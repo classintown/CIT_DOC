@@ -2011,3 +2011,917 @@ Create an internal page to monitor webhook health:
 - ✅ Monitoring/logging in place
 
 --- 
+
+---
+
+## Phase 8: UI/UX Implementation
+
+### 🎯 Goal
+Create intuitive, user-friendly interfaces for instructors to manage their Razorpay connection and for students to make payments seamlessly.
+
+### 🎨 Instructor Dashboard - Payment Settings
+
+```mermaid
+stateDiagram-v2
+    [*] --> NotConnected: First Visit
+    
+    NotConnected --> DataCollection: Click "Connect Razorpay"
+    DataCollection --> AccountCreating: Submit Form
+    
+    AccountCreating --> KYCPending: Account Created
+    KYCPending --> KYCUnderReview: Documents Submitted
+    KYCUnderReview --> KYCVerified: Approved
+    
+    KYCVerified --> OAuthPending: Waiting for Authorization
+    OAuthPending --> Connected: OAuth Complete
+    
+    Connected --> [*]: ✅ Ready
+    
+    Connected --> Revoked: Access Revoked
+    Revoked --> Connected: Reconnect
+    
+    note right of Connected
+        Green status badge
+        "Accepting Payments"
+    end note
+```
+
+### 📱 UI Components Needed
+
+#### 1. Connection Status Banner
+
+**Not Connected State:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  💰 Start Accepting Direct Payments                          │
+│                                                              │
+│  Connect Razorpay to receive student payments directly      │
+│  to your bank account.                                      │
+│                                                              │
+│  Benefits:                                                  │
+│  ✓ Money reaches your bank in 2-3 days                     │
+│  ✓ Full control of your funds                              │
+│  ✓ Easy setup (takes 5-10 minutes)                         │
+│                                                              │
+│         [🔗 Connect Razorpay Account]                        │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Connected State:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ✅ Payment Gateway Active                                   │
+│                                                              │
+│  Razorpay Account: acc_XYZ789abc                            │
+│  Status: Connected & Verified                              │
+│  Last Payment: 2 hours ago                                  │
+│                                                              │
+│  [View Transaction History]  [Update Bank Details]          │
+│                              [Disconnect]                    │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**KYC Pending State:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ⏳ Action Required: Complete KYC Verification               │
+│                                                              │
+│  Your account is created but needs document verification.   │
+│                                                              │
+│  Progress: ████████░░░░░░ 60%                               │
+│                                                              │
+│  What's needed:                                             │
+│  ✅ Basic info submitted                                     │
+│  ⚠️  Documents pending                                       │
+│                                                              │
+│         [📄 Upload Documents Now]                            │
+│                                                              │
+│  Need help? [Chat with Support] or call 1800-XXX-XXXX      │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Revoked State (Warning):**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ⚠️ Payment Connection Lost                                  │
+│                                                              │
+│  You disconnected ClassInTown from your Razorpay account.   │
+│  Students cannot pay for your classes until you reconnect.  │
+│                                                              │
+│         [🔄 Reconnect Razorpay]                              │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 2. Transaction History Page
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  💳 Payment History                                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Filters: [All Time ▼] [All Classes ▼] [Export CSV]         │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │ Date       | Student  | Class      | Amount | Status  │  │
+│  ├───────────┼──────────┼────────────┼────────┼─────────┤  │
+│  │ Jan 29    │ Amit K.  │ Yoga Basic │ ₹2,500 │ ✅ Paid │  │
+│  │ Jan 28    │ Priya S. │ Advanced   │ ₹3,000 │ ✅ Paid │  │
+│  │ Jan 27    │ Rohit M. │ Yoga Basic │ ₹2,500 │ 🔄 Refunded│ │
+│  │ Jan 26    │ Sneha P. │ Kids Yoga  │ ₹1,500 │ ✅ Paid │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                              │
+│  Total Earnings (This Month): ₹45,000                       │
+│  Pending Settlement: ₹8,500                                 │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 3. Student Payment Flow (Student View)
+
+**Step 1: Class Details Page**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Yoga for Beginners                                          │
+│  by Instructor Riya Shah                                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  📅 Schedule: Mon, Wed, Fri | 6:00 AM - 7:00 AM             │
+│  📍 Location: Online (Zoom)                                  │
+│  👥 Batch Size: 15 students (5 spots left)                   │
+│                                                              │
+│  Course Fee: ₹2,500 / month                                 │
+│                                                              │
+│  [💳 Enroll Now - Pay Securely]                              │
+│                                                              │
+│  🔒 Secure payment powered by Razorpay                       │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Step 2: Payment Modal (Razorpay Checkout)**
+```
+This opens as an overlay, handled by Razorpay's checkout library.
+Student sees standard Razorpay payment form with:
+- UPI
+- Cards
+- Netbanking
+- Wallets
+```
+
+**Step 3: Success Confirmation**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ✅ Payment Successful!                                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  You're enrolled in: Yoga for Beginners                     │
+│  Instructor: Riya Shah                                      │
+│                                                              │
+│  Amount Paid: ₹2,500                                         │
+│  Payment ID: pay_ABC123xyz                                  │
+│  Date: Jan 29, 2025, 10:45 AM                               │
+│                                                              │
+│  📧 Receipt sent to your email                               │
+│  📅 Class starts on: Feb 1, 2025                             │
+│                                                              │
+│  [View My Classes]  [Download Receipt]                      │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🔔 Notification Templates
+
+#### Instructor Notifications
+
+**Email: KYC Approved**
+```
+Subject: 🎉 Your payment setup is complete!
+
+Hi Riya,
+
+Great news! Your Razorpay account has been verified.
+
+Last step: Authorize ClassInTown to process payments on your behalf.
+
+[Authorize Access] → (Button linking to OAuth)
+
+This is secure and you can revoke access anytime.
+
+Once connected, you'll start receiving payments directly to your bank.
+
+Questions? Reply to this email.
+
+- ClassInTown Team
+```
+
+**In-App Notification: New Enrollment**
+```
+🔔 New Enrollment!
+
+Amit Kumar enrolled in "Yoga for Beginners"
+Amount: ₹2,500 | Payment received
+
+[View Details]
+```
+
+#### Student Notifications
+
+**Email: Payment Confirmation**
+```
+Subject: Payment Successful - Enrollment Confirmed
+
+Hi Amit,
+
+Your payment of ₹2,500 has been processed successfully!
+
+Class: Yoga for Beginners
+Instructor: Riya Shah
+Start Date: Feb 1, 2025
+Schedule: Mon, Wed, Fri | 6:00-7:00 AM
+
+Payment Details:
+Transaction ID: pay_ABC123xyz
+Date: Jan 29, 2025
+Amount: ₹2,500
+
+[View Class Details] [Download Receipt]
+
+See you in class!
+
+- ClassInTown Team
+```
+
+### 🎉 Completion Criteria
+
+- ✅ Instructor payment settings page designed
+- ✅ All status states (not connected, pending, connected, revoked) UI ready
+- ✅ Student payment flow implemented
+- ✅ Transaction history page built
+- ✅ Email templates created and tested
+- ✅ In-app notifications working
+- ✅ Mobile responsive design verified
+
+---
+
+## Phase 9: Testing & Launch
+
+### 🎯 Goal
+Thoroughly test the entire flow in sandbox mode, pilot with real instructors, then roll out to all users.
+
+### 🧪 Testing Checklist
+
+```mermaid
+flowchart TD
+    Start([Start Testing]) --> T1[Unit Tests]
+    T1 --> T2[Integration Tests]
+    T2 --> T3[Sandbox Testing]
+    T3 --> T4[Security Audit]
+    T4 --> T5[Pilot with 3-5 Instructors]
+    T5 --> T6[Monitor & Fix Issues]
+    T6 --> T7{Ready for Full Launch?}
+    T7 -->|Yes| T8[Full Rollout]
+    T7 -->|No| T5
+    T8 --> End([System Live])
+    
+    style T5 fill:#FFE4B5
+    style T8 fill:#90EE90
+```
+
+### 📋 Detailed Testing Scenarios
+
+#### Scenario 1: New Instructor Onboarding (Path B)
+
+| Step | Action | Expected Result | ✓ |
+|------|--------|----------------|---|
+| 1 | Instructor opens Payment Settings | Shows "Connect Razorpay" banner | ☐ |
+| 2 | Click "Connect Razorpay" | Data collection form appears | ☐ |
+| 3 | Fill all required fields | Form validates correctly | ☐ |
+| 4 | Submit form (no existing account) | Account created, onboarding link generated | ☐ |
+| 5 | Click onboarding link | Razorpay hosted page loads | ☐ |
+| 6 | Upload documents | Documents accepted | ☐ |
+| 7 | Wait for webhook | `account.activated` webhook received | ☐ |
+| 8 | Database updated | KYC status = 'verified' in DB | ☐ |
+| 9 | Instructor sees "Authorize" button | Button appears in dashboard | ☐ |
+| 10 | Click "Authorize" | OAuth flow starts | ☐ |
+| 11 | Approve on Razorpay | Redirect back to app | ☐ |
+| 12 | Token exchange | Access token stored in DB | ☐ |
+| 13 | Final status | Shows "Connected & Verified" | ☐ |
+
+#### Scenario 2: Existing Instructor Connection (Path A)
+
+| Step | Action | Expected Result | ✓ |
+|------|--------|----------------|---|
+| 1 | Check "I have Razorpay account" | Form adjusts | ☐ |
+| 2 | Submit form | OAuth flow starts immediately | ☐ |
+| 3 | Login to Razorpay | Razorpay auth page loads | ☐ |
+| 4 | Approve access | Redirected back with code | ☐ |
+| 5 | Backend exchanges token | Access token saved | ☐ |
+| 6 | Status shows connected | Dashboard updates | ☐ |
+
+#### Scenario 3: Student Payment Flow
+
+| Step | Action | Expected Result | ✓ |
+|------|--------|----------------|---|
+| 1 | Student browses classes | Class list loads | ☐ |
+| 2 | Click "Enroll Now" | Order creation API called | ☐ |
+| 3 | Razorpay checkout opens | Payment modal appears | ☐ |
+| 4 | Enter card details (test card) | Payment processes | ☐ |
+| 5 | Payment succeeds | Success callback triggered | ☐ |
+| 6 | Verification endpoint | Signature verified | ☐ |
+| 7 | Enrollment created | Record in DB | ☐ |
+| 8 | Webhook received | `payment.captured` webhook | ☐ |
+| 9 | Emails sent | Student & instructor receive emails | ☐ |
+| 10 | Money in instructor account | Verify in Razorpay dashboard | ☐ |
+
+#### Scenario 4: Access Revocation
+
+| Step | Action | Expected Result | ✓ |
+|------|--------|----------------|---|
+| 1 | Instructor logs into Razorpay | Razorpay dashboard | ☐ |
+| 2 | Revoke ClassInTown access | Authorization removed | ☐ |
+| 3 | Webhook sent | `authorization_revoked` received | ☐ |
+| 4 | Database updated | Status = 'revoked', tokens cleared | ☐ |
+| 5 | Instructor dashboard | Shows "Reconnect" warning | ☐ |
+| 6 | Try to enroll (student side) | Error: "Payment setup incomplete" | ☐ |
+| 7 | Instructor reconnects | OAuth flow, tokens restored | ☐ |
+| 8 | Payments work again | Student can enroll | ☐ |
+
+#### Scenario 5: Refund Processing
+
+| Step | Action | Expected Result | ✓ |
+|------|--------|----------------|---|
+| 1 | Initiate refund (your platform) | Refund API called | ☐ |
+| 2 | Refund processes | Razorpay confirms | ☐ |
+| 3 | Webhook received | `refund.processed` | ☐ |
+| 4 | Enrollment updated | Status = 'refunded' | ☐ |
+| 5 | Notifications sent | Student & instructor notified | ☐ |
+
+### 🔒 Security Testing
+
+**Checklist:**
+
+- ✅ Webhook signature verification working
+- ✅ OAuth state parameter validation
+- ✅ SQL injection protection on all inputs
+- ✅ XSS protection in forms
+- ✅ Access tokens encrypted at rest
+- ✅ HTTPS enforced on all endpoints
+- ✅ Rate limiting on payment APIs
+- ✅ CSRF protection on forms
+- ✅ Instructor can only see their own transactions
+- ✅ Students can only see their own payments
+- ✅ Admins need proper authentication
+
+### 🚀 Launch Phases
+
+#### Phase 9.1: Sandbox Testing (1 week)
+
+**Goals:**
+- Complete all testing scenarios above
+- Fix all bugs found
+- Verify webhook reliability
+
+**Team involved:** Dev team only
+
+#### Phase 9.2: Pilot Launch (2 weeks)
+
+**Goals:**
+- Onboard 3-5 friendly instructors
+- Process 10-20 real payments
+- Gather feedback on UX
+- Monitor errors and edge cases
+
+**Selection criteria for pilot instructors:**
+- Tech-savvy
+- Active with students
+- Willing to provide feedback
+- Different business types (individual, LLP, etc.)
+
+**Feedback form:**
+```
+Post-Pilot Survey for Instructors:
+
+1. How easy was the setup process? (1-5 stars)
+2. Did you face any issues during KYC?
+3. How long did verification take?
+4. Were the instructions clear?
+5. Did payments arrive in your account as expected?
+6. Would you recommend improvements?
+7. Overall satisfaction (1-10)
+```
+
+#### Phase 9.3: Full Rollout (Gradual)
+
+**Week 1:** Announce feature, enable for 20% of instructors
+**Week 2:** Increase to 50% if no issues
+**Week 3:** Enable for all instructors
+**Week 4:** Mark as fully launched
+
+**Rollout Communication:**
+
+```
+Subject: 🎉 New Feature: Get Paid Directly to Your Bank!
+
+Hi Instructors,
+
+Exciting news! You can now receive student payments directly 
+into your own Razorpay account.
+
+What this means for you:
+✓ Faster access to your money (2-3 days)
+✓ Full control and transparency
+✓ Easy setup (just 5-10 minutes)
+
+[Get Started Now]
+
+How it works: [Link to Help Doc]
+FAQs: [Link]
+
+We're here to help! Reply with questions.
+
+- ClassInTown Team
+```
+
+### 🎉 Completion Criteria
+
+- ✅ All testing scenarios passed
+- ✅ Security audit complete
+- ✅ Pilot successful (>80% satisfaction)
+- ✅ Rollout communication sent
+- ✅ Support team trained
+- ✅ Monitoring dashboards active
+- ✅ Rollback plan documented
+
+---
+
+## Phase 10: Support & Operations
+
+### 🎯 Goal
+Ensure smooth ongoing operations with proactive support, monitoring, and continuous improvement.
+
+### 📞 Support Playbooks
+
+```mermaid
+graph TD
+    A[Support Ticket] --> B{Issue Category}
+    
+    B -->|KYC Rejected| C[KYC Playbook]
+    B -->|Payment Failed| D[Payment Playbook]
+    B -->|Access Revoked| E[Revocation Playbook]
+    B -->|Can't Connect| F[Connection Playbook]
+    B -->|Refund Request| G[Refund Playbook]
+    
+    C --> C1[Check rejection reason]
+    C --> C2[Guide document reupload]
+    
+    D --> D1[Check payment logs]
+    D --> D2[Verify instructor connection]
+    D --> D3[Check Razorpay status]
+    
+    E --> E1[Explain revocation]
+    E --> E2[Guide reconnection]
+    
+    F --> F1[Check browser console]
+    F --> F2[Verify OAuth credentials]
+    F --> F3[Test redirect URL]
+    
+    G --> G1[Verify refund policy]
+    G --> G2[Initiate refund API]
+    G --> G3[Confirm with both parties]
+```
+
+### 📖 Support Playbook Details
+
+#### Playbook 1: "My KYC was rejected"
+
+**Step 1:** Empathize and reassure
+```
+"I understand this is frustrating. Let's get this sorted quickly.
+KYC rejections are usually due to document quality or mismatches,
+and we can fix them easily."
+```
+
+**Step 2:** Check rejection reason in database
+```sql
+SELECT razorpay_account_id, kyc_status, kyc_rejection_reason
+FROM razorpay_connections
+WHERE instructor_id = [ID];
+```
+
+**Step 3:** Common issues & fixes
+
+| Rejection Reason | What to Tell Instructor |
+|-----------------|------------------------|
+| "Blurry document" | "Please retake the photo in good lighting. Use a scanner app if possible." |
+| "Name mismatch" | "Ensure the name on your PAN matches your bank account exactly." |
+| "Incomplete document" | "Upload both front and back of your ID card." |
+| "Invalid bank proof" | "Use a cancelled cheque or bank statement showing your name, account number, and IFSC." |
+
+**Step 4:** Send fresh onboarding link
+```
+"I'm resending your setup link. Please upload clearer documents:
+[Onboarding Link]
+
+Tips:
+• Natural light, no shadows
+• All corners visible
+• Text readable
+• No glare or blur
+
+Need a sample? Here: [Link to sample images]"
+```
+
+**Step 5:** Follow up in 1 day
+
+#### Playbook 2: "Payment failed for my student"
+
+**Step 1:** Gather details
+- Order ID or Payment ID
+- Student name
+- Class name
+- Timestamp
+
+**Step 2:** Check order status
+```sql
+SELECT status, failure_reason
+FROM enrollment_orders
+WHERE razorpay_order_id = '[ORDER_ID]';
+```
+
+**Step 3:** Common failure reasons
+
+| Failure Reason | Solution |
+|----------------|----------|
+| "Insufficient funds" | Ask student to retry with different payment method |
+| "Card declined by bank" | Student should contact their bank |
+| "3DS authentication failed" | Student needs to enable online transactions |
+| "Instructor connection revoked" | Instructor needs to reconnect Razorpay |
+
+**Step 4:** If instructor connection issue:
+```
+"Your Razorpay connection was disconnected. Please reconnect:
+1. Go to Payment Settings
+2. Click 'Reconnect Razorpay'
+3. Approve access again
+
+Once done, ask your student to retry the payment."
+```
+
+#### Playbook 3: "I accidentally revoked access"
+
+**Step 1:** Explain what happened
+```
+"No worries! You can reconnect anytime. When you revoke access,
+students temporarily can't pay for your classes. Let's fix it now."
+```
+
+**Step 2:** Guide reconnection
+```
+1. Go to your Payment Settings page
+2. You'll see a warning banner
+3. Click "Reconnect Razorpay"
+4. Log in and approve access again
+5. Done! Payments will work immediately.
+
+[Direct Link to Payment Settings]
+```
+
+**Step 3:** Verify in database
+```sql
+UPDATE razorpay_connections
+SET connection_status = 'connected'
+WHERE instructor_id = [ID] AND razorpay_account_id = '[ACC_ID]';
+```
+
+**Step 4:** Confirm
+```
+"All set! Your payment gateway is active again. ✅"
+```
+
+### 📊 Monitoring Dashboard (Internal)
+
+**Metrics to track daily:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  📈 Razorpay Integration Health Dashboard                │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  Total Instructors:                                      │
+│  ├─ Connected: 245 (82%) ✅                              │
+│  ├─ Pending KYC: 35 (12%) ⏳                             │
+│  ├─ Not Started: 18 (6%)                                 │
+│  └─ Revoked: 2 (0.7%) ⚠️                                 │
+│                                                           │
+│  Payments (Last 24h):                                    │
+│  ├─ Successful: 127 ✅                                    │
+│  ├─ Failed: 3 ❌                                          │
+│  └─ Success Rate: 97.7%                                  │
+│                                                           │
+│  Webhooks (Last 24h):                                    │
+│  ├─ Received: 145                                        │
+│  ├─ Processed: 145                                       │
+│  └─ Failed: 0                                            │
+│                                                           │
+│  Support Tickets (Open):                                 │
+│  ├─ KYC Issues: 4                                        │
+│  ├─ Payment Issues: 1                                    │
+│  └─ Connection Issues: 2                                 │
+│                                                           │
+│  Avg. Onboarding Time: 4.2 days                          │
+│  Avg. KYC Approval Time: 1.8 days                        │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+```
+
+### 🚨 Alerts to Set Up
+
+| Alert | Condition | Action |
+|-------|-----------|--------|
+| **High payment failure rate** | >10% in 1 hour | Notify tech lead, check Razorpay status |
+| **Webhook not received** | No webhooks for 1 hour | Check endpoint health, notify DevOps |
+| **Multiple KYC rejections** | >5 in a day for same instructor | Manually review, reach out proactively |
+| **Access revocations spike** | >3 in 1 day | Investigate if there's a communication issue |
+| **Token refresh failures** | Any failure | Immediate alert, could block payments |
+
+### 📚 Knowledge Base Articles (To Create)
+
+1. **"How to Connect Your Razorpay Account"** (Step-by-step with screenshots)
+2. **"What Documents Do I Need for KYC?"** (Country-specific)
+3. **"When Will I Receive My Money?"** (Settlement timelines)
+4. **"How to View My Payment History"**
+5. **"What If My KYC Is Rejected?"** (Troubleshooting)
+6. **"How to Reconnect Razorpay"**
+7. **"Understanding Payment Failures"** (For students)
+8. **"How to Issue a Refund"** (For instructors)
+
+### 🎉 Completion Criteria
+
+- ✅ Support playbooks documented and trained
+- ✅ Monitoring dashboard live
+- ✅ Alerts configured
+- ✅ Knowledge base articles published
+- ✅ Support team trained on all scenarios
+- ✅ Escalation process defined
+- ✅ Monthly review process established
+
+---
+
+## Troubleshooting & FAQs
+
+### 🔧 Common Issues & Solutions
+
+#### Issue 1: OAuth Redirect Not Working
+
+**Symptoms:**
+- After instructor approves on Razorpay, they're not redirected back
+- "Redirect URI mismatch" error
+
+**Diagnosis:**
+```bash
+# Check redirect URL in database matches OAuth app
+SELECT redirect_url FROM oauth_config;
+
+# Verify in Razorpay Partner Dashboard:
+# Settings → OAuth Applications → Your App → Redirect URLs
+```
+
+**Solution:**
+1. Ensure redirect URL in code EXACTLY matches what's in Razorpay dashboard
+2. Include protocol (https://)
+3. No trailing slash differences
+4. Test in both staging and production
+
+**Example Fix:**
+```javascript
+// ❌ Wrong - missing protocol
+redirect_uri: 'classintown.com/auth/callback'
+
+// ✅ Correct
+redirect_uri: 'https://classintown.com/auth/razorpay/callback'
+```
+
+---
+
+#### Issue 2: Webhooks Not Being Received
+
+**Symptoms:**
+- Payments succeed but enrollment not created
+- Database not updating after KYC approval
+
+**Diagnosis:**
+```bash
+# Check webhook endpoint is accessible
+curl -X POST https://classintown.com/api/webhooks/razorpay \
+  -H "Content-Type: application/json" \
+  -d '{"test": "data"}'
+
+# Check Razorpay Dashboard → Webhooks → Delivery Logs
+```
+
+**Solution:**
+1. Verify webhook URL is publicly accessible (not localhost)
+2. Check firewall isn't blocking Razorpay IPs
+3. Ensure endpoint returns 200 status
+4. Verify webhook secret matches
+
+**Debug logging:**
+```javascript
+// Add to webhook handler
+console.log('Webhook received:', {
+  signature: req.headers['x-razorpay-signature'],
+  body: req.body,
+  timestamp: new Date()
+});
+```
+
+---
+
+#### Issue 3: Token Expired / Refresh Token Not Working
+
+**Symptoms:**
+- "Unauthorized" error when creating orders
+- "Invalid token" in logs
+
+**Diagnosis:**
+```sql
+SELECT 
+  instructor_id,
+  token_expiry,
+  TIMESTAMPDIFF(MINUTE, NOW(), token_expiry) as minutes_until_expiry
+FROM razorpay_connections
+WHERE connection_status = 'connected';
+```
+
+**Solution:**
+Implement automatic token refresh:
+
+```javascript
+async function refreshAccessToken(connection) {
+  try {
+    const response = await axios.post(
+      'https://auth.razorpay.com/token',
+      {
+        grant_type: 'refresh_token',
+        refresh_token: connection.refresh_token,
+        client_id: process.env.RAZORPAY_CLIENT_ID,
+        client_secret: process.env.RAZORPAY_CLIENT_SECRET
+      }
+    );
+    
+    // Update tokens in database
+    await RazorpayConnection.updateOne(
+      { _id: connection._id },
+      {
+        access_token: response.data.access_token,
+        refresh_token: response.data.refresh_token,
+        token_expiry: new Date(Date.now() + response.data.expires_in * 1000)
+      }
+    );
+    
+    return response.data.access_token;
+    
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    // Mark connection as needs reauthorization
+    await RazorpayConnection.updateOne(
+      { _id: connection._id },
+      { connection_status: 'revoked' }
+    );
+    throw new Error('Please reconnect your Razorpay account');
+  }
+}
+```
+
+---
+
+### ❓ Frequently Asked Questions
+
+#### For Instructors
+
+**Q: How long does KYC verification take?**
+A: Usually 1-2 business days. Razorpay reviews documents manually. We'll email you once approved.
+
+**Q: Can I use my existing Razorpay account?**
+A: Yes! When connecting, check the box "I already have a Razorpay account" and we'll link it.
+
+**Q: Where does the money go?**
+A: Directly to your bank account linked with Razorpay. We never hold your funds.
+
+**Q: What's your commission?**
+A: [Your commission %]. This is billed separately [monthly/quarterly]. Payment from students goes 100% to you first.
+
+**Q: Can I disconnect later?**
+A: Yes, anytime from your Razorpay Dashboard. Just note that students won't be able to pay while disconnected.
+
+**Q: What if my bank details change?**
+A: Update them in your Razorpay Dashboard. Changes may require re-verification.
+
+**Q: Do students see my Razorpay account details?**
+A: No. They only see "ClassInTown" during checkout. Your account details are private.
+
+**Q: How do refunds work?**
+A: [Explain your refund policy]. Refunds go back to the student's original payment method. Your commission [is/isn't] refunded based on policy.
+
+#### For Students
+
+**Q: Is payment secure?**
+A: Yes! We use Razorpay, a trusted payment gateway with bank-level security and PCI DSS compliance.
+
+**Q: What payment methods are accepted?**
+A: UPI, Credit/Debit cards, Net banking, and wallets (Paytm, PhonePe, etc.).
+
+**Q: Will I get a receipt?**
+A: Yes, emailed immediately after payment. You can also download from your dashboard.
+
+**Q: Who do I pay?**
+A: Payment goes directly to your instructor via Razorpay. ClassInTown facilitates the connection.
+
+**Q: What if payment fails?**
+A: Try again with a different payment method. If it continues failing, contact your bank or our support.
+
+**Q: How do I get a refund?**
+A: [Per your refund policy]. Refunds take 5-7 business days to reflect in your account.
+
+---
+
+### 🎯 Quick Reference: Status Meanings
+
+| Status | What It Means | Next Action |
+|--------|---------------|-------------|
+| `not_connected` | Instructor hasn't started setup | Show "Connect Razorpay" button |
+| `pending` | Account created, waiting for KYC | Show "Complete KYC" button with onboarding link |
+| `kyc_pending` | Documents submitted, under review | Show "Under Review" message, no action needed |
+| `kyc_verified` | Documents approved, need OAuth | Show "Authorize Access" button |
+| `connected` | Fully set up and ready | Show "Active" badge, allow payments |
+| `revoked` | Instructor disconnected access | Show warning, "Reconnect" button |
+
+---
+
+### 🔐 Security Best Practices
+
+1. **Never log sensitive data:**
+   - ❌ Don't log access tokens
+   - ❌ Don't log full card numbers
+   - ✅ Do log order IDs, status, timestamps
+
+2. **Encrypt at rest:**
+   - Access tokens
+   - Refresh tokens
+   - Any PII from Razorpay API
+
+3. **Verify everything:**
+   - Webhook signatures
+   - OAuth state parameters
+   - Payment signatures
+
+4. **Rate limiting:**
+   - Prevent brute force on payment endpoints
+   - Limit webhook retries
+
+5. **Access control:**
+   - Instructors can only see their own transactions
+   - Students can only see their own payments
+   - Admins need proper authentication
+
+---
+
+## 🎊 Congratulations!
+
+You've completed the full Razorpay integration roadmap! 
+
+### ✅ What You've Built:
+
+- ✅ Full OAuth-based payment integration
+- ✅ Instructor onboarding (with and without existing accounts)
+- ✅ Automated KYC management
+- ✅ Secure payment flow
+- ✅ Real-time webhook handling
+- ✅ Comprehensive UI/UX
+- ✅ Support infrastructure
+
+### 📈 Next Steps:
+
+1. **Monitor metrics** daily for the first month
+2. **Gather feedback** from instructors and students
+3. **Optimize** bottlenecks (e.g., if KYC rejections are high)
+4. **Consider Route** if you want automatic commission splitting later
+5. **Scale** confidently as you grow!
+
+---
+
+## 📞 Need Help?
+
+- **Razorpay Support:** support@razorpay.com or Dashboard chat
+- **Razorpay Partner Docs:** https://razorpay.com/docs/partners/
+- **OAuth Documentation:** https://razorpay.com/docs/partners/oauth/
+
+---
+
+*Document Version: 1.0*  
+*Last Updated: September 29, 2025*  
+*Maintained by: ClassInTown Development Team* 
