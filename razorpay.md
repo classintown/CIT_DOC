@@ -1144,8 +1144,8 @@ When instructor clicks **"Authorize Access Now"**, follow **Path A steps A.1 to 
 stateDiagram-v2
     [*] --> NotConnected: Initial State
     
-    NotConnected --> Pending: Path B: Account Created
-    NotConnected --> Connected: Path A: OAuth Success
+    NotConnected --> Pending: Path B - Account Created
+    NotConnected --> Connected: Path A - OAuth Success
     
     Pending --> KYCPending: Onboarding Link Sent
     KYCPending --> KYCUnderReview: Documents Submitted
@@ -1159,11 +1159,11 @@ stateDiagram-v2
     Revoked --> Connected: Instructor Reconnects
     
     note right of Connected
-        ✅ Ready to accept payments
+        Ready to accept payments
     end note
     
     note right of KYCUnderReview
-        ⏸️ Wait 1-3 business days
+        Wait 1-3 business days
     end note
 ```
 
