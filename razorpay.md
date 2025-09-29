@@ -1,258 +1,425 @@
-# ClassInTown × Razorpay (Technology Partner OAuth) — End‑to‑End Roadmap
+### ClassInTown × Razorpay Technology Partner
 
-**Goal:** Each instructor gets paid **directly to their own Razorpay account**.  
-**Approach:** Use Razorpay **Technology Partner + OAuth**. If the instructor doesn’t have an account, you **create one on their behalf**, then guide them through **KYC** via a **hosted onboarding link**, and finally obtain **OAuth consent** so you can create orders on their account.
+A complete end-to-end roadmap for onboarding instructors to Razorpay via Technology Partner OAuth, creating accounts on their behalf (when needed), finishing KYC, handling consent, and running payments, refunds, and operations with clarity on when to act vs when to wait.
 
----
-
-## Contents
-1. [At‑a‑Glance Flow (Mermaid)](#at-a-glance-flow-mermaid)
-2. [Phase 0 — Business Decisions](#phase-0--business-decisions)
-3. [Phase 1 — Become a Technology Partner](#phase-1--become-a-technology-partner)
-4. [Phase 2 — Design Onboarding Paths](#phase-2--design-onboarding-paths)
-5. [Phase 3 — Data to Collect Upfront](#phase-3--data-to-collect-upfront)
-6. [Phase 4 — Instructor Journeys (Step‑by‑Step)](#phase-4--instructor-journeys-step-by-step)
-7. [Phase 5 — Payments End‑to‑End (Plain English)](#phase-5--payments-end-to-end-plain-english)
-8. [Phase 6 — Reconciliation, Taxes & Refunds](#phase-6--reconciliation-taxes--refunds)
-9. [Phase 7 — Ops & Support Playbooks](#phase-7--ops--support-playbooks)
-10. [Phase 8 — Testing & Launch Plan](#phase-8--testing--launch-plan)
-11. [Phase 9 — Monitoring & Improvements](#phase-9--monitoring--improvements)
-12. [Printable Checklists](#printable-checklists)
-13. [FAQ & Glossary](#faq--glossary)
 
 ---
 
-## At‑a‑Glance Flow (Mermaid)
+### Quick Legend
+- **ACT**: Your team or system should do this now.
+- **WAIT**: Pause until Razorpay or the instructor finishes something.
+- **INFO**: Guidance and context for the step.
 
+
+---
+
+### Overview Diagram — Big Picture
 ```mermaid
-flowchart TD
-    A[Start: Instructor wants to receive payments] --> B{Do they already have a Razorpay account?}
-    B -- Yes --> C[Instructor clicks 'Connect Razorpay']
-    C --> D[Razorpay OAuth Consent Screen]
-    D -->|Allow| E[Redirect back to ClassInTown with Access Granted]
-    E --> F[Show Status: Connected]
-    F --> G{KYC Verified?}
-    G -- Yes --> H[Ready for Live Payments]
-    G -- No --> I[Prompt 'Resume Onboarding' on Razorpay Hosted Page]
-    I --> J[Upload Needed Docs & Submit]
-    J --> K[⏳ WAIT: Razorpay Verification]
-    K -->|Approved| H
+flowchart TB
+  subgraph Platform Setup (One-time)
+    P0[Phase 0: Business Rules]
+    P1[Phase 1: Become Technology Partner]
+    P2[Phase 2: Design Onboarding]
+    P3[Phase 3: Data & UX]
+    P4[Phase 4: Tokens & Security]
+    P5[Phase 5: Payments]
+    P6[Phase 6: Reconciliation]
+    P7[Phase 7: Support]
+    P8[Phase 8: Testing & Launch]
+    P9[Phase 9: Monitoring]
+  end
 
-    B -- No --> L[Create Razorpay Account on Instructor's Behalf]
-    L --> M[Generate Hosted Onboarding Link (Prefilled)]
-    M --> N[Instructor Opens Link, Reviews, Uploads Docs]
-    N --> O[⏳ WAIT: Razorpay Verification]
-    O -->|Approved| P[Ask for OAuth Consent]
-    P --> D
+  P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9
+
+  subgraph Instructor Journey (Per Instructor)
+    J0[Start]
+    J1{Has Razorpay Account?}
+    J2A[Path A: OAuth Connect]
+    J2B[Path B: Create Account]
+    J3B[Hosted Onboarding Link (KYC)]
+    J4[OAuth Consent]
+    J5[Status: KYC Pending → Verified]
+    J6[Checkout: Create Order using Instructor Tokens]
+    J7[Capture & Webhooks]
+    J8[Enrollments & Refunds]
+  end
+
+  J0 --> J1
+  J1 -- Yes --> J2A --> J4 --> J5 --> J6 --> J7 --> J8
+  J1 -- No  --> J2B --> J3B --> J4 --> J5 --> J6 --> J7 --> J8
 ```
-**Legend:**  
-- **Diamond** = Decision.  
-- **⏳ WAIT** = Razorpay needs time to verify documents.  
-- **Hosted Onboarding Link** = Co‑branded Razorpay page that only asks for missing items.
+
 
 ---
 
-## Phase 0 — Business Decisions
+### Phase 0 — Decide Business Rules (One-time)
+- **ACT**: Finalize revenue split, refund policy, and invoicing authority.
+- **INFO**: Define commission %, taxes (GST), cancellation/refund rules. Decide who issues student invoices (in OAuth model, typically the instructor). Decide how you collect commission (invoice monthly or consider Route later).
 
-- **Revenue Split & Fees**
-  - Commission %: `<e.g., 10% of order value>`
-  - Refund policy: `<e.g., full refund minus platform fee within 48 hours>`
-  - Charge timing: `<monthly invoice to instructor>` or `<introduce Route later for auto‑split>`
-
-- **Invoicing & GST**
-  - **MoR (Merchant of Record):** In OAuth model, the **instructor** is typically MoR (issues tax invoice to student).
-  - Platform invoices the instructor for commission and services.
-
-- **Disputes & Cancellations**
-  - Who approves refunds? `<instructor/platform>`
-  - What is the deadline & evidence needed? `<policy link>`
 
 ---
 
-## Phase 1 — Become a Technology Partner
+### Phase 1 — Become a Razorpay Technology Partner (One-time)
+- **ACT**: Apply/enable Partner access with Razorpay.
+- **WAIT**: For partner approval and dashboard access.
+- **OUTPUT**: Access to Partner Dashboard & Partner APIs.
 
-1. **Apply/Enable Technology Partner** in Razorpay Partner Program.  
-2. **Create an OAuth Application** in Partner Dashboard:  
-   - App Name: `ClassInTown Instructor Payments`  
-   - Redirect URL(s): `<https://app.classintown.com/payments/razorpay/callback>`  
-   - Scopes: `<read/write permissions needed for orders & payments>`  
-   - Securely store **Client ID** & **Client Secret**.
-
-**Outputs to keep safe:** Partner Dashboard access, Client ID/Secret, allowed redirect URL(s).
 
 ---
 
-## Phase 2 — Design Onboarding Paths
+### Phase 2 — Create an OAuth Application (One-time)
+- **ACT**: In Partner Dashboard, create an OAuth Application.
+- **CAPTURE**: `client_id`, `client_secret`, allowed `redirect_uri`, and requested scopes.
+- **SECURE**: Store credentials safely; plan token storage per instructor.
 
-- **Path A (Connect existing account):**  
-  - Instructor already has Razorpay; they **Authorize** your app (OAuth).  
-  - Minimal friction, immediate connection.
-
-- **Path B (Create account on their behalf):**  
-  - You **create** a Razorpay account using instructor basics.  
-  - Generate **Hosted Onboarding Link** to capture only missing pieces (PAN/ID, bank proof).  
-  - After KYC approval, ask for **OAuth Consent** to grant your app access.
-
-**Tip:** Show clear status chips in your UI: `Not Connected`, `Creating Account`, `KYC Pending`, `In Review`, `Verified`, `Access Revoked`.
 
 ---
 
-## Phase 3 — Data to Collect Upfront
+### Phase 3 — Data & UX You’ll Build (Platform Foundation)
+- **ACT**: Implement a minimal profile form to collect from instructor:
+  - Legal name, email, phone
+  - Business type (Individual / Sole-prop / LLP / Company)
+  - Business category (Education → Coaching/Tutoring)
+  - Trading/brand name (optional)
+  - Settlement bank details (or defer to onboarding link)
+- **ACT**: Build a `Payments Setup` screen with connection states:
+  - Connection: Not Connected / Connected
+  - KYC: Not Started / In Progress / Pending Review / Verified
+  - Actions: Create/Connect, Resume Onboarding, Reconnect, Update Bank
+- **INFO**: Keep copy friendly and short; prefill onboarding to reduce drop-off.
 
-Collect these from each instructor (via a short, friendly form):
-
-- **Legal Full Name** (e.g., `Riya Shah`)  
-- **Email** (`riya@example.com`)  
-- **Mobile** (`+91 98xxxxxxx`)  
-- **Business Type**: `Individual / Sole Proprietor / Partnership / LLP / Company`  
-- **Business Category**: `Education → Coaching/Tutoring`  
-- **Trading/Brand Name**: *(optional)* `Riya’s Chemistry Lab`  
-- **Settlement Bank Details**: *(optional now; can collect later)*
-
-**Why:** Enough to create the account & prefill onboarding so only missing KYC items are asked later.
-
----
-
-## Phase 4 — Instructor Journeys (Step‑by‑Step)
-
-### Path B — No Account Yet (Recommended for non‑tech users)
-
-1) **Explain the process clearly** (copy you can use):  
-   - “Click **Create/Connect Razorpay**. We’ll set up your payments account.”  
-   - “You may be asked for **PAN**, **ID proof**, and **bank proof**. You can upload them now or later.”  
-   - “Once verified, payments from your students go **directly to your bank**.”
-
-2) **Create the Razorpay account on their behalf**  
-   - Use their basics from Phase 3.  
-   - **Save:** Razorpay `Account ID` for the instructor (e.g., `acc_ABC123`).
-
-3) **Generate the Hosted Onboarding Link**  
-   - Send it in‑app and via email/WhatsApp.  
-   - It’s prefilled with what you know; it asks only for **missing** docs.
-
-4) **Instructor completes onboarding**  
-   - They open the link → review details → upload PAN/ID, bank proof → submit.  
-   - Status becomes **Pending Review**.
-
-5) **⏳ WAIT: Verification by Razorpay**  
-   - Typical outcomes: **Approved**, **Need clearer copy**, **Alternative doc required**.  
-   - If rejected, instructor re‑uploads via the same link.
-
-6) **Ask for OAuth Consent**  
-   - Once account exists (and ideally after KYC approved), show **Authorize ClassInTown**.  
-   - Instructor taps **Allow** on Razorpay and returns to your app.
-
-7) **Show Connected & Verified**  
-   - UI shows: `Connection = Connected`, `KYC = Verified`.  
-   - Ready for live payments.
 
 ---
 
-### Path A — Already Has an Account
+### Phase 4 — Tokens, Permissions & Security
+- **ACT**: Handle OAuth callback; store `access_token`/`refresh_token` per instructor; track expiry and auto-refresh.
+- **ACT**: Subscribe to `account.app.authorization_revoked` webhook. On revoke, mark connection as Disconnected and prompt Reconnect.
+- **SECURITY**: Encrypt tokens at rest; rotate secrets; strict access control.
 
-1) **Instructor clicks Connect** → Goes to Razorpay’s **OAuth consent** page.  
-2) **Allow** → Redirects back to your app.  
-3) Show `Connected`. If KYC was already done, they’re **Ready**; else prompt **Resume Onboarding**.
-
----
-
-## Phase 5 — Payments End‑to‑End (Plain English)
-
-1) **Student chooses a class and proceeds to pay.**  
-2) Your app prepares a **payment order on the instructor’s Razorpay account** (you have OAuth access).  
-3) Student completes checkout (Razorpay UI).  
-4) **Money settles to instructor’s bank** (per Razorpay timelines).  
-5) You **receive webhooks** like `payment.captured` and mark the enrollment as **Paid** in ClassInTown.  
-6) **Refunds**—if needed—are initiated on the same account; you display refund status in your app.
-
-**Commission handling (OAuth model):**  
-- Start with **monthly invoices** to instructors (simplest).  
-- Optionally add **Route** later for automatic fee splits.
 
 ---
 
-## Phase 6 — Reconciliation, Taxes & Refunds
+### Phase 5 — Payment & Enrollment Flow
+- **ACT**: At checkout, create Razorpay Order using the instructor’s tokens (not platform keys).
+- **ACT**: Launch Razorpay Checkout for the student with that Order.
+- **WAIT**: For payment completion and webhook delivery (`payment.captured`, `order.paid`).
+- **ACT**: On success, mark enrollment Paid and send confirmations.
+- **ACT**: Handle refunds on the same instructor account; sync status via webhooks.
 
-- **Reconciliation data to store per enrollment:**  
-  - Instructor `Account ID`, `Order ID`, `Payment ID`, payer name/email, price, taxes, time.  
-- **Invoicing & GST:**  
-  - Instructor is MoR; your platform invoices the instructor for commission/service.  
-- **Refund policy:**  
-  - Define who can trigger refunds, deadlines, and how fees/commissions are treated on refunds.
-
----
-
-## Phase 7 — Ops & Support Playbooks
-
-**Common Questions & Answers:**  
-- *What is bank proof?* → “A cancelled cheque or first page of passbook or a recent bank statement with your name & account number.”  
-- *KYC rejected—what now?* → “Click **Resume Onboarding** and re‑upload a clearer document or alternate proof.”  
-- *Disconnected by mistake?* → “Click **Reconnect** and press **Allow** on Razorpay.”  
-- *When will I get my money?* → “Directly from Razorpay to your bank—check settlements in Razorpay Dashboard.”  
-- *How to refund a student?* → “From your Razorpay Dashboard (or ask us); we’ll show the refund status in ClassInTown.”
-
-**Webhooks you must watch:**  
-- `payment.captured` (update enrollment to **Paid**)  
-- `refund.processed` (reflect refund)  
-- `account.app.authorization_revoked` (mark **Disconnected** and prompt **Reconnect**)
 
 ---
 
-## Phase 8 — Testing & Launch Plan
+### Phase 6 — Reconciliation, Finance & Compliance
+- **ACT**: For each enrollment, store:
+  - Instructor account id, order id, payment id, payer details
+  - Fee/tax breakdown (commission, GST if applicable)
+- **ACT**: Provide payouts/reports page per instructor.
+- **ACT**: Decide invoicing model (instructor invoices student; you invoice instructor for commission monthly or adopt Route later).
 
-**Sandbox/Pilot:**  
-- Connect a **test** instructor (Path A & Path B).  
-- Run a **test payment** and verify your webhook updates the enrollment.  
-- Simulate **revoked access** and confirm your UI shows **Disconnected** with **Reconnect** button.
-
-**Pilot Launch:**  
-- Onboard 3–5 real instructors, gather friction points, refine copy & reminders.
-
-**Full Launch:**  
-- Publish internal SOP, FAQs, and add automated reminders for “KYC Pending”.
 
 ---
 
-## Phase 9 — Monitoring & Improvements
+### Phase 7 — Operations & Support
+- **ACT**: Prepare playbooks and self-serve buttons: Resume Onboarding, Reconnect, Update Bank, Download report.
+- **ACT**: Create alerting on revoked access and webhook failures.
 
-Track weekly:  
-- % instructors who **started** onboarding, % who **completed** KYC, average **time to verification**.  
-- Payment **success rate**, **refund rate**, webhook **delivery errors**.  
-- Top **drop‑off** reasons (e.g., bank proof unclear).
-
-Improve by:  
-- Prefilling more fields, adding **examples** next to each document upload, and sending helpful **nudges** (email/WhatsApp).
 
 ---
 
-## Printable Checklists
+### Phase 8 — Testing & Launch
+- **ACT**: Sandbox end-to-end for both paths (existing vs create-on-behalf).
+- **ACT**: Simulate webhooks, expired tokens, revoked access.
+- **ACT**: Pilot with 3–5 instructors; gather feedback.
 
-### Platform Readiness
-- [ ] Technology Partner access enabled  
-- [ ] OAuth App created; Client ID/Secret stored securely  
-- [ ] Redirect URL tested end‑to‑end  
-- [ ] Hosted Onboarding Link flow verified  
-- [ ] Webhooks subscribed & tested (`payment.captured`, `authorization_revoked`)
-
-### Per‑Instructor
-- [ ] Basics collected (name, email, phone, entity type, category)  
-- [ ] If no account → Create account; send onboarding link  
-- [ ] If account exists → Connect via OAuth  
-- [ ] KYC status: `Verified`  
-- [ ] Connection status: `Connected`  
-- [ ] Test payment & webhook received
 
 ---
 
-## FAQ & Glossary
+### Phase 9 — Monitoring & Continuous Improvement
+- **ACT**: Track dashboards: % onboarding completion, time to verification, payment success %, refund rate, webhook failures.
+- **ACT**: Optimize friction points (e.g., add examples for commonly rejected docs).
 
-**FAQ**  
-- **Do I need to open the account myself?** No. ClassInTown can create it for you and you just upload missing docs on a single page.  
-- **Who holds my money?** Razorpay; it settles directly to your bank account.  
-- **Can I disconnect later?** Yes, anytime from Razorpay; you can reconnect from ClassInTown.
 
-**Glossary**  
-- **Technology Partner:** A Razorpay partner type that lets a platform act on behalf of its clients with consent.  
-- **OAuth:** A safe permission system that lets ClassInTown operate on the instructor’s Razorpay account.  
-- **KYC (Onboarding):** Document & verification process required before payouts.  
-- **Webhook:** A message Razorpay sends your system when an event occurs (e.g., payment captured).
+---
+
+### Instructor Path Decision — Flowchart
+```mermaid
+flowchart LR
+  A[Start Payments Setup] --> B{Does Instructor have
+  a Razorpay Account?}
+  B -- Yes --> C[Connect via OAuth]
+  B -- No  --> D[Create Account (Partner API)]
+  D --> E[Generate Hosted Onboarding Link]
+  C --> F[Consent Given]
+  E --> G[Instructor Uploads Docs]
+  G --> H{KYC Verified?}
+  H -- No --> E
+  H -- Yes --> F
+  F --> I[Ready for Live Payments]
+```
+
+
+---
+
+### OAuth Consent — Sequence Diagram
+```mermaid
+sequenceDiagram
+  participant I as Instructor
+  participant CIT as ClassInTown
+  participant RZ as Razorpay OAuth
+
+  I->>CIT: Click "Connect Razorpay"
+  CIT->>RZ: Redirect to OAuth (client_id, scopes, redirect_uri)
+  I->>RZ: Login & Approve consent
+  RZ-->>CIT: Redirect with code/state
+  CIT->>RZ: Exchange code for tokens
+  RZ-->>CIT: Access & Refresh tokens (for this instructor)
+  CIT->>CIT: Store tokens securely, mark Connected
+  CIT-->>I: Show status: Connected
+```
+
+
+---
+
+### Create-on-Behalf + Hosted Onboarding — Sequence Diagram
+```mermaid
+sequenceDiagram
+  participant I as Instructor
+  participant CIT as ClassInTown (Partner)
+  participant RZ as Razorpay Partner API
+
+  I->>CIT: Submit basic profile (name, email, phone, entity)
+  CIT->>RZ: Create Account on behalf (server-to-server)
+  RZ-->>CIT: New Account ID (acc_xxx)
+  CIT->>RZ: Generate Hosted Onboarding Link (prefilled)
+  CIT-->>I: Show/Send link (in-app + email/WhatsApp)
+  I->>RZ: Upload KYC documents on hosted page
+  RZ-->>CIT: Webhook/Event updates (status changes)
+  CIT-->>I: Show status (In Progress → Pending → Verified)
+  I->>CIT: Click "Authorize" (OAuth)
+  CIT->>RZ: OAuth flow → get tokens
+  RZ-->>CIT: Access tokens stored per instructor
+  CIT-->>I: Status: Connected; KYC: Verified
+```
+
+
+---
+
+### Checkout & Webhooks — Sequence Diagram
+```mermaid
+sequenceDiagram
+  participant S as Student
+  participant CIT as ClassInTown
+  participant RZ as Razorpay (Instructor Account)
+
+  S->>CIT: Start checkout for class
+  CIT->>RZ: Create Order (using instructor tokens)
+  RZ-->>CIT: Order ID
+  CIT-->>S: Open Razorpay Checkout with order
+  S->>RZ: Pay (card/UPI/etc.)
+  RZ-->>CIT: Webhook payment.captured / order.paid
+  CIT->>CIT: Mark enrollment Paid; send confirmations
+  CIT-->>S: Receipt/confirmation
+  Note over CIT,RZ: Refunds: Initiate on same account → webhook → reverse enrollment state
+```
+
+
+---
+
+### Instructor Status States — State Diagram
+```mermaid
+stateDiagram-v2
+  [*] --> NotConnected
+  NotConnected --> CreatingAccount: Create via Partner API
+  CreatingAccount --> OnboardingLinkSent: Generate link
+  OnboardingLinkSent --> KYCPending: Instructor uploads docs
+  KYCPending --> InReview: Razorpay review
+  InReview --> Verified: Approved
+  InReview --> Rejected: Reupload/fix docs
+  Verified --> Connected: OAuth granted
+  Connected --> Disconnected: Access revoked webhook
+  Disconnected --> Connected: Reconnect via OAuth
+```
+
+
+---
+
+### Gantt — Suggested Project Timeline (Illustrative)
+```mermaid
+gantt
+  dateFormat  YYYY-MM-DD
+  title Razorpay Partner Integration Roadmap
+  section Foundation
+  Phase 0: Business Rules      :done,    p0, 2025-09-01, 3d
+  Phase 1: Partner Approval    :active,  p1, 2025-09-04, 7d
+  Phase 2: OAuth App Setup     :         p2, after p1, 2d
+  section Build & UX
+  Phase 3: Data + UI           :         p3, after p2, 5d
+  Phase 4: Tokens + Webhooks   :         p4, after p3, 4d
+  section Payments & Ops
+  Phase 5: Checkout + Orders   :         p5, after p4, 4d
+  Phase 6: Reconciliation      :         p6, after p5, 3d
+  Phase 7: Support Playbooks   :         p7, after p6, 2d
+  section Launch
+  Phase 8: Sandbox + Pilot     :         p8, after p7, 7d
+  Phase 9: Monitoring          :         p9, after p8, 999d
+```
+
+
+---
+
+### What You’ll Collect Up Front (Minimal Form)
+- Legal name (e.g., Riya Shah)
+- Email address
+- Mobile number (+91…)
+- Business type: Individual / Sole Proprietor / LLP / Company
+- Business category: Education → Coaching/Tutoring
+- Trading/brand name (optional)
+- Bank details (or defer to onboarding link)
+
+
+---
+
+### KYC Documents (Typical)
+- Individual / Sole Proprietor:
+  - PAN (person’s PAN)
+  - ID + address proof (Aadhaar / Passport / DL / Voter ID)
+  - Bank proof (cancelled cheque or passbook first page or statement)
+  - Optional business proof if registered (shop & establishment, GST)
+- LLP / Company / Partnership:
+  - Registration docs (COI / LLP Agreement / Partnership Deed)
+  - PAN of entity
+  - Authorized signatory ID + PAN
+  - Registered address proof
+  - Bank proof; GST if applicable
+
+
+---
+
+### Payments Setup — UI Copy You Can Reuse
+- Header: “Get paid directly to your bank via Razorpay”
+- Step 1 button: “Create/Connect your Razorpay account”
+- Subtext: “Takes ~5–10 minutes. Keep your PAN, ID proof, and bank proof handy.”
+- Status Cards:
+  - Connection: Not Connected / Connected
+  - KYC: Not Started / In Progress / Pending Review / Verified
+- Actions: Resume Onboarding | Reconnect | Update Bank
+- Empty State: “No Razorpay account found. Click Create/Connect to start. We’ll pre-fill what we know and guide you step by step.”
+- Error State (examples):
+  - “We couldn’t finish your connection because Razorpay needs one more document (bank proof). Click Resume Onboarding.”
+  - “Access revoked on Razorpay. Click Reconnect to continue accepting payments.”
+- Tooltip: “You control your own account. You can disconnect ClassInTown anytime from your Razorpay Dashboard.”
+
+
+---
+
+### Operational Checklist (Team)
+- Before launch
+  - ☐ Technology Partner access enabled
+  - ☐ OAuth Application created; Client ID/Secret stored securely
+  - ☐ Redirect URL tested (Razorpay → Your app → success message)
+  - ☐ Onboarding link flow confirmed (create → hosted link → upload docs → status visible)
+  - ☐ Webhooks subscribed: `payment.captured`, `order.paid`, `refund.processed`, `account.app.authorization_revoked`
+  - ☐ Support playbooks ready
+- During onboarding
+  - ☐ Store per instructor: name, email, phone, entity type, account ID, connection status, KYC status
+  - ☐ Nudge stalled users: “Please upload bank proof to finish activation.”
+- Before live payments
+  - ☐ Test cycle complete: connect test sub-merchant, run payment, receive webhooks
+
+
+---
+
+### Support Playbooks (Ready-to-Say Guidance)
+- What is “bank proof”?
+  - “A cancelled cheque or the first page of your passbook or a recent bank statement showing your name and account number is fine.”
+- KYC rejected — what now?
+  - “Razorpay needs a clearer document or a different type. Click Resume Onboarding and re-upload. If you’re unsure, reply with a photo of what you have—we’ll advise the best fit.”
+- Disconnected by mistake?
+  - “No problem. Click Reconnect on ClassInTown → you’ll see a Razorpay page → press Allow.”
+- When do I get my money?
+  - “The money settles directly from Razorpay to your bank per Razorpay’s standard timelines. Check settlement status in your Razorpay Dashboard.”
+- Refund a student?
+  - “Do it from your Razorpay Dashboard (same account that received the payment) or ask us to initiate. We’ll reflect the status automatically.”
+
+
+---
+
+### Common Pitfalls → Fixes
+- No webhook for revoked access → You’ll try charging disconnected accounts.
+  - Fix: Subscribe to `account.app.authorization_revoked` and flag Disconnected immediately.
+- Asking every document up front → High drop-off.
+  - Fix: Use hosted onboarding link and prefill; only missing items are asked.
+- Ambiguous commission/invoicing → Disputes later.
+  - Fix: Publish commission/refund policy clearly inside Payments Setup.
+- No “Resume Onboarding” button → Users get stuck.
+  - Fix: Always provide a way back into the hosted onboarding flow.
+
+
+---
+
+### FAQs
+- Do I have to create a Razorpay account myself?
+  - No. ClassInTown can create it for you and send a link to upload remaining documents.
+- Who holds my money?
+  - Razorpay settles directly to your bank account. ClassInTown never holds your funds.
+- Can I disconnect later?
+  - Yes. Revoke access in your Razorpay Dashboard anytime. We’ll notify you and pause payments here until you reconnect.
+- I already have Razorpay — what do I do?
+  - Click Connect and approve access — done.
+
+
+---
+
+### Glossary
+- Technology Partner: Razorpay partner type enabling platform-to-client operations via OAuth.
+- OAuth: Secure authorization for ClassInTown to act on an instructor’s account with consent.
+- Onboarding (KYC): Document and verification process required before payouts.
+- Webhook: Event notifications sent by Razorpay (payment captured, access revoked, etc.).
+
+
+---
+
+### One-Page Visual Checklist (Per Instructor)
+```mermaid
+journey
+  title Instructor Payments Enablement
+  section Collect Basics
+    Legal name, email, phone, entity, category: 5
+  section Account Path
+    If no account: Create via Partner API: 4
+    Generate & send hosted onboarding link: 4
+    Upload missing KYC docs: 3
+  section Consent
+    Click Connect & approve OAuth: 4
+  section Go Live
+    KYC Verified status: 3
+    Test a small payment: 5
+    Webhooks received & enrollment marked Paid: 5
+  section Operate
+    Refunds reflect automatically: 4
+    Monitoring & alerts in place: 3
+```
+
+
+---
+
+### When to ACT vs When to WAIT (At-a-Glance)
+- ACT
+  - Create Partner OAuth app; store credentials
+  - Build Payments Setup UI; collect minimal data
+  - Create instructor account (if needed); generate onboarding link
+  - Handle OAuth; store tokens; subscribe to webhooks
+  - Create order using instructor tokens; open checkout; update enrollment
+  - Reconciliation, reports, support playbooks, alerts
+- WAIT
+  - Partner approval from Razorpay
+  - Instructor uploading KYC
+  - Razorpay KYC review (Pending Review)
+  - Webhook deliveries after payments/refunds
+
+
+---
+
+### Notes
+- Start with OAuth + direct settlement to instructor. Add Route later if you want automated commission splits; until then, invoice instructors periodically for your commission.
+- Keep onboarding copy empathetic and short; only ask what’s necessary up front; prefer prefill. 
