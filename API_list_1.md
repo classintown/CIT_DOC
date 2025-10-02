@@ -12,6 +12,19 @@
   - [Student Enrollment Data](#student-enrollment-data)
   - [View Student Detail](#view-student-detail)
 - [Schedule Management](#schedule-management)
+- [Attendance Management](#attendance-management)
+  - [Get All Schedules](#get-all-schedules)
+  - [Get Enrolled Students](#get-enrolled-students)
+- [Activity Listings](#activity-listings)
+  - [Get Active Activities](#get-active-activities)
+  - [Get Archived Activities](#get-archived-activities)
+- [Venue Management](#venue-management)
+  - [Get Locations](#get-locations)
+  - [Get Venue Analytics](#get-venue-analytics)
+- [Enrollment Management](#enrollment-management)
+  - [Get Instructor Enrollments](#get-instructor-enrollments)
+- [Payment Plans](#payment-plans)
+  - [Get Payment Plans](#get-payment-plans)
 
 ---
 
@@ -309,6 +322,167 @@ curl 'https://dev.classintown.com/api/v1/student/instructor/68d17bbe53f6535b3228
 **Request:**
 ```bash
 curl 'https://dev.classintown.com/api/v1/instructClass/instructor/68d17bbe53f6535b32286266/schedules' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+---
+
+## Attendance Management
+
+### Get All Schedules
+
+**Endpoint:** `GET /api/v1/instructClass`
+
+**Description:** Get all schedules associated with activities for attendance tracking
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/instructClass' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+### Get Enrolled Students
+
+**Endpoint:** `GET /api/v1/class/enrolled/{scheduleId}`
+
+**Path Parameters:**
+- `scheduleId`: 68d6ba382d36a78258eff75a
+
+**Description:** Get students enrolled in a selected schedule with attendance data
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/class/enrolled/68d6ba382d36a78258eff75a' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+**Note:** This endpoint is also used for instructor notes feature.
+
+---
+
+## Activity Listings
+
+### Get Active Activities
+
+**Endpoint:** `GET /api/v1/activities/active`
+
+**Description:** Get all active activities
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/activities/active' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+### Get Archived Activities
+
+**Endpoint:** `GET /api/v1/activities/archived`
+
+**Description:** Get all archived activities
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/activities/archived' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+---
+
+## Venue Management
+
+### Get Locations
+
+**Endpoint:** `GET /api/v1/maps/enhanced`
+
+**Query Parameters:**
+- `page`: 1
+- `limit`: 10
+- `sortBy`: createdAt
+- `sortOrder`: desc
+- `includeInstitute`: false
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/maps/enhanced?page=1&limit=10&sortBy=createdAt&sortOrder=desc&includeInstitute=false' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+### Get Venue Analytics
+
+**Endpoint:** `GET /api/v1/maps/analytics`
+
+**Query Parameters:**
+- `timeframe`: 30d
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/maps/analytics?timeframe=30d' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+---
+
+## Enrollment Management
+
+### Get Instructor Enrollments
+
+**Endpoint:** `GET /api/v1/enrollment/instructor`
+
+**Query Parameters:**
+- `instructorId`: 68d17bbe53f6535b32286266
+- `sortColumn`: enrollmentDate
+- `sortOrder`: desc
+- `page`: 1
+- `limit`: 15
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/enrollment/instructor?instructorId=68d17bbe53f6535b32286266&sortColumn=enrollmentDate&sortOrder=desc&page=1&limit=15' \
+  -H 'accept: application/json' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
+  -H 'content-type: application/json'
+```
+
+---
+
+## Payment Plans
+
+### Get Payment Plans
+
+**Endpoint:** `GET /api/v1/enrollment/payment-plans`
+
+**Query Parameters:**
+- `instructorId`: 68d17bbe53f6535b32286266
+- `sortColumn`: createdAt
+- `sortOrder`: desc
+- `page`: 1
+- `limit`: 15
+
+**Request:**
+```bash
+curl 'https://dev.classintown.com/api/v1/enrollment/payment-plans?instructorId=68d17bbe53f6535b32286266&sortColumn=createdAt&sortOrder=desc&page=1&limit=15' \
   -H 'accept: application/json' \
   -H 'accept-language: en-US,en;q=0.9' \
   -H 'authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' \
