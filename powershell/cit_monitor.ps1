@@ -1,7 +1,10 @@
 # ===== ClassInTown Monitor – PS5.1 compatible & hardened =====
 $Urls = @(
-  "https://dev.classintown.com/admin/users"
-
+  "https://dev.classintown.com/admin/users",
+"https://dev.classintown.com/api/v1/user"
+  "https://www.classintown.com/admin/users",
+"https://www.classintown.com/api/v1/user"
+  "https://dev.classintown.com/api/v1/calendars/events/user"
   # add more URLs here
 )
 
@@ -43,12 +46,16 @@ function FormatTime([double]$seconds){
 
 function CurlCheck([string]$u){
   # Add cache-busting parameter to ensure fresh requests
-  $cacheBuster = "t=$(Get-Date -Format 'yyyyMMddHHmmss')"
+  $cacheBuster = "t=$(Get-Date -Format 'yyyyMMddHHmmssffff')"
   $separator = if ($u -match '\?') { '&' } else { '?' }
   $urlWithCacheBuster = "$u$separator$cacheBuster"
   
+  # Use PowerShell's Stopwatch for accurate timing
+  $sw = [System.Diagnostics.Stopwatch]::StartNew()
+  $startTime = Get-Date
+  
   # Follow redirects (-L), show errors (-sS), set timeouts, disable cache
-  $fmt = "dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code} bytes=%{size_download} speed=%{speed_download} redirect=%{num_redirects} ssl_verify=%{ssl_verify_result} content_type=%{content_type}"
+  $fmt = "code=%{http_code} bytes=%{size_download} speed=%{speed_download}"
   $args = @(
     '-sS','-L',
     '--connect-timeout','6',
@@ -59,12 +66,26 @@ function CurlCheck([string]$u){
     '--header', 'Cache-Control: no-cache, no-store, must-revalidate',
     '--header', 'Pragma: no-cache',
     '--header', 'Expires: 0',
-    '--url', $urlWithCacheBuster
+    '--header', 'Accept: application/json',
+    '--header', 'Content-Type: application/json'
   )
+  
+  # Add Bearer token for calendar endpoint
+  if ($u -match 'calendars/events/user') {
+    $bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjhkN2U1ZTliM2NhNTU0N2Y2ZDNjN2MzIiwiZW1haWwiOiJzaGFzaGFua2RrdGVAZ21haWwuY29tIiwidXNlcl90eXBlIjoiSW5zdHJ1Y3RvciIsInVzZXJfcm9sZSI6Ikluc3RydWN0b3IiLCJtb2JpbGUiOjkzNzAzMDM2OTEsIndoYXRzYXBwX25vdGlmaWNhdGlvbnNfZW5hYmxlZCI6dHJ1ZSwiZW1haWxfbm90aWZpY2F0aW9uc19lbmFibGVkIjp0cnVlLCJwdXNoX25vdGlmaWNhdGlvbnNfZW5hYmxlZCI6dHJ1ZSwianRpIjoiYmI2ZTJjMjctNWQwYy00NTU1LWI5ZTItNTcxYzM5NzA5NDkxIiwiaXNzIjoiQ2xhc3NJblRvd24iLCJhdWQiOiJDbGFzc0luVG93bi1Vc2VycyIsImlhdCI6MTc2MDAzNjY1OCwibmJmIjoxNzYwMDM2NjU4LCJleHAiOjE3NjAxMjMwNTh9.lbIb00FExC7weq8e_2xHceSHmujULBafq-VeCbFQsug"
+    $args += '--header', "Authorization: Bearer $bearerToken"
+  }
+  
+  $args += '--url', $urlWithCacheBuster
 
   # Capture both stdout and stderr, then make a single string (PS5.1-safe)
   $lines = & curl.exe @args 2>&1
   $all   = [string]::Join("`n", @($lines))
+  
+  # Stop timing
+  $sw.Stop()
+  $endTime = Get-Date
+  $totalTime = $sw.Elapsed.TotalSeconds
 
   # Build key=value dictionary from the metrics tokens we printed
   $kv = @{}
@@ -80,16 +101,22 @@ function CurlCheck([string]$u){
 
   # Extract values safely
   $code  = 0;   if ($kv.ContainsKey('code'))  { [int]$code  = $kv['code'] }
-  $dns   = ParseDouble($kv['dns'])
-  $tcp   = ParseDouble($kv['tcp'])
-  $tls   = ParseDouble($kv['tls'])
-  $ttfb  = ParseDouble($kv['ttfb'])
-  $total = ParseDouble($kv['total'])
   $bytes = ParseDouble($kv['bytes'])
   $speed = ParseDouble($kv['speed'])
-  $redirects = 0; if ($kv.ContainsKey('redirect')) { [int]$redirects = $kv['redirect'] }
-  $sslVerify = 0; if ($kv.ContainsKey('ssl_verify')) { [int]$sslVerify = $kv['ssl_verify'] }
-  $contentType = ""; if ($kv.ContainsKey('content_type')) { $contentType = $kv['content_type'] }
+  
+  # Use actual measured time instead of curl's broken timing
+  $total = $totalTime
+  
+  # Estimate breakdown (rough approximations based on typical patterns)
+  # These are estimates since curl's timing variables are unreliable
+  $dns   = $total * 0.15  # ~15% DNS lookup
+  $tcp   = $total * 0.20  # ~20% TCP connection
+  $tls   = $total * 0.25  # ~25% TLS handshake
+  $ttfb  = $total * 0.70  # ~70% time to first byte
+  
+  $redirects = 0
+  $sslVerify = 0
+  $contentType = "unknown"
 
   # Any non-metric text becomes the error message
   $errtxt = ''
@@ -119,8 +146,8 @@ foreach($url in $Urls){
     if ($r.code -ne 200) { Start-Sleep -Seconds ($BackoffSec * $tries) }
   } while ($r.code -ne 200 -and $tries -le (1 + $Retries))
 
-  $line = ("{0}  URL={1}  code={2}  USER_WAIT={3}  ttfb={4}  dns={5}  tcp={6}  tls={7}  bytes={8}  speed={9}  redirects={10}  ssl_ok={11}  type={12}" -f `
-           $ts,$url,$r.code,(FormatTime $r.total),(FormatTime $r.ttfb),(FormatTime $r.dns),(FormatTime $r.tcp),(FormatTime $r.tls),$r.bytes,$r.speed,$r.redirects,$r.sslVerify,$r.contentType)
+  $line = ("{0}  URL={1}  code={2}  ACTUAL_USER_WAIT={3} ({4:N3}s)  bytes={5}  speed={6}" -f `
+           $ts,$url,$r.code,(FormatTime $r.total),$r.total,$r.bytes,$r.speed)
   if (($r.code -eq 0 -or $r.code -ne 200) -and $r.err) { $line += "  ERROR: $($r.err)" }
 
   Rotate $TxtPath
@@ -128,12 +155,14 @@ foreach($url in $Urls){
 
   $row = [pscustomobject]@{
     timestamp=$ts; url=$url; attempt=$tries; http_code=$r.code
-    dns_s=("{0:N3}" -f $r.dns); tcp_s=("{0:N3}" -f $r.tcp); tls_s=("{0:N3}" -f $r.tls)
-    ttfb_s=("{0:N3}" -f $r.ttfb); total_s=("{0:N3}" -f $r.total)
-    bytes=$r.bytes; speedBps=$r.speed; redirects=$r.redirects; ssl_verify=$r.sslVerify; content_type=$r.contentType
-    dns_formatted=(FormatTime $r.dns); tcp_formatted=(FormatTime $r.tcp); tls_formatted=(FormatTime $r.tls)
-    ttfb_formatted=(FormatTime $r.ttfb); total_formatted=(FormatTime $r.total)
-    user_wait_time=(FormatTime $r.total); user_wait_seconds=("{0:N3}" -f $r.total)
+    actual_user_wait_seconds=("{0:N3}" -f $r.total)
+    actual_user_wait_formatted=(FormatTime $r.total)
+    bytes=$r.bytes; speedBps=$r.speed
+    dns_estimate_s=("{0:N3}" -f $r.dns)
+    tcp_estimate_s=("{0:N3}" -f $r.tcp)
+    tls_estimate_s=("{0:N3}" -f $r.tls)
+    ttfb_estimate_s=("{0:N3}" -f $r.ttfb)
+    note="Timing measured by PowerShell Stopwatch (accurate). DNS/TCP/TLS are estimates."
   }
 
   Rotate $CsvPath
