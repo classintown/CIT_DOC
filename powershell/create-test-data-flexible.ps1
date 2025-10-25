@@ -16,7 +16,7 @@
 #   # Large test dataset
 #   .\create-test-data-flexible.ps1 -AuthToken "TOKEN" -Activities 30 -Locations 30 -Classes 20 -Students 50 -EnrollmentsPerStudent 3
 # ===========================================================================
-# dev = https:dev.classintown.com/api/v1
+# dev = "https:dev.classintown.com/api/v1"
 param(
     [string]$BaseUrl = "http://localhost:2000",
     [string]$AuthToken = "",
