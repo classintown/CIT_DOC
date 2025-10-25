@@ -28,7 +28,7 @@
 #   # Dry run (show what would be deleted without deleting)
 #   .\cleanup-flexible-test-data.ps1 -AuthToken "TOKEN" -DryRun
 # ===========================================================================
-
+# dev = "https:dev.classintown.com/api/v1"
 param(
     [string]$BaseUrl = "http://localhost:2000",
     [string]$AuthToken = "",
