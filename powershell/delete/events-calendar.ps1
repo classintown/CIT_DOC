@@ -23,12 +23,25 @@ Write-Host "`n[DELETE] Deleting future calendar events for: $Email`n" -Foregroun
 try {
     Write-Host "Fetching events..." -ForegroundColor Yellow
     $resp = Invoke-RestMethod -Uri "$BaseUrl/calendars/events/user" -Headers $headers -Method Get
-    $future = $resp.data | Where-Object {
-        $st = if ($_.start.dateTime) { [DateTime]::Parse($_.start.dateTime) } else { [DateTime]::Parse($_.start.date) }
-        $st -gt $now
+    Write-Host "Total events returned: $($resp.data.Count)" -ForegroundColor Yellow
+    
+    $future = @()
+    $skipped = 0
+    $resp.data | ForEach-Object {
+        try {
+            $dateStr = if ($_.start.dateTime) { $_.start.dateTime } else { $_.start.date }
+            # Convert "M/d/yyyy HH:mm:ss" format to DateTime
+            $st = [DateTime]::ParseExact($dateStr, "M/d/yyyy HH:mm:ss", $null)
+            if ($st -gt $now) {
+                $future += $_
+            }
+        } catch {
+            $skipped++
+            Write-Host "  [SKIP] Unable to parse: $($_.summary) (date: $dateStr)" -ForegroundColor DarkGray
+        }
     }
     
-    Write-Host "Found $($future.Count) future events`n" -ForegroundColor Green
+    Write-Host "Found $($future.Count) future events (skipped $skipped unparseable)`n" -ForegroundColor Green
     
     if ($future.Count -eq 0) { 
         Write-Host "Nothing to delete!`n" -ForegroundColor Green
@@ -37,8 +50,14 @@ try {
     
     # Show list
     $future | ForEach-Object { 
-        $st = if ($_.start.dateTime) { [DateTime]::Parse($_.start.dateTime).ToString('MM/dd HH:mm') } else { [DateTime]::Parse($_.start.date).ToString('MM/dd') }
-        Write-Host "  - [$st] $($_.summary)" -ForegroundColor Gray
+        try {
+            $dateStr = if ($_.start.dateTime) { $_.start.dateTime } else { $_.start.date }
+            $st = [DateTime]::ParseExact($dateStr, "M/d/yyyy HH:mm:ss", $null)
+            $formatted = $st.ToString('MM/dd HH:mm')
+            Write-Host "  - [$formatted] $($_.summary)" -ForegroundColor Gray
+        } catch {
+            Write-Host "  - [unknown] $($_.summary)" -ForegroundColor Gray
+        }
     }
     
     Write-Host "`nType YES to delete all: " -NoNewline -ForegroundColor Yellow
@@ -64,4 +83,3 @@ try {
     Write-Host "`n[ERROR] $_`n" -ForegroundColor Red
     exit 1
 }
-
