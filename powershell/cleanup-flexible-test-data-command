@@ -1,0 +1,1 @@
+.\create-test-data-flexible.ps1 -AuthToken "YOUR_TOKEN"  -Activities 10 -Locations 5 -Classes 15 -Students 10 -Verbose
