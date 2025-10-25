@@ -1,0 +1,1 @@
+.\cleanup-flexible-test-data.ps1 -AuthToken "YOUR_TOKEN" -Verbose
