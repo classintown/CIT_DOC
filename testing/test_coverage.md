@@ -9,192 +9,340 @@
 
 | Category | Features | Test Cases | Estimated Hours |
 |----------|----------|------------|-----------------|
-| **1. Authentication & Authorization** | 5 | 150 | 80h |
-| **2. Class Management (Core)** | 8 | 320 | 160h |
-| **3. Student Management** | 6 | 180 | 90h |
-| **4. Payment Management** | 8 | 240 | 120h |
-| **5. Calendar & Scheduling** | 6 | 180 | 90h |
-| **6. Communications** | 5 | 150 | 75h |
-| **7. Listings** | 4 | 120 | 60h |
-| **8. Reports & Analytics** | 5 | 150 | 75h |
-| **9. Resources & Materials** | 5 | 150 | 75h |
-| **10. Business Profile** | 3 | 90 | 45h |
-| **11. Support & Help** | 3 | 60 | 30h |
-| **12. Load Testing** | - | 50 | 80h |
-| **13. Database Testing** | - | 100 | 60h |
-| **TOTAL** | **58 Features** | **1,940 Test Cases** | **1,040 Hours** |
+| **1. Authentication & Authorization** | 5 | 403 | 140h |
+| **2. Class Management (Core)** | 8 | 450 | 200h |
+| **3. Student Management** | 6 | 210 | 100h |
+| **4. Payment Management** | 8 | 280 | 140h |
+| **5. Calendar & Scheduling** | 6 | 250 | 120h |
+| **6. Communications** | 5 | 180 | 85h |
+| **7. Listings** | 4 | 140 | 70h |
+| **8. Reports & Analytics** | 5 | 170 | 85h |
+| **9. Resources & Materials** | 5 | 170 | 85h |
+| **10. Business Profile** | 3 | 100 | 50h |
+| **11. Support & Help** | 3 | 70 | 35h |
+| **12. Load Testing** | - | 80 | 100h |
+| **13. Database Testing** | - | 120 | 70h |
+| **14. Google Integration Testing** | - | 150 | 80h |
+| **TOTAL** | **58 Features** | **2,773 Test Cases** | **1,360 Hours** |
 
-**Team Size:** 3 QA Engineers  
-**Timeline:** ~14 weeks (3.5 months) of rigorous testing  
-**Cost:** ~$52,000 USD (@ $50/hour)
+**Team Size:** 4 QA Engineers (1 Senior + 2 Mid + 1 Junior)  
+**Timeline:** ~17 weeks (4.2 months) of rigorous testing  
+**Cost:** ~$68,000 USD (@ $50/hour)
 
 ---
 
 ## 🔐 1. AUTHENTICATION & AUTHORIZATION (Security)
 
-### 1.1 Email/Password Login
+> **PRIMARY METHODS:** Google OAuth (70%) + Mobile OTP (25%)  
+> **BACKUP METHOD:** Email/Password (5%)
+
+### 1.1 🌟 Google OAuth (PRIMARY - 70% of users)
 
 #### Unit Tests - Frontend (Angular)
-| Component/Service | Test Scenario | Frontend | Backend | Database |
-|-------------------|---------------|----------|---------|----------|
-| `login.component.ts` | Form validation (empty fields) | ✓ | | |
-| `login.component.ts` | Email format validation | ✓ | | |
-| `login.component.ts` | Password min length validation | ✓ | | |
-| `login.component.ts` | Show/hide password toggle | ✓ | | |
-| `auth.service.ts` | HTTP POST to /api/auth/login | ✓ | | |
-| `auth.service.ts` | Token storage in localStorage | ✓ | | |
-| `auth.service.ts` | Redirect after successful login | ✓ | | |
+| Component/Service | Test Scenario | Frontend | Backend | Database | Priority |
+|-------------------|---------------|----------|---------|----------|----------|
+| `google-oauth.component.ts` | Google Sign-in button render | ✓ | | | HIGH |
+| `google-oauth.component.ts` | Click → Open Google consent | ✓ | | | HIGH |
+| `google-oauth.component.ts` | Handle OAuth redirect callback | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Receive Google ID token | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Validate token client-side | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Send token to backend | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Store JWT in localStorage | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Store user profile data | ✓ | | | HIGH |
+| `google-oauth.service.ts` | Store Google refresh token | ✓ | | | HIGH |
+| `auth.service.ts` | Handle Google login success | ✓ | | | HIGH |
+| `auth.service.ts` | Redirect to role dashboard | ✓ | | | HIGH |
+| `auth.service.ts` | Handle Google scope denial | ✓ | | | HIGH |
+| `auth.service.ts` | Handle network errors | ✓ | | | MEDIUM |
 
 #### Unit Tests - Backend (Node.js)
-| Controller/Service | Test Scenario | Frontend | Backend | Database |
-|-------------------|---------------|----------|---------|----------|
-| `auth.controller.js` | Validate email exists | | ✓ | ✓ |
-| `auth.controller.js` | Validate password match (bcrypt) | | ✓ | ✓ |
-| `auth.controller.js` | Generate JWT token | | ✓ | |
-| `auth.controller.js` | Return user role | | ✓ | ✓ |
-| `auth.controller.js` | Handle invalid credentials | | ✓ | ✓ |
-| `auth.controller.js` | Rate limiting (5 attempts/minute) | | ✓ | |
-| `session.service.js` | Create session in DB | | ✓ | ✓ |
-| `session.service.js` | Update last login timestamp | | ✓ | ✓ |
+| Controller/Service | Test Scenario | Frontend | Backend | Database | Priority |
+|-------------------|---------------|----------|---------|----------|----------|
+| `auth.controller.js` | Receive Google ID token | | ✓ | | HIGH |
+| `auth.controller.js` | Verify Google token with Google API | | ✓ | | HIGH |
+| `auth.controller.js` | Extract user email from token | | ✓ | | HIGH |
+| `auth.controller.js` | Extract user name from token | | ✓ | | HIGH |
+| `auth.controller.js` | Extract Google profile picture | | ✓ | | HIGH |
+| `auth.controller.js` | Check if user exists in DB | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Create new user if first-time | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Link Google account to existing user | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Store Google access token | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Store Google refresh token | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Generate ClassInTown JWT token | | ✓ | | HIGH |
+| `auth.controller.js` | Return user role & permissions | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Check Google Calendar scope | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Handle revoked Google access | | ✓ | ✓ | MEDIUM |
+| `auth.controller.js` | Handle expired Google token | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Refresh Google token | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Rate limiting (10 requests/minute) | | ✓ | | MEDIUM |
+| `session.service.js` | Create session with Google metadata | | ✓ | ✓ | HIGH |
+| `session.service.js` | Update last login timestamp | | ✓ | ✓ | MEDIUM |
+| `google-calendar.service.js` | Sync user events on first login | | ✓ | ✓ | HIGH |
 
 #### Integration Tests
-| Scenario | Description | Tests |
-|----------|-------------|-------|
-| Login Success Flow | Email → Backend → JWT → Dashboard | 5 |
-| Login Failure Flow | Wrong password → Error message | 3 |
-| Account Locked | 5 failed attempts → Lock account | 4 |
-| Session Expiry | Token expires → Redirect to login | 3 |
+| Scenario | Description | Tests | Priority |
+|----------|-------------|-------|----------|
+| First-time Google Login | Google OAuth → Create account → Onboarding | 10 | HIGH |
+| Returning User Google Login | Google OAuth → JWT → Dashboard | 8 | HIGH |
+| Google token validation | Backend verifies token with Google API | 8 | HIGH |
+| Account linking | Link Google to existing email account | 8 | HIGH |
+| Calendar scope granted | User grants calendar access → Sync enabled | 10 | HIGH |
+| Calendar scope denied | User denies calendar → Continue without sync | 6 | MEDIUM |
+| Token refresh | Expired token → Auto-refresh → Continue | 8 | HIGH |
+| Revoked access | User revokes from Google → Re-authenticate | 6 | MEDIUM |
+| Multiple devices | Same Google account on 3 devices | 8 | HIGH |
+| Role-based redirect | Instructor/Student/Admin → Correct dashboard | 8 | HIGH |
 
 #### E2E Tests (Playwright)
-| User Journey | Steps | Status |
-|--------------|-------|--------|
-| Instructor Login | Open → Enter credentials → Dashboard | ⬜ |
-| Student Login | Open → Enter credentials → Browse classes | ⬜ |
-| Admin Login | Open → Enter credentials → Admin panel | ⬜ |
-| Failed Login | Wrong password → Error shown | ⬜ |
+| User Journey | Steps | Tests | Priority |
+|--------------|-------|-------|----------|
+| 🔥 Instructor Google Sign-in (New) | Click Google → Consent → Onboarding → Dashboard | 8 | CRITICAL |
+| 🔥 Instructor Google Sign-in (Returning) | Click Google → Auto-login → Dashboard | 5 | CRITICAL |
+| 🔥 Student Google Sign-in (New) | Click Google → Consent → Browse classes | 8 | CRITICAL |
+| 🔥 Student Google Sign-in (Returning) | Click Google → Auto-login → Browse | 5 | CRITICAL |
+| Admin Google Sign-in | Click Google → Admin panel | 5 | HIGH |
+| Google Calendar Sync | Login → Grant scope → Events sync | 10 | HIGH |
+| Switch accounts | Logout → Login with different Google account | 6 | MEDIUM |
+| Session persistence | Close browser → Reopen → Still logged in | 5 | HIGH |
 
-**Sub-Total:** 30 test cases × 5 features = **150 test cases**
+**Sub-Total:** **120 test cases (Google OAuth)**
 
 ---
 
-### 1.2 Mobile OTP Login
+### 1.2 🌟 Mobile OTP Login (SECONDARY - 25% of users)
 
-#### Unit Tests - Frontend
-| Test Scenario | Frontend | Backend | Database |
-|---------------|----------|---------|----------|
-| Mobile number validation (10 digits) | ✓ | | |
-| Country code dropdown | ✓ | | |
-| Send OTP button enabled/disabled | ✓ | | |
-| OTP input field (6 digits) | ✓ | | |
-| Resend OTP timer (60 seconds) | ✓ | | |
+#### Unit Tests - Frontend (Angular)
+| Component/Service | Test Scenario | Frontend | Backend | Database | Priority |
+|-------------------|---------------|----------|---------|----------|----------|
+| `mobile-login.component.ts` | Country code dropdown (India +91) | ✓ | | | HIGH |
+| `mobile-login.component.ts` | Mobile number validation (10 digits) | ✓ | | | HIGH |
+| `mobile-login.component.ts` | Mobile format validation | ✓ | | | HIGH |
+| `mobile-login.component.ts` | Send OTP button enabled/disabled | ✓ | | | HIGH |
+| `mobile-login.component.ts` | OTP sent success message | ✓ | | | MEDIUM |
+| `mobile-login.component.ts` | OTP input field (6 digits) | ✓ | | | HIGH |
+| `mobile-login.component.ts` | Auto-focus on OTP fields | ✓ | | | LOW |
+| `mobile-login.component.ts` | Resend OTP button (60s timer) | ✓ | | | HIGH |
+| `mobile-login.component.ts` | Verify OTP button click | ✓ | | | HIGH |
+| `auth.service.ts` | POST /api/auth/send-otp | ✓ | | | HIGH |
+| `auth.service.ts` | POST /api/auth/verify-otp | ✓ | | | HIGH |
+| `auth.service.ts` | Store JWT from OTP login | ✓ | | | HIGH |
 
-#### Unit Tests - Backend
-| Test Scenario | Frontend | Backend | Database |
-|---------------|----------|---------|----------|
-| Generate random 6-digit OTP | | ✓ | |
-| Send SMS via SMS gateway | | ✓ | |
-| Store OTP in DB with expiry (5 min) | | ✓ | ✓ |
-| Verify OTP match | | ✓ | ✓ |
-| Invalidate OTP after use | | ✓ | ✓ |
-| Rate limit (3 OTP requests/hour) | | ✓ | |
+#### Unit Tests - Backend (Node.js)
+| Controller/Service | Test Scenario | Frontend | Backend | Database | Priority |
+|-------------------|---------------|----------|---------|----------|----------|
+| `auth.controller.js` | Validate mobile number format | | ✓ | | HIGH |
+| `auth.controller.js` | Check mobile exists in DB | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Generate random 6-digit OTP | | ✓ | | HIGH |
+| `auth.controller.js` | Send SMS via gateway (India) | | ✓ | | HIGH |
+| `auth.controller.js` | Send SMS via gateway (Global) | | ✓ | | MEDIUM |
+| `auth.controller.js` | Store OTP in DB with 5 min expiry | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Hash OTP before storing | | ✓ | | MEDIUM |
+| `auth.controller.js` | Rate limit (3 OTP/hour per mobile) | | ✓ | | HIGH |
+| `auth.controller.js` | Verify OTP match | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Check OTP not expired | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Invalidate OTP after successful use | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Block after 3 wrong attempts | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Generate JWT after OTP verify | | ✓ | | HIGH |
+| `auth.controller.js` | Create user if first-time mobile | | ✓ | ✓ | HIGH |
+| `auth.controller.js` | Link mobile to existing user | | ✓ | ✓ | MEDIUM |
+| `session.service.js` | Create session with mobile data | | ✓ | ✓ | HIGH |
+| `sms.service.js` | SMS delivery confirmation | | ✓ | | MEDIUM |
 
 #### Integration Tests
-| Scenario | Tests |
-|----------|-------|
-| OTP Send → Verify → Login Success | 8 |
-| OTP Expired → Error | 4 |
-| Wrong OTP 3 times → Block | 5 |
+| Scenario | Description | Tests | Priority |
+|----------|-------------|-------|----------|
+| OTP Send → Verify → Login Success | Complete OTP flow | 10 | HIGH |
+| First-time Mobile Login | OTP → Create account → Onboarding | 8 | HIGH |
+| Returning Mobile Login | OTP → Dashboard | 6 | HIGH |
+| OTP Expired (5 min) | Send OTP → Wait → Verify → Error | 6 | HIGH |
+| Wrong OTP 3 times | Wrong OTP → Block account | 8 | HIGH |
+| Resend OTP | Send → Resend → New OTP works | 6 | MEDIUM |
+| Rate limiting | 4th OTP request → Blocked | 6 | MEDIUM |
+| Link mobile to Google account | OTP login → Link to Google user | 8 | HIGH |
+
+#### E2E Tests (Playwright)
+| User Journey | Steps | Tests | Priority |
+|--------------|-------|-------|----------|
+| 🔥 Instructor OTP Login (New) | Enter mobile → OTP → Onboarding | 6 | HIGH |
+| 🔥 Instructor OTP Login (Returning) | Enter mobile → OTP → Dashboard | 5 | HIGH |
+| 🔥 Student OTP Login (New) | Enter mobile → OTP → Browse classes | 6 | HIGH |
+| Student OTP Login (Returning) | Enter mobile → OTP → Dashboard | 5 | HIGH |
+| OTP Resend Flow | Send → Resend → Verify with new OTP | 5 | MEDIUM |
+| Wrong OTP Error | Enter wrong OTP → Error shown | 4 | MEDIUM |
+
+**Sub-Total:** **70 test cases (Mobile OTP)**
 
 ---
 
-### 1.3 Google OAuth
+### 1.3 Google OAuth + Calendar Integration Testing
+
+> **Critical:** Most features depend on Google authentication and Calendar sync
+
+#### Calendar Sync Tests (Post-Authentication)
+| Test Scenario | Frontend | Backend | Database | Priority |
+|---------------|----------|---------|----------|----------|
+| Check if Calendar scope granted | ✓ | ✓ | ✓ | HIGH |
+| Sync classes to Google Calendar | | ✓ | ✓ | HIGH |
+| Sync Google events to ClassInTown | | ✓ | ✓ | HIGH |
+| Two-way sync (create/update/delete) | | ✓ | ✓ | HIGH |
+| Handle sync conflicts | | ✓ | ✓ | HIGH |
+| Retry failed syncs | | ✓ | ✓ | MEDIUM |
+| Rate limit Google API calls | | ✓ | | HIGH |
+| Handle API quota exceeded | | ✓ | | MEDIUM |
+| Re-request scope if denied initially | ✓ | ✓ | ✓ | HIGH |
+
+#### Google Token Management Tests
+| Test Scenario | Frontend | Backend | Database | Priority |
+|---------------|----------|---------|----------|----------|
+| Store access token securely | | ✓ | ✓ | HIGH |
+| Store refresh token securely | | ✓ | ✓ | HIGH |
+| Auto-refresh expired access token | | ✓ | ✓ | HIGH |
+| Handle token revoked by user | | ✓ | ✓ | HIGH |
+| Re-authenticate on token invalid | ✓ | ✓ | | HIGH |
+| Token encryption at rest | | | ✓ | MEDIUM |
+
+#### Integration Tests (Google-based Auth)
+| Scenario | Description | Tests | Priority |
+|----------|-------------|-------|----------|
+| 🔥 Google Login → Create Class → Calendar Sync | End-to-end flow | 15 | CRITICAL |
+| 🔥 Google Login → Enroll Student → Notification | Full enrollment | 12 | CRITICAL |
+| 🔥 Google Login → Schedule Class → Email Sent | Complete scheduling | 12 | CRITICAL |
+| Google token in all API calls | Every API validates Google JWT | 20 | HIGH |
+| Token expiry → Auto-refresh → Continue | Seamless token refresh | 8 | HIGH |
+| Multiple sessions with same Google account | 3 devices, 1 account | 10 | HIGH |
+
+**Sub-Total:** **77 test cases (Google Integration)**
+
+---
+
+### 1.4 Email/Password Login (BACKUP - 5% of users)
+
+> **Note:** Minimal testing, backup method only
+
+#### Basic Tests
+| Test Scenario | Tests | Priority |
+|---------------|-------|----------|
+| Email/password validation | 10 | LOW |
+| Login success → Dashboard | 8 | LOW |
+| Forgot password flow | 10 | LOW |
+| Reset password | 8 | LOW |
+
+**Sub-Total:** **36 test cases (Email/Password - Backup)**
+
+---
+
+### 1.5 Session Management (All Auth Methods)
 
 #### Unit Tests - Frontend
-| Test Scenario | Frontend | Backend | Database |
-|---------------|----------|---------|----------|
-| Google login button click | ✓ | | |
-| Redirect to Google OAuth page | ✓ | | |
-| Handle OAuth callback | ✓ | | |
-| Store Google access token | ✓ | | |
-| Google Calendar scope check | ✓ | | |
+| Test Scenario | Tests | Priority |
+|---------------|-------|----------|
+| Check Google token on page load | 5 | HIGH |
+| Auto-logout on token expiry | 5 | HIGH |
+| Warning before session expires (5 min) | 5 | MEDIUM |
+| Refresh Google token before expiry | 8 | HIGH |
+| Store user role from Google token | 5 | HIGH |
+| Persist session across tabs | 5 | MEDIUM |
 
 #### Unit Tests - Backend
-| Test Scenario | Frontend | Backend | Database |
-|---------------|----------|---------|----------|
-| Verify Google ID token | | ✓ | |
-| Create user if doesn't exist | | ✓ | ✓ |
-| Link Google account to existing user | | ✓ | ✓ |
-| Store Google refresh token | | ✓ | ✓ |
-| Calendar sync permission | | ✓ | ✓ |
+| Test Scenario | Tests | Priority |
+|---------------|-------|----------|
+| Validate Google JWT on each request | 10 | HIGH |
+| Check token expiry (24 hours) | 8 | HIGH |
+| Invalidate session on logout | 8 | HIGH |
+| Handle multiple active sessions | 10 | HIGH |
+| Session cleanup (delete old sessions) | 5 | LOW |
 
 #### Integration Tests
-| Scenario | Tests |
-|----------|-------|
-| New user → Google OAuth → Account creation | 10 |
-| Existing user → Google OAuth → Link account | 8 |
-| Revoke Google access → Re-authenticate | 6 |
+| Scenario | Tests | Priority |
+|----------|-------|----------|
+| Session persistence across devices | 10 | HIGH |
+| Concurrent sessions (same user) | 8 | HIGH |
+| Force logout from all devices | 8 | MEDIUM |
+
+**Sub-Total:** **100 test cases (Session Management)**
 
 ---
 
-### 1.4 Session Management
+## 🔐 AUTHENTICATION TESTING SUMMARY
 
-#### Unit Tests - Frontend
-| Test Scenario | Tests |
-|---------------|-------|
-| Check session on page load | 5 |
-| Auto-logout on token expiry | 5 |
-| Warning before session expires | 5 |
-| Refresh token before expiry | 5 |
+| Auth Method | Test Cases | Priority | % of Users |
+|-------------|------------|----------|------------|
+| 🔥 **Google OAuth** | 120 | CRITICAL | 70% |
+| 🔥 **Mobile OTP** | 70 | HIGH | 25% |
+| **Google Integration** | 77 | CRITICAL | - |
+| **Session Management** | 100 | HIGH | 100% |
+| **Email/Password (Backup)** | 36 | LOW | 5% |
+| **TOTAL** | **403 test cases** | - | - |
 
-#### Unit Tests - Backend
-| Test Scenario | Tests |
-|---------------|-------|
-| Validate JWT on each request | 8 |
-| Check token expiry (24 hours) | 5 |
-| Invalidate session on logout | 5 |
-| Handle multiple active sessions | 8 |
+### Updated Timeline for Auth Testing
+- **Week 1:** Google OAuth (Frontend + Backend) - 40h
+- **Week 2:** Mobile OTP + Google Integration - 40h
+- **Week 3:** Session Management + E2E flows - 40h
+- **Week 4:** Bug fixes + Regression - 20h
+
+**Total Auth Testing:** 140 hours (vs previous 80h)
 
 ---
 
-### 1.5 Forgot/Reset Password
+## 🔐 DOWNSTREAM TESTING (Based on Google Token)
 
-#### Unit Tests (Frontend + Backend)
-| Test Scenario | Tests |
-|---------------|-------|
-| Send reset link via email | 10 |
-| Reset link expiry (1 hour) | 5 |
-| Update password in database | 8 |
-| Invalidate all sessions on reset | 5 |
+> **Important:** ALL features now assume Google OAuth as primary authentication
+
+### How Google Token Affects Other Modules
+
+| Module | Google Token Usage | Additional Tests |
+|--------|-------------------|------------------|
+| **Class Management** | Token in Authorization header | 20 |
+| **Student Management** | User ID from Google token | 15 |
+| **Payment Management** | Email from Google token | 15 |
+| **Calendar Sync** | Google Calendar API with token | 30 |
+| **Communications** | User profile from Google | 10 |
+| **Reports** | User permissions from Google | 10 |
+
+**Total Additional Tests:** 100 test cases
 
 ---
 
 ## 📚 2. CLASS MANAGEMENT (Core Feature - Scheduling)
 
+> **Auth Dependency:** All operations require valid Google token
+
 ### 2.1 Duration-based Scheduling
 
+> **Auth Check:** Every test must validate Google token first
+
 #### Unit Tests - Frontend
-| Component | Test Scenario | Tests |
-|-----------|---------------|-------|
-| `instructor-schedule-class.component.ts` | Select start date/time | 5 |
-| `instructor-schedule-class.component.ts` | Select duration (30 min - 4 hours) | 8 |
-| `instructor-schedule-class.component.ts` | Calculate end time automatically | 5 |
-| `instructor-schedule-class.component.ts` | Validate past date selection | 5 |
-| `instructor-schedule-class.component.ts` | Show duration dropdown | 5 |
+| Component | Test Scenario | Tests | Auth Check |
+|-----------|---------------|-------|------------|
+| `instructor-schedule-class.component.ts` | Verify Google token on component init | 5 | ✓ |
+| `instructor-schedule-class.component.ts` | Select start date/time | 5 | ✓ |
+| `instructor-schedule-class.component.ts` | Select duration (30 min - 4 hours) | 8 | ✓ |
+| `instructor-schedule-class.component.ts` | Calculate end time automatically | 5 | - |
+| `instructor-schedule-class.component.ts` | Validate past date selection | 5 | - |
+| `instructor-schedule-class.component.ts` | Show duration dropdown | 5 | - |
+| `instructor-schedule-class.component.ts` | Redirect to login if token invalid | 5 | ✓ |
 
 #### Unit Tests - Backend
-| Controller/Service | Test Scenario | Tests |
-|-------------------|---------------|-------|
-| `class.controller.js` | Create class with duration | 10 |
-| `class.controller.js` | Calculate end time from start + duration | 5 |
-| `class.controller.js` | Validate duration range | 5 |
-| `class.service.js` | Save class to database | 8 |
-| `class.service.js` | Generate class unique ID | 5 |
+| Controller/Service | Test Scenario | Tests | Auth Check |
+|-------------------|---------------|-------|------------|
+| `class.controller.js` | Validate Google JWT in header | 10 | ✓ |
+| `class.controller.js` | Extract instructor ID from token | 5 | ✓ |
+| `class.controller.js` | Create class with duration | 10 | ✓ |
+| `class.controller.js` | Calculate end time from start + duration | 5 | - |
+| `class.controller.js` | Validate duration range | 5 | - |
+| `class.service.js` | Save class to database | 8 | ✓ |
+| `class.service.js` | Generate class unique ID | 5 | - |
+| `google-calendar.service.js` | 🔥 Sync class to Google Calendar | 15 | ✓ |
+| `google-calendar.service.js` | 🔥 Handle calendar sync failure | 8 | ✓ |
 
 #### Integration Tests
-| Scenario | Tests |
-|----------|-------|
-| Create class → Save to DB → Appear in calendar | 15 |
-| Create class → Send notification → Email sent | 10 |
+| Scenario | Tests | Auth Check |
+|----------|-------|------------|
+| 🔥 Google Login → Create class → Save DB → Sync Calendar | 20 | ✓ |
+| Create class → Send notification → Email sent | 10 | ✓ |
+| Token expired during creation → Refresh → Continue | 10 | ✓ |
+
+**Sub-Total:** **144 test cases (up from ~40)**
 
 ---
 
@@ -939,18 +1087,21 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    TESTING TIMELINE (14 Weeks)               │
+│                    TESTING TIMELINE (17 Weeks)               │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│  Week 1-2:   Setup + Unit Tests (Frontend Auth & Classes)   │
-│  Week 3-4:   Unit Tests (Backend Auth & Classes)            │
-│  Week 5-6:   Unit Tests (Students, Payments, Calendar)      │
-│  Week 7-8:   Integration Tests (All Modules)                │
-│  Week 9-10:  E2E Tests (User Journeys)                      │
-│  Week 11:    Load Testing                                   │
-│  Week 12:    Database Testing                               │
-│  Week 13:    Bug Fixing                                     │
-│  Week 14:    Regression Testing + Final Sign-off            │
+│  Week 1-2:   🔥 Google OAuth + Mobile OTP (Critical)        │
+│  Week 3:     🔥 Google Calendar Integration                 │
+│  Week 4:     Session Management + Token Testing             │
+│  Week 5-6:   Class Management (with Google token)           │
+│  Week 7-8:   Student & Payment (with Google token)          │
+│  Week 9-10:  Calendar, Comms, Listings (Google-based)       │
+│  Week 11:    Resources, Business Profile, Support           │
+│  Week 12-13: Integration Tests (Full Google-based flows)    │
+│  Week 14:    E2E Tests (User Journeys with Google auth)     │
+│  Week 15:    Load Testing (13,500 concurrent users)         │
+│  Week 16:    Database + Google API Testing                  │
+│  Week 17:    Bug Fixing + Regression + Final Sign-off       │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -961,10 +1112,10 @@
 
 | Role | Count | Hours/Week | Total Cost |
 |------|-------|------------|------------|
-| Senior QA Engineer | 1 | 40h | $20,000 |
-| QA Engineers | 2 | 40h each | $24,000 |
-| DevOps Engineer (Load Testing) | 1 | 20h | $8,000 |
-| **TOTAL** | **4** | **140h/week** | **$52,000** |
+| Senior QA Engineer (Google OAuth expert) | 1 | 40h | $24,000 |
+| QA Engineers (Mid-level) | 2 | 40h each | $32,000 |
+| Junior QA Engineer | 1 | 40h | $12,000 |
+| **TOTAL** | **4** | **160h/week** | **$68,000** |
 
 ---
 
@@ -1032,11 +1183,20 @@
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  Total Features:                58                           │
-│  Total Test Cases:              1,940                        │
-│  Total Testing Hours:           1,040 hours                  │
-│  Timeline:                      14 weeks                     │
+│  Total Test Cases:              2,773 (↑ from 1,940)        │
+│  Total Testing Hours:           1,360 hours (↑ from 1,040)  │
+│  Timeline:                      17 weeks (↑ from 14)         │
 │  Team Size:                     4 engineers                  │
-│  Budget:                        $52,000 USD                  │
+│  Budget:                        $68,000 USD (↑ from $52k)   │
+│                                                              │
+│  ─────────────────────────────────────────────────────────  │
+│  🔥 PRIMARY AUTH:                                            │
+│                                                              │
+│  Google OAuth Tests:            120 (CRITICAL)              │
+│  Mobile OTP Tests:              70 (HIGH)                   │
+│  Google Integration Tests:      150 (CRITICAL)              │
+│  Google Token in all APIs:      100% coverage               │
+│  Google Calendar Sync Tests:    77 (CRITICAL)               │
 │                                                              │
 │  ─────────────────────────────────────────────────────────  │
 │                                                              │
@@ -1047,6 +1207,7 @@
 │  Payments Handled/Day:          2,700                        │
 │  Database Size:                 500 GB                       │
 │  API Response Time:             < 2 seconds                  │
+│  Google API Rate Limit:         Handled via queueing         │
 │  Uptime Target:                 99.9%                        │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
@@ -1056,16 +1217,208 @@
 
 ## 🚀 DEPLOYMENT READINESS CHECKLIST
 
-- [ ] 1,940 test cases written
+- [ ] 2,773 test cases written
 - [ ] 100% tests passing
+- [ ] 🔥 Google OAuth: 100% tests passing
+- [ ] 🔥 Mobile OTP: 100% tests passing
+- [ ] 🔥 Google Calendar Sync: All scenarios tested
+- [ ] 🔥 Google token validation in ALL APIs
 - [ ] Load testing: 13,500 concurrent users handled
 - [ ] Database: 10M documents, < 200ms query time
 - [ ] API: < 2s response time
+- [ ] Google API rate limiting handled
 - [ ] Zero critical/high bugs
 - [ ] Code coverage > 80%
-- [ ] Security audit passed
+- [ ] Security audit passed (Google OAuth flows)
 - [ ] Backup & recovery tested
 - [ ] Monitoring & alerts configured
+
+---
+
+## 🔍 POTENTIALLY MISSING FEATURES TO TEST
+
+### Missing Test Coverage Areas
+
+| Feature Area | Description | Additional Tests | Priority |
+|--------------|-------------|------------------|----------|
+| **1. Email Notifications** | | | |
+| Welcome email (Google signup) | After first Google login | 10 | HIGH |
+| Class reminder emails | 24h before class | 10 | HIGH |
+| Payment confirmation emails | After successful payment | 10 | HIGH |
+| Enrollment confirmation | Student enrolled → Email | 10 | HIGH |
+| **2. Push Notifications** | | | |
+| OneSignal integration | Browser push notifications | 15 | HIGH |
+| Mobile app notifications | If mobile app exists | 15 | MEDIUM |
+| Notification preferences | User can enable/disable | 10 | MEDIUM |
+| **3. Image Uploads** | | | |
+| Profile picture upload | User/Instructor profiles | 15 | HIGH |
+| Activity image upload | Activity listings | 15 | HIGH |
+| Class thumbnail upload | Class cards | 15 | MEDIUM |
+| Resource file upload | PDF, DOCX, images | 20 | HIGH |
+| File size validation (max 10MB) | Reject large files | 10 | HIGH |
+| Image compression | Auto-compress before upload | 10 | MEDIUM |
+| **4. Search Functionality** | | | |
+| Search classes by name | Full-text search | 15 | HIGH |
+| Search by activity type | Filter classes | 10 | HIGH |
+| Search by location | Geo-based search | 15 | HIGH |
+| Search by instructor | Find instructor's classes | 10 | MEDIUM |
+| Search by date range | Available classes | 10 | HIGH |
+| Auto-complete/suggestions | As user types | 10 | MEDIUM |
+| **5. Filters & Sorting** | | | |
+| Filter by price range | Min-max price | 10 | HIGH |
+| Filter by online/in-person | Mode filter | 8 | HIGH |
+| Sort by popularity | Most enrolled | 8 | MEDIUM |
+| Sort by price (low to high) | Price sorting | 8 | MEDIUM |
+| Sort by rating | If rating system exists | 10 | LOW |
+| **6. Reviews & Ratings** | | | |
+| Student can rate class | 1-5 stars | 15 | MEDIUM |
+| Student can write review | Text review | 15 | MEDIUM |
+| Instructor can reply to reviews | Response system | 10 | LOW |
+| Display average rating | On class cards | 8 | MEDIUM |
+| **7. Attendance Tracking** | | | |
+| Mark attendance (Instructor) | Present/Absent/Late | 15 | HIGH |
+| QR code attendance | Students scan QR | 20 | LOW |
+| Geofence attendance | Location-based | 15 | LOW |
+| Attendance reports | Export to Excel | 10 | MEDIUM |
+| **8. Certificate Generation** | | | |
+| Auto-generate on completion | PDF certificate | 20 | LOW |
+| Customizable templates | Instructor can customize | 15 | LOW |
+| Email certificate to student | Auto-send | 10 | LOW |
+| **9. Waitlist Management** | | | |
+| Add student to waitlist | Class full | 15 | MEDIUM |
+| Auto-notify when spot opens | Email + Push | 15 | MEDIUM |
+| Waitlist priority (FIFO) | First come first serve | 10 | MEDIUM |
+| **10. Recurring Payments** | | | |
+| Monthly subscriptions | Razorpay subscription | 25 | HIGH |
+| Auto-charge on due date | Automated billing | 20 | HIGH |
+| Failed payment retry | 3 retry attempts | 15 | HIGH |
+| Subscription cancellation | User can cancel | 15 | MEDIUM |
+| **11. Refund Policies** | | | |
+| Define refund rules | Per class settings | 10 | MEDIUM |
+| Auto-refund if class canceled | Automated refunds | 15 | HIGH |
+| Partial refunds | Percentage-based | 10 | MEDIUM |
+| **12. Multi-language Support** | | | |
+| English (default) | All content | 20 | HIGH |
+| Hindi | Translation | 20 | MEDIUM |
+| Other Indian languages | Regional support | 15 | LOW |
+| **13. Accessibility (A11y)** | | | |
+| Screen reader support | ARIA labels | 25 | MEDIUM |
+| Keyboard navigation | Tab through forms | 20 | MEDIUM |
+| Color contrast (WCAG) | Accessibility standards | 15 | LOW |
+| **14. Analytics & Tracking** | | | |
+| Google Analytics integration | Page views, events | 15 | MEDIUM |
+| Track user journeys | Funnel analysis | 15 | MEDIUM |
+| Track conversions | Sign-ups, payments | 15 | MEDIUM |
+| **15. Admin Dashboard** | | | |
+| User management (CRUD) | Create/Edit/Delete users | 20 | HIGH |
+| Class approval workflow | Admin approves classes | 15 | MEDIUM |
+| Payment dispute resolution | Handle disputes | 15 | MEDIUM |
+| System health monitoring | Uptime, errors | 15 | HIGH |
+| **16. Instructor Payouts** | | | |
+| Calculate instructor earnings | After class completion | 20 | HIGH |
+| Payout schedule (weekly/monthly) | Automated payouts | 20 | HIGH |
+| Payout via bank transfer | Integration with payment gateway | 20 | HIGH |
+| Payout history | Track past payouts | 10 | MEDIUM |
+| **17. Tax & Invoicing** | | | |
+| GST calculation (India) | 18% tax on services | 20 | HIGH |
+| Invoice generation | PDF invoices | 15 | HIGH |
+| Tax reports for compliance | Annual reports | 15 | MEDIUM |
+| **18. Bulk Operations** | | | |
+| Bulk enroll students | CSV upload | 15 | MEDIUM |
+| Bulk send messages | To all students | 15 | MEDIUM |
+| Bulk class cancellation | Cancel multiple classes | 10 | LOW |
+| **19. Offline Mode** | | | |
+| Cache data locally | PWA support | 20 | LOW |
+| Sync when online | Background sync | 15 | LOW |
+| **20. Social Sharing** | | | |
+| Share class on Facebook | Social media integration | 10 | LOW |
+| Share on WhatsApp | Direct WhatsApp share | 10 | MEDIUM |
+| Share on Twitter/X | Social sharing | 5 | LOW |
+| **21. Promo Codes & Discounts** | | | |
+| Create promo codes | Admin/Instructor | 20 | HIGH |
+| Apply discount at checkout | Percentage or fixed | 20 | HIGH |
+| Limit promo code usage | Max uses, expiry | 15 | MEDIUM |
+| Track promo code effectiveness | Analytics | 10 | LOW |
+| **22. Error Handling & Logging** | | | |
+| Frontend error boundaries | Catch React errors | 15 | HIGH |
+| Backend error logging | Winston/Sentry | 15 | HIGH |
+| User-friendly error messages | No technical jargon | 20 | HIGH |
+| Retry mechanisms | Auto-retry failed requests | 15 | MEDIUM |
+| **23. Data Export** | | | |
+| Export student data | GDPR compliance | 15 | HIGH |
+| Export class data | Excel/CSV | 10 | MEDIUM |
+| Export payment data | Accounting | 15 | HIGH |
+| **24. Data Privacy & GDPR** | | | |
+| Privacy policy display | Legal compliance | 10 | MEDIUM |
+| Terms & conditions | User agreement | 10 | MEDIUM |
+| Data deletion request | User can request deletion | 20 | HIGH |
+| Cookie consent | GDPR compliance | 10 | MEDIUM |
+| **25. Performance Optimization** | | | |
+| Lazy loading images | Improve load time | 15 | HIGH |
+| Code splitting | Reduce bundle size | 15 | HIGH |
+| CDN for static assets | Faster delivery | 10 | MEDIUM |
+| Database query optimization | Indexes, caching | 20 | HIGH |
+
+**Additional Test Cases:** **1,065 tests**
+
+---
+
+## 📊 UPDATED TESTING SCOPE
+
+| Category | Original Tests | Missing Tests | Total Tests |
+|----------|---------------|---------------|-------------|
+| Core Features (1-11) | 1,940 | 0 | 1,940 |
+| Load Testing | 50 | 30 | 80 |
+| Database Testing | 100 | 20 | 120 |
+| Google Integration | 150 | 0 | 150 |
+| **Missing Features (1-25)** | **0** | **1,065** | **1,065** |
+| **GRAND TOTAL** | **2,240** | **1,115** | **3,838** |
+
+### Updated Estimates
+
+| Metric | Original | With Missing Features |
+|--------|----------|----------------------|
+| Total Test Cases | 2,773 | **3,838** |
+| Total Hours | 1,360h | **1,920h** |
+| Timeline | 17 weeks | **24 weeks (6 months)** |
+| Team Size | 4 engineers | **5 engineers** |
+| Budget | $68,000 | **$96,000** |
+
+---
+
+## 🎯 PRIORITIZED TESTING ROADMAP
+
+### Phase 1: Critical Features (Weeks 1-12)
+- Google OAuth + Mobile OTP
+- Class Management
+- Student Enrollment
+- Payment Processing
+- Calendar Sync
+- **Sub-Total:** 2,773 tests
+
+### Phase 2: Important Missing Features (Weeks 13-20)
+- Email & Push Notifications (80 tests)
+- Image Uploads (85 tests)
+- Search & Filters (81 tests)
+- Recurring Payments (75 tests)
+- Admin Dashboard (50 tests)
+- Instructor Payouts (70 tests)
+- Tax & Invoicing (50 tests)
+- Promo Codes (55 tests)
+- Error Handling (50 tests)
+- Data Export (40 tests)
+- **Sub-Total:** 636 tests
+
+### Phase 3: Nice-to-Have Features (Weeks 21-24)
+- Reviews & Ratings (48 tests)
+- Waitlist (40 tests)
+- Certificates (45 tests)
+- Multi-language (55 tests)
+- Accessibility (60 tests)
+- Social Sharing (25 tests)
+- Offline Mode (35 tests)
+- Other features (161 tests)
+- **Sub-Total:** 429 tests
 
 ---
 
