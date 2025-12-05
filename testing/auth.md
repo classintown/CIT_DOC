@@ -223,38 +223,38 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Security Edge Cases - Frontend (Google OAuth)
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| GOA-SEC-F-001 | XSS injection in OAuth redirect | Inject `<script>` in callback URL | Sanitized, no execution | CRITICAL |
-|| GOA-SEC-F-002 | CSRF token validation | Missing CSRF token in OAuth flow | Request rejected | CRITICAL |
-|| GOA-SEC-F-003 | State parameter validation | Tampered state parameter | OAuth flow rejected | CRITICAL |
-|| GOA-SEC-F-004 | Token stored in localStorage | Check if JWT encrypted | Token encrypted/secured | HIGH |
-|| GOA-SEC-F-005 | Token exposed in console | Check browser console logs | No token in logs | HIGH |
-|| GOA-SEC-F-006 | Token in URL parameters | Token passed via URL | Token NOT in URL | CRITICAL |
-|| GOA-SEC-F-007 | Clickjacking attack | Embed login in iframe | X-Frame-Options blocks | HIGH |
-|| GOA-SEC-F-008 | Session fixation | Reuse old session ID | New session created | CRITICAL |
-|| GOA-SEC-F-009 | Token in browser history | Check browser history | Token NOT stored | HIGH |
-|| GOA-SEC-F-010 | Postmessage validation | Malicious postMessage to OAuth | Origin validated, rejected | HIGH |
-|| GOA-SEC-F-011 | OAuth popup blocked | Browser blocks popup | Fallback to redirect | MEDIUM |
-|| GOA-SEC-F-012 | Multiple OAuth windows | Open 2+ OAuth windows | Only 1 succeeds | MEDIUM |
-|| GOA-SEC-F-013 | OAuth timeout (5 min) | User delays consent | Timeout, show error | HIGH |
-|| GOA-SEC-F-014 | Browser back button | Back during OAuth flow | Restart flow | MEDIUM |
-|| GOA-SEC-F-015 | Browser refresh during OAuth | F5 during callback | Restart flow gracefully | MEDIUM |
-|| GOA-SEC-F-016 | Malformed OAuth response | Google returns error | Display user-friendly error | HIGH |
-|| GOA-SEC-F-017 | Google account picker | Multiple Google accounts | User can select | MEDIUM |
-|| GOA-SEC-F-018 | Incognito mode login | Login in private browsing | Works correctly | HIGH |
-|| GOA-SEC-F-019 | Ad blocker interference | Ad blocker active | OAuth still works | MEDIUM |
-|| GOA-SEC-F-020 | Third-party cookies disabled | Browser blocks 3rd party | Show warning/guide | HIGH |
-|| GOA-SEC-F-021 | Token expiry check on load | Page load with expired token | Auto-refresh or logout | CRITICAL |
-|| GOA-SEC-F-022 | localStorage quota exceeded | Storage full | Graceful error handling | LOW |
-|| GOA-SEC-F-023 | DOM manipulation attack | Attacker modifies OAuth button | Original button verified | HIGH |
-|| GOA-SEC-F-024 | Network disconnect mid-OAuth | WiFi off during flow | Show offline error | MEDIUM |
-|| GOA-SEC-F-025 | Slow network (3G) | OAuth on slow connection | Timeout handling | MEDIUM |
-|| GOA-SEC-F-026 | Browser extension interference | Malicious extension present | OAuth validated | MEDIUM |
-|| GOA-SEC-F-027 | Screen reader accessibility | Blind user using screen reader | ARIA labels correct | LOW |
-|| GOA-SEC-F-028 | Keyboard-only navigation | Tab to OAuth button, Enter | Fully accessible | MEDIUM |
-|| GOA-SEC-F-029 | Mobile landscape mode | Rotate device during OAuth | Responsive, no break | LOW |
-|| GOA-SEC-F-030 | Very small screen (320px) | Old iPhone SE | Button/UI visible | LOW |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| GOA-SEC-F-001 | XSS injection in OAuth redirect | Inject `<script>` in callback URL | Sanitized, no execution | CRITICAL |
+| GOA-SEC-F-002 | CSRF token validation | Missing CSRF token in OAuth flow | Request rejected | CRITICAL |
+| GOA-SEC-F-003 | State parameter validation | Tampered state parameter | OAuth flow rejected | CRITICAL |
+| GOA-SEC-F-004 | Token stored in localStorage | Check if JWT encrypted | Token encrypted/secured | HIGH |
+| GOA-SEC-F-005 | Token exposed in console | Check browser console logs | No token in logs | HIGH |
+| GOA-SEC-F-006 | Token in URL parameters | Token passed via URL | Token NOT in URL | CRITICAL |
+| GOA-SEC-F-007 | Clickjacking attack | Embed login in iframe | X-Frame-Options blocks | HIGH |
+| GOA-SEC-F-008 | Session fixation | Reuse old session ID | New session created | CRITICAL |
+| GOA-SEC-F-009 | Token in browser history | Check browser history | Token NOT stored | HIGH |
+| GOA-SEC-F-010 | Postmessage validation | Malicious postMessage to OAuth | Origin validated, rejected | HIGH |
+| GOA-SEC-F-011 | OAuth popup blocked | Browser blocks popup | Fallback to redirect | MEDIUM |
+| GOA-SEC-F-012 | Multiple OAuth windows | Open 2+ OAuth windows | Only 1 succeeds | MEDIUM |
+| GOA-SEC-F-013 | OAuth timeout (5 min) | User delays consent | Timeout, show error | HIGH |
+| GOA-SEC-F-014 | Browser back button | Back during OAuth flow | Restart flow | MEDIUM |
+| GOA-SEC-F-015 | Browser refresh during OAuth | F5 during callback | Restart flow gracefully | MEDIUM |
+| GOA-SEC-F-016 | Malformed OAuth response | Google returns error | Display user-friendly error | HIGH |
+| GOA-SEC-F-017 | Google account picker | Multiple Google accounts | User can select | MEDIUM |
+| GOA-SEC-F-018 | Incognito mode login | Login in private browsing | Works correctly | HIGH |
+| GOA-SEC-F-019 | Ad blocker interference | Ad blocker active | OAuth still works | MEDIUM |
+| GOA-SEC-F-020 | Third-party cookies disabled | Browser blocks 3rd party | Show warning/guide | HIGH |
+| GOA-SEC-F-021 | Token expiry check on load | Page load with expired token | Auto-refresh or logout | CRITICAL |
+| GOA-SEC-F-022 | localStorage quota exceeded | Storage full | Graceful error handling | LOW |
+| GOA-SEC-F-023 | DOM manipulation attack | Attacker modifies OAuth button | Original button verified | HIGH |
+| GOA-SEC-F-024 | Network disconnect mid-OAuth | WiFi off during flow | Show offline error | MEDIUM |
+| GOA-SEC-F-025 | Slow network (3G) | OAuth on slow connection | Timeout handling | MEDIUM |
+| GOA-SEC-F-026 | Browser extension interference | Malicious extension present | OAuth validated | MEDIUM |
+| GOA-SEC-F-027 | Screen reader accessibility | Blind user using screen reader | ARIA labels correct | LOW |
+| GOA-SEC-F-028 | Keyboard-only navigation | Tab to OAuth button, Enter | Fully accessible | MEDIUM |
+| GOA-SEC-F-029 | Mobile landscape mode | Rotate device during OAuth | Responsive, no break | LOW |
+| GOA-SEC-F-030 | Very small screen (320px) | Old iPhone SE | Button/UI visible | LOW |
 
 **Sub-Total:** **30 additional Security Edge Cases (Frontend)**
 
@@ -262,58 +262,58 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Security Edge Cases - Backend (Google OAuth)
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| GOA-SEC-B-001 | Token replay attack | Reuse old Google token | Reject with 401 | CRITICAL |
-|| GOA-SEC-B-002 | Token from different app | Token from another Google app | Reject, wrong audience | CRITICAL |
-|| GOA-SEC-B-003 | Expired Google token | Send expired token | Return 401 Token Expired | CRITICAL |
-|| GOA-SEC-B-004 | Malformed JWT token | Send random string as token | Return 400 Bad Request | HIGH |
-|| GOA-SEC-B-005 | Missing Authorization header | No header sent | Return 401 Unauthorized | CRITICAL |
-|| GOA-SEC-B-006 | SQL injection in email | Email: `' OR '1'='1` | Sanitized, no SQL exec | CRITICAL |
-|| GOA-SEC-B-007 | NoSQL injection | Email: `{"$ne": null}` | Sanitized, rejected | CRITICAL |
-|| GOA-SEC-B-008 | Email with special chars | Email: `test+tag@example.com` | Accepted correctly | HIGH |
-|| GOA-SEC-B-009 | Very long email (500 chars) | Extremely long email | Reject or truncate | MEDIUM |
-|| GOA-SEC-B-010 | Unicode in name | Name: `张三`, `محمد` | Stored correctly (UTF-8) | HIGH |
-|| GOA-SEC-B-011 | Emoji in name | Name: `John 😀 Doe` | Stored correctly | MEDIUM |
-|| GOA-SEC-B-012 | XSS in profile name | Name: `<script>alert(1)</script>` | Sanitized before storage | CRITICAL |
-|| GOA-SEC-B-013 | Path traversal in profile pic | URL: `../../etc/passwd` | Validated, rejected | CRITICAL |
-|| GOA-SEC-B-014 | Null byte injection | Email: `test@ex\x00ample.com` | Sanitized/rejected | HIGH |
-|| GOA-SEC-B-015 | Rate limiting - 100 req/min | Send 101 requests | 101st rejected (429) | HIGH |
-|| GOA-SEC-B-016 | Brute force token guessing | Try 1000 random tokens | All rejected, IP blocked | CRITICAL |
-|| GOA-SEC-B-017 | Concurrent logins same user | 5 simultaneous OAuth requests | All succeed, separate sessions | HIGH |
-|| GOA-SEC-B-018 | Token verification timeout | Google API slow (>10s) | Timeout, return error | HIGH |
-|| GOA-SEC-B-019 | Google API rate limit | Exceed Google API quota | Graceful error, queue | HIGH |
-|| GOA-SEC-B-020 | Google API returns 500 | Google server error | Retry 3x, then fail gracefully | HIGH |
-|| GOA-SEC-B-021 | Invalid Google token format | Token missing parts (2 dots) | Return 400 Invalid Token | HIGH |
-|| GOA-SEC-B-022 | Token with wrong signature | Valid format, wrong signature | Reject after Google verify | CRITICAL |
-|| GOA-SEC-B-023 | Token audience mismatch | Token for different client_id | Reject, wrong audience | CRITICAL |
-|| GOA-SEC-B-024 | Token issuer not Google | Token from facebook.com | Reject, invalid issuer | CRITICAL |
-|| GOA-SEC-B-025 | Token issued in future | `iat` (issued at) in future | Reject, clock skew check | HIGH |
-|| GOA-SEC-B-026 | Token expired 1 second ago | `exp` just passed | Reject or allow grace period | HIGH |
-|| GOA-SEC-B-027 | Clock skew handling | Server time off by 5 min | Accept with tolerance | MEDIUM |
-|| GOA-SEC-B-028 | Missing email in token | Google token without email | Reject, email required | HIGH |
-|| GOA-SEC-B-029 | Email not verified at Google | `email_verified: false` | Reject or warn user | HIGH |
-|| GOA-SEC-B-030 | Revoked token mid-request | User revokes during processing | Detect and reject | HIGH |
-|| GOA-SEC-B-031 | Duplicate email race condition | 2 users, same email, simultaneous | One succeeds, one fails | CRITICAL |
-|| GOA-SEC-B-032 | Account linking conflict | Link Google to email already linked | Reject, show error | HIGH |
-|| GOA-SEC-B-033 | Orphaned session cleanup | User logs out, session in DB | Session deleted | MEDIUM |
-|| GOA-SEC-B-034 | Memory leak on many logins | 1000 logins in 1 minute | No memory leak | HIGH |
-|| GOA-SEC-B-035 | Database connection pool | 100 concurrent logins | Pool managed correctly | HIGH |
-|| GOA-SEC-B-036 | Transaction rollback | Error after user created | Full rollback, no partial data | CRITICAL |
-|| GOA-SEC-B-037 | Google refresh token missing | User denies offline access | Store null, handle gracefully | MEDIUM |
-|| GOA-SEC-B-038 | Refresh token encryption | Check DB storage | Token encrypted at rest | CRITICAL |
-|| GOA-SEC-B-039 | Access token in logs | Check application logs | Tokens redacted/masked | CRITICAL |
-|| GOA-SEC-B-040 | Error messages leak info | Wrong token error | Generic error, no details | HIGH |
-|| GOA-SEC-B-041 | User enumeration attack | Check if email exists | Same response for exist/not | HIGH |
-|| GOA-SEC-B-042 | Timing attack on token check | Measure response time | Constant time comparison | MEDIUM |
-|| GOA-SEC-B-043 | HTTP instead of HTTPS | Send token over HTTP | Reject, HTTPS only | CRITICAL |
-|| GOA-SEC-B-044 | CORS misconfiguration | Request from evil.com | CORS blocks request | CRITICAL |
-|| GOA-SEC-B-045 | Missing security headers | Check response headers | HSTS, CSP, etc. present | HIGH |
-|| GOA-SEC-B-046 | JWT algorithm confusion | Change token alg to 'none' | Reject, alg mismatch | CRITICAL |
-|| GOA-SEC-B-047 | JWT kid manipulation | Invalid kid in header | Reject, validation fails | HIGH |
-|| GOA-SEC-B-048 | Privilege escalation | Student token → Admin access | Reject, role validated | CRITICAL |
-|| GOA-SEC-B-049 | Session hijacking | Steal session ID, replay | Detect via IP/User-Agent | HIGH |
-|| GOA-SEC-B-050 | Session fixation attack | Force user to use attacker session | New session on login | CRITICAL |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| GOA-SEC-B-001 | Token replay attack | Reuse old Google token | Reject with 401 | CRITICAL |
+| GOA-SEC-B-002 | Token from different app | Token from another Google app | Reject, wrong audience | CRITICAL |
+| GOA-SEC-B-003 | Expired Google token | Send expired token | Return 401 Token Expired | CRITICAL |
+| GOA-SEC-B-004 | Malformed JWT token | Send random string as token | Return 400 Bad Request | HIGH |
+| GOA-SEC-B-005 | Missing Authorization header | No header sent | Return 401 Unauthorized | CRITICAL |
+| GOA-SEC-B-006 | SQL injection in email | Email: `' OR '1'='1` | Sanitized, no SQL exec | CRITICAL |
+| GOA-SEC-B-007 | NoSQL injection | Email: `{"$ne": null}` | Sanitized, rejected | CRITICAL |
+| GOA-SEC-B-008 | Email with special chars | Email: `test+tag@example.com` | Accepted correctly | HIGH |
+| GOA-SEC-B-009 | Very long email (500 chars) | Extremely long email | Reject or truncate | MEDIUM |
+| GOA-SEC-B-010 | Unicode in name | Name: `张三`, `محمد` | Stored correctly (UTF-8) | HIGH |
+| GOA-SEC-B-011 | Emoji in name | Name: `John 😀 Doe` | Stored correctly | MEDIUM |
+| GOA-SEC-B-012 | XSS in profile name | Name: `<script>alert(1)</script>` | Sanitized before storage | CRITICAL |
+| GOA-SEC-B-013 | Path traversal in profile pic | URL: `../../etc/passwd` | Validated, rejected | CRITICAL |
+| GOA-SEC-B-014 | Null byte injection | Email: `test@ex\x00ample.com` | Sanitized/rejected | HIGH |
+| GOA-SEC-B-015 | Rate limiting - 100 req/min | Send 101 requests | 101st rejected (429) | HIGH |
+| GOA-SEC-B-016 | Brute force token guessing | Try 1000 random tokens | All rejected, IP blocked | CRITICAL |
+| GOA-SEC-B-017 | Concurrent logins same user | 5 simultaneous OAuth requests | All succeed, separate sessions | HIGH |
+| GOA-SEC-B-018 | Token verification timeout | Google API slow (>10s) | Timeout, return error | HIGH |
+| GOA-SEC-B-019 | Google API rate limit | Exceed Google API quota | Graceful error, queue | HIGH |
+| GOA-SEC-B-020 | Google API returns 500 | Google server error | Retry 3x, then fail gracefully | HIGH |
+| GOA-SEC-B-021 | Invalid Google token format | Token missing parts (2 dots) | Return 400 Invalid Token | HIGH |
+| GOA-SEC-B-022 | Token with wrong signature | Valid format, wrong signature | Reject after Google verify | CRITICAL |
+| GOA-SEC-B-023 | Token audience mismatch | Token for different client_id | Reject, wrong audience | CRITICAL |
+| GOA-SEC-B-024 | Token issuer not Google | Token from facebook.com | Reject, invalid issuer | CRITICAL |
+| GOA-SEC-B-025 | Token issued in future | `iat` (issued at) in future | Reject, clock skew check | HIGH |
+| GOA-SEC-B-026 | Token expired 1 second ago | `exp` just passed | Reject or allow grace period | HIGH |
+| GOA-SEC-B-027 | Clock skew handling | Server time off by 5 min | Accept with tolerance | MEDIUM |
+| GOA-SEC-B-028 | Missing email in token | Google token without email | Reject, email required | HIGH |
+| GOA-SEC-B-029 | Email not verified at Google | `email_verified: false` | Reject or warn user | HIGH |
+| GOA-SEC-B-030 | Revoked token mid-request | User revokes during processing | Detect and reject | HIGH |
+| GOA-SEC-B-031 | Duplicate email race condition | 2 users, same email, simultaneous | One succeeds, one fails | CRITICAL |
+| GOA-SEC-B-032 | Account linking conflict | Link Google to email already linked | Reject, show error | HIGH |
+| GOA-SEC-B-033 | Orphaned session cleanup | User logs out, session in DB | Session deleted | MEDIUM |
+| GOA-SEC-B-034 | Memory leak on many logins | 1000 logins in 1 minute | No memory leak | HIGH |
+| GOA-SEC-B-035 | Database connection pool | 100 concurrent logins | Pool managed correctly | HIGH |
+| GOA-SEC-B-036 | Transaction rollback | Error after user created | Full rollback, no partial data | CRITICAL |
+| GOA-SEC-B-037 | Google refresh token missing | User denies offline access | Store null, handle gracefully | MEDIUM |
+| GOA-SEC-B-038 | Refresh token encryption | Check DB storage | Token encrypted at rest | CRITICAL |
+| GOA-SEC-B-039 | Access token in logs | Check application logs | Tokens redacted/masked | CRITICAL |
+| GOA-SEC-B-040 | Error messages leak info | Wrong token error | Generic error, no details | HIGH |
+| GOA-SEC-B-041 | User enumeration attack | Check if email exists | Same response for exist/not | HIGH |
+| GOA-SEC-B-042 | Timing attack on token check | Measure response time | Constant time comparison | MEDIUM |
+| GOA-SEC-B-043 | HTTP instead of HTTPS | Send token over HTTP | Reject, HTTPS only | CRITICAL |
+| GOA-SEC-B-044 | CORS misconfiguration | Request from evil.com | CORS blocks request | CRITICAL |
+| GOA-SEC-B-045 | Missing security headers | Check response headers | HSTS, CSP, etc. present | HIGH |
+| GOA-SEC-B-046 | JWT algorithm confusion | Change token alg to 'none' | Reject, alg mismatch | CRITICAL |
+| GOA-SEC-B-047 | JWT kid manipulation | Invalid kid in header | Reject, validation fails | HIGH |
+| GOA-SEC-B-048 | Privilege escalation | Student token → Admin access | Reject, role validated | CRITICAL |
+| GOA-SEC-B-049 | Session hijacking | Steal session ID, replay | Detect via IP/User-Agent | HIGH |
+| GOA-SEC-B-050 | Session fixation attack | Force user to use attacker session | New session on login | CRITICAL |
 
 **Sub-Total:** **50 additional Security Edge Cases (Backend)**
 
@@ -321,28 +321,28 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Database Security Tests (Google OAuth)
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| GOA-DB-001 | User collection indexes | Check email index exists | Unique index on email | CRITICAL |
-|| GOA-DB-002 | Google ID unique constraint | Insert duplicate google_id | Error: Duplicate key | CRITICAL |
-|| GOA-DB-003 | Refresh token encrypted | Query users collection | Tokens encrypted | CRITICAL |
-|| GOA-DB-004 | Sensitive fields not exposed | Read user document | No password/token in response | HIGH |
-|| GOA-DB-005 | Audit log for login | User logs in | Entry in audit_logs | MEDIUM |
-|| GOA-DB-006 | Failed login attempts logged | 5 failed logins | 5 entries in logs | HIGH |
-|| GOA-DB-007 | Session collection TTL | Session older than 30 days | Auto-deleted by MongoDB TTL | MEDIUM |
-|| GOA-DB-008 | Database injection prevention | Malicious query in email | Query fails safely | CRITICAL |
-|| GOA-DB-009 | Read/write permissions | Test DB user permissions | Correct access control | HIGH |
-|| GOA-DB-010 | Connection encryption | Check DB connection | TLS/SSL enabled | CRITICAL |
-|| GOA-DB-011 | Backup includes auth data | Restore from backup | User can login | HIGH |
-|| GOA-DB-012 | Data at rest encryption | Check storage | Encryption enabled | HIGH |
-|| GOA-DB-013 | Query performance (1M users) | Find user by email | < 50ms with index | HIGH |
-|| GOA-DB-014 | Concurrent write conflicts | 2 updates to same user | Optimistic locking | HIGH |
-|| GOA-DB-015 | Transaction isolation | Concurrent reads/writes | Proper isolation level | MEDIUM |
-|| GOA-DB-016 | Soft delete users | Mark user deleted | active: false, not removed | MEDIUM |
-|| GOA-DB-017 | GDPR data deletion | User requests deletion | All user data removed | CRITICAL |
-|| GOA-DB-018 | User profile picture storage | Check image URL | Stored in CDN, not DB | MEDIUM |
-|| GOA-DB-019 | Token expiry field | Check sessions | expires_at stored correctly | HIGH |
-|| GOA-DB-020 | Multi-tenant data isolation | Query users by business_id | Correct filtering | CRITICAL |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| GOA-DB-001 | User collection indexes | Check email index exists | Unique index on email | CRITICAL |
+| GOA-DB-002 | Google ID unique constraint | Insert duplicate google_id | Error: Duplicate key | CRITICAL |
+| GOA-DB-003 | Refresh token encrypted | Query users collection | Tokens encrypted | CRITICAL |
+| GOA-DB-004 | Sensitive fields not exposed | Read user document | No password/token in response | HIGH |
+| GOA-DB-005 | Audit log for login | User logs in | Entry in audit_logs | MEDIUM |
+| GOA-DB-006 | Failed login attempts logged | 5 failed logins | 5 entries in logs | HIGH |
+| GOA-DB-007 | Session collection TTL | Session older than 30 days | Auto-deleted by MongoDB TTL | MEDIUM |
+| GOA-DB-008 | Database injection prevention | Malicious query in email | Query fails safely | CRITICAL |
+| GOA-DB-009 | Read/write permissions | Test DB user permissions | Correct access control | HIGH |
+| GOA-DB-010 | Connection encryption | Check DB connection | TLS/SSL enabled | CRITICAL |
+| GOA-DB-011 | Backup includes auth data | Restore from backup | User can login | HIGH |
+| GOA-DB-012 | Data at rest encryption | Check storage | Encryption enabled | HIGH |
+| GOA-DB-013 | Query performance (1M users) | Find user by email | < 50ms with index | HIGH |
+| GOA-DB-014 | Concurrent write conflicts | 2 updates to same user | Optimistic locking | HIGH |
+| GOA-DB-015 | Transaction isolation | Concurrent reads/writes | Proper isolation level | MEDIUM |
+| GOA-DB-016 | Soft delete users | Mark user deleted | active: false, not removed | MEDIUM |
+| GOA-DB-017 | GDPR data deletion | User requests deletion | All user data removed | CRITICAL |
+| GOA-DB-018 | User profile picture storage | Check image URL | Stored in CDN, not DB | MEDIUM |
+| GOA-DB-019 | Token expiry field | Check sessions | expires_at stored correctly | HIGH |
+| GOA-DB-020 | Multi-tenant data isolation | Query users by business_id | Correct filtering | CRITICAL |
 
 **Sub-Total:** **20 Database Security Tests**
 
@@ -350,28 +350,28 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🌐 Network & Infrastructure Edge Cases
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| GOA-NET-001 | Google OAuth API down | Google returns 503 | Show error, retry logic | HIGH |
-|| GOA-NET-002 | DNS resolution failure | DNS for google.com fails | Timeout, show error | MEDIUM |
-|| GOA-NET-003 | SSL certificate expired | Google cert expired | Browser warning, handle | LOW |
-|| GOA-NET-004 | Man-in-the-middle attack | Intercept OAuth traffic | SSL/TLS prevents | CRITICAL |
-|| GOA-NET-005 | Slow Google API (10s+) | Google responds slowly | Timeout at 15s | HIGH |
-|| GOA-NET-006 | Network packet loss (50%) | Unstable connection | Retry mechanism works | MEDIUM |
-|| GOA-NET-007 | CDN failure (Cloudflare) | CDN down | Fallback to origin | MEDIUM |
-|| GOA-NET-008 | Load balancer failure | One server down | Traffic to healthy server | HIGH |
-|| GOA-NET-009 | Database connection lost | DB disconnects mid-request | Reconnect, retry | HIGH |
-|| GOA-NET-010 | Redis cache down | Cache unavailable | Fallback to DB | MEDIUM |
-|| GOA-NET-011 | Email service down | SendGrid/SES unavailable | Queue email, retry later | MEDIUM |
-|| GOA-NET-012 | SMS gateway timeout | Twilio timeout | Graceful error | MEDIUM |
-|| GOA-NET-013 | API rate limit from proxy | Too many requests from IP | Distribute across IPs | MEDIUM |
-|| GOA-NET-014 | IPv6 vs IPv4 | User on IPv6 network | OAuth works | LOW |
-|| GOA-NET-015 | VPN/Proxy usage | User behind VPN | OAuth works | MEDIUM |
-|| GOA-NET-016 | Corporate firewall | Firewall blocks OAuth | Detect, show guide | MEDIUM |
-|| GOA-NET-017 | DDoS attack simulation | 10,000 req/sec | Rate limiting, Cloudflare | HIGH |
-|| GOA-NET-018 | Geographic latency (India) | User in Mumbai | < 1s response | HIGH |
-|| GOA-NET-019 | Geographic latency (US) | User in New York | < 3s response | MEDIUM |
-|| GOA-NET-020 | Mobile network (4G) | User on mobile data | OAuth completes | HIGH |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| GOA-NET-001 | Google OAuth API down | Google returns 503 | Show error, retry logic | HIGH |
+| GOA-NET-002 | DNS resolution failure | DNS for google.com fails | Timeout, show error | MEDIUM |
+| GOA-NET-003 | SSL certificate expired | Google cert expired | Browser warning, handle | LOW |
+| GOA-NET-004 | Man-in-the-middle attack | Intercept OAuth traffic | SSL/TLS prevents | CRITICAL |
+| GOA-NET-005 | Slow Google API (10s+) | Google responds slowly | Timeout at 15s | HIGH |
+| GOA-NET-006 | Network packet loss (50%) | Unstable connection | Retry mechanism works | MEDIUM |
+| GOA-NET-007 | CDN failure (Cloudflare) | CDN down | Fallback to origin | MEDIUM |
+| GOA-NET-008 | Load balancer failure | One server down | Traffic to healthy server | HIGH |
+| GOA-NET-009 | Database connection lost | DB disconnects mid-request | Reconnect, retry | HIGH |
+| GOA-NET-010 | Redis cache down | Cache unavailable | Fallback to DB | MEDIUM |
+| GOA-NET-011 | Email service down | SendGrid/SES unavailable | Queue email, retry later | MEDIUM |
+| GOA-NET-012 | SMS gateway timeout | Twilio timeout | Graceful error | MEDIUM |
+| GOA-NET-013 | API rate limit from proxy | Too many requests from IP | Distribute across IPs | MEDIUM |
+| GOA-NET-014 | IPv6 vs IPv4 | User on IPv6 network | OAuth works | LOW |
+| GOA-NET-015 | VPN/Proxy usage | User behind VPN | OAuth works | MEDIUM |
+| GOA-NET-016 | Corporate firewall | Firewall blocks OAuth | Detect, show guide | MEDIUM |
+| GOA-NET-017 | DDoS attack simulation | 10,000 req/sec | Rate limiting, Cloudflare | HIGH |
+| GOA-NET-018 | Geographic latency (India) | User in Mumbai | < 1s response | HIGH |
+| GOA-NET-019 | Geographic latency (US) | User in New York | < 3s response | MEDIUM |
+| GOA-NET-020 | Mobile network (4G) | User on mobile data | OAuth completes | HIGH |
 
 **Sub-Total:** **20 Network & Infrastructure Tests**
 
@@ -379,33 +379,33 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 📱 Cross-Platform & Browser Compatibility
 
-|| Test ID | Browser/Device | OAuth Flow | Token Storage | Callback | Priority |
-||---------|----------------|------------|---------------|----------|----------|
-|| GOA-PLAT-001 | Chrome (latest) | ✓ | ✓ | ✓ | CRITICAL |
-|| GOA-PLAT-002 | Chrome (3 versions old) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-003 | Firefox (latest) | ✓ | ✓ | ✓ | CRITICAL |
-|| GOA-PLAT-004 | Safari (macOS) | ✓ | ✓ | ✓ | CRITICAL |
-|| GOA-PLAT-005 | Safari (iOS) | ✓ | ✓ | ✓ | CRITICAL |
-|| GOA-PLAT-006 | Edge (Chromium) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-007 | Brave browser | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-008 | Opera browser | ✓ | ✓ | ✓ | LOW |
-|| GOA-PLAT-009 | Samsung Internet | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-010 | UC Browser (India) | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-011 | Chrome on Android 14 | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-012 | Chrome on Android 10 | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-013 | Safari on iPhone 15 | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-014 | Safari on iPhone 12 | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-015 | iPad Pro (Safari) | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-016 | Android tablet | ✓ | ✓ | ✓ | LOW |
-|| GOA-PLAT-017 | Windows 11 (Chrome) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-018 | Windows 10 (Edge) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-019 | macOS Sonoma (Safari) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-020 | Linux (Firefox) | ✓ | ✓ | ✓ | MEDIUM |
-|| GOA-PLAT-021 | Chrome Incognito | ✓ | ✓ (session) | ✓ | HIGH |
-|| GOA-PLAT-022 | Firefox Private | ✓ | ✓ (session) | ✓ | MEDIUM |
-|| GOA-PLAT-023 | Safari Private | ✓ | ✓ (session) | ✓ | MEDIUM |
-|| GOA-PLAT-024 | WebView (Android app) | ✓ | ✓ | ✓ | HIGH |
-|| GOA-PLAT-025 | WKWebView (iOS app) | ✓ | ✓ | ✓ | HIGH |
+| Test ID | Browser/Device | OAuth Flow | Token Storage | Callback | Priority |
+|---------|----------------|------------|---------------|----------|----------|
+| GOA-PLAT-001 | Chrome (latest) | ✓ | ✓ | ✓ | CRITICAL |
+| GOA-PLAT-002 | Chrome (3 versions old) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-003 | Firefox (latest) | ✓ | ✓ | ✓ | CRITICAL |
+| GOA-PLAT-004 | Safari (macOS) | ✓ | ✓ | ✓ | CRITICAL |
+| GOA-PLAT-005 | Safari (iOS) | ✓ | ✓ | ✓ | CRITICAL |
+| GOA-PLAT-006 | Edge (Chromium) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-007 | Brave browser | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-008 | Opera browser | ✓ | ✓ | ✓ | LOW |
+| GOA-PLAT-009 | Samsung Internet | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-010 | UC Browser (India) | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-011 | Chrome on Android 14 | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-012 | Chrome on Android 10 | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-013 | Safari on iPhone 15 | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-014 | Safari on iPhone 12 | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-015 | iPad Pro (Safari) | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-016 | Android tablet | ✓ | ✓ | ✓ | LOW |
+| GOA-PLAT-017 | Windows 11 (Chrome) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-018 | Windows 10 (Edge) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-019 | macOS Sonoma (Safari) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-020 | Linux (Firefox) | ✓ | ✓ | ✓ | MEDIUM |
+| GOA-PLAT-021 | Chrome Incognito | ✓ | ✓ (session) | ✓ | HIGH |
+| GOA-PLAT-022 | Firefox Private | ✓ | ✓ (session) | ✓ | MEDIUM |
+| GOA-PLAT-023 | Safari Private | ✓ | ✓ (session) | ✓ | MEDIUM |
+| GOA-PLAT-024 | WebView (Android app) | ✓ | ✓ | ✓ | HIGH |
+| GOA-PLAT-025 | WKWebView (iOS app) | ✓ | ✓ | ✓ | HIGH |
 
 **Sub-Total:** **25 Cross-Platform Tests**
 
@@ -482,43 +482,43 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Security Edge Cases - Mobile OTP (Frontend)
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| OTP-SEC-F-001 | OTP visible in plain text | Check input field type | Type: "text" (visible) or "password" | MEDIUM |
-|| OTP-SEC-F-002 | OTP in browser autofill | Browser suggests OTP | Auto-fill works (SMS OTP) | HIGH |
-|| OTP-SEC-F-003 | Copy-paste OTP disabled | Try to paste OTP | Paste allowed (UX) | LOW |
-|| OTP-SEC-F-004 | OTP in browser history | Check history | OTP NOT stored | HIGH |
-|| OTP-SEC-F-005 | Mobile number in localStorage | Check storage | Mobile NOT stored plain | MEDIUM |
-|| OTP-SEC-F-006 | Resend spam prevention | Click resend 10x rapidly | Limited to 1 per 60s | HIGH |
-|| OTP-SEC-F-007 | Timer countdown accuracy | Check 60s timer | Accurate countdown | MEDIUM |
-|| OTP-SEC-F-008 | Timer manipulation | Change system clock | Timer continues correctly | LOW |
-|| OTP-SEC-F-009 | OTP field validation (6 digits) | Enter 5 digits | Button disabled | HIGH |
-|| OTP-SEC-F-010 | OTP field accepts letters | Enter "ABCDEF" | Rejected, numbers only | HIGH |
-|| OTP-SEC-F-011 | OTP field accepts special chars | Enter "!@#$%^" | Rejected | HIGH |
-|| OTP-SEC-F-012 | XSS in mobile number field | Enter `<script>` | Sanitized | CRITICAL |
-|| OTP-SEC-F-013 | SQL injection in mobile | Enter `' OR '1'='1` | Sanitized | CRITICAL |
-|| OTP-SEC-F-014 | Country code dropdown | Select wrong country | Mobile validation fails | HIGH |
-|| OTP-SEC-F-015 | Mobile with spaces | Enter "98765 43210" | Spaces removed, accepted | MEDIUM |
-|| OTP-SEC-F-016 | Mobile with dashes | Enter "9876-543-210" | Dashes removed, accepted | MEDIUM |
-|| OTP-SEC-F-017 | Mobile with +91 prefix | Enter "+91 9876543210" | Accepted or prefix removed | HIGH |
-|| OTP-SEC-F-018 | Invalid mobile length | Enter "123" (3 digits) | Show error | HIGH |
-|| OTP-SEC-F-019 | Mobile starting with 0 | Enter "09876543210" | Reject or auto-correct | HIGH |
-|| OTP-SEC-F-020 | Mobile all zeros | Enter "0000000000" | Reject as invalid | MEDIUM |
-|| OTP-SEC-F-021 | Mobile all same digit | Enter "1111111111" | Accept (valid format) | MEDIUM |
-|| OTP-SEC-F-022 | Very long mobile (20 digits) | Enter 20 digits | Truncate or reject | MEDIUM |
-|| OTP-SEC-F-023 | Network error on send OTP | API fails | Show error message | HIGH |
-|| OTP-SEC-F-024 | Network error on verify | API fails | Show retry option | HIGH |
-|| OTP-SEC-F-025 | Loading state on send | Click Send OTP | Button disabled, spinner shown | MEDIUM |
-|| OTP-SEC-F-026 | Loading state on verify | Click Verify | Button disabled, spinner shown | MEDIUM |
-|| OTP-SEC-F-027 | Back button during OTP | Press back | Return to mobile input | MEDIUM |
-|| OTP-SEC-F-028 | Refresh page during OTP | F5 on OTP screen | Restart flow or maintain state | MEDIUM |
-|| OTP-SEC-F-029 | Multiple tabs send OTP | 2 tabs, same mobile | Both get OTP, race condition | MEDIUM |
-|| OTP-SEC-F-030 | OTP expires while typing | Wait 5 min, then verify | Show "OTP expired" error | HIGH |
-|| OTP-SEC-F-031 | Rate limit error display | After 3 OTP requests | Show "Try again in X minutes" | HIGH |
-|| OTP-SEC-F-032 | Mobile number masking | Display mobile on verify screen | Shown as "****3210" | MEDIUM |
-|| OTP-SEC-F-033 | Edit mobile after send OTP | Click "Change mobile" | Allow editing | MEDIUM |
-|| OTP-SEC-F-034 | Screen reader support | Use screen reader on form | ARIA labels present | LOW |
-|| OTP-SEC-F-035 | Keyboard navigation | Tab through fields | All accessible | LOW |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| OTP-SEC-F-001 | OTP visible in plain text | Check input field type | Type: "text" (visible) or "password" | MEDIUM |
+| OTP-SEC-F-002 | OTP in browser autofill | Browser suggests OTP | Auto-fill works (SMS OTP) | HIGH |
+| OTP-SEC-F-003 | Copy-paste OTP disabled | Try to paste OTP | Paste allowed (UX) | LOW |
+| OTP-SEC-F-004 | OTP in browser history | Check history | OTP NOT stored | HIGH |
+| OTP-SEC-F-005 | Mobile number in localStorage | Check storage | Mobile NOT stored plain | MEDIUM |
+| OTP-SEC-F-006 | Resend spam prevention | Click resend 10x rapidly | Limited to 1 per 60s | HIGH |
+| OTP-SEC-F-007 | Timer countdown accuracy | Check 60s timer | Accurate countdown | MEDIUM |
+| OTP-SEC-F-008 | Timer manipulation | Change system clock | Timer continues correctly | LOW |
+| OTP-SEC-F-009 | OTP field validation (6 digits) | Enter 5 digits | Button disabled | HIGH |
+| OTP-SEC-F-010 | OTP field accepts letters | Enter "ABCDEF" | Rejected, numbers only | HIGH |
+| OTP-SEC-F-011 | OTP field accepts special chars | Enter "!@#$%^" | Rejected | HIGH |
+| OTP-SEC-F-012 | XSS in mobile number field | Enter `<script>` | Sanitized | CRITICAL |
+| OTP-SEC-F-013 | SQL injection in mobile | Enter `' OR '1'='1` | Sanitized | CRITICAL |
+| OTP-SEC-F-014 | Country code dropdown | Select wrong country | Mobile validation fails | HIGH |
+| OTP-SEC-F-015 | Mobile with spaces | Enter "98765 43210" | Spaces removed, accepted | MEDIUM |
+| OTP-SEC-F-016 | Mobile with dashes | Enter "9876-543-210" | Dashes removed, accepted | MEDIUM |
+| OTP-SEC-F-017 | Mobile with +91 prefix | Enter "+91 9876543210" | Accepted or prefix removed | HIGH |
+| OTP-SEC-F-018 | Invalid mobile length | Enter "123" (3 digits) | Show error | HIGH |
+| OTP-SEC-F-019 | Mobile starting with 0 | Enter "09876543210" | Reject or auto-correct | HIGH |
+| OTP-SEC-F-020 | Mobile all zeros | Enter "0000000000" | Reject as invalid | MEDIUM |
+| OTP-SEC-F-021 | Mobile all same digit | Enter "1111111111" | Accept (valid format) | MEDIUM |
+| OTP-SEC-F-022 | Very long mobile (20 digits) | Enter 20 digits | Truncate or reject | MEDIUM |
+| OTP-SEC-F-023 | Network error on send OTP | API fails | Show error message | HIGH |
+| OTP-SEC-F-024 | Network error on verify | API fails | Show retry option | HIGH |
+| OTP-SEC-F-025 | Loading state on send | Click Send OTP | Button disabled, spinner shown | MEDIUM |
+| OTP-SEC-F-026 | Loading state on verify | Click Verify | Button disabled, spinner shown | MEDIUM |
+| OTP-SEC-F-027 | Back button during OTP | Press back | Return to mobile input | MEDIUM |
+| OTP-SEC-F-028 | Refresh page during OTP | F5 on OTP screen | Restart flow or maintain state | MEDIUM |
+| OTP-SEC-F-029 | Multiple tabs send OTP | 2 tabs, same mobile | Both get OTP, race condition | MEDIUM |
+| OTP-SEC-F-030 | OTP expires while typing | Wait 5 min, then verify | Show "OTP expired" error | HIGH |
+| OTP-SEC-F-031 | Rate limit error display | After 3 OTP requests | Show "Try again in X minutes" | HIGH |
+| OTP-SEC-F-032 | Mobile number masking | Display mobile on verify screen | Shown as "****3210" | MEDIUM |
+| OTP-SEC-F-033 | Edit mobile after send OTP | Click "Change mobile" | Allow editing | MEDIUM |
+| OTP-SEC-F-034 | Screen reader support | Use screen reader on form | ARIA labels present | LOW |
+| OTP-SEC-F-035 | Keyboard navigation | Tab through fields | All accessible | LOW |
 
 **Sub-Total:** **35 Security Edge Cases (OTP Frontend)**
 
@@ -526,58 +526,58 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Security Edge Cases - Mobile OTP (Backend)
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| OTP-SEC-B-001 | OTP brute force (1000 tries) | Try all 6-digit combos | Block after 3 wrong attempts | CRITICAL |
-|| OTP-SEC-B-002 | OTP timing attack | Measure verification time | Constant-time comparison | HIGH |
-|| OTP-SEC-B-003 | OTP replay attack | Reuse same OTP twice | Second use rejected | CRITICAL |
-|| OTP-SEC-B-004 | OTP from different mobile | OTP for mobile A, verify with B | Rejected | CRITICAL |
-|| OTP-SEC-B-005 | Expired OTP (5 min + 1 sec) | Verify after expiry | Rejected | HIGH |
-|| OTP-SEC-B-006 | OTP not yet sent | Verify without sending | Rejected | HIGH |
-|| OTP-SEC-B-007 | OTP generation randomness | Generate 10,000 OTPs | No predictable pattern | CRITICAL |
-|| OTP-SEC-B-008 | OTP hash storage | Check DB | OTP stored as hash | CRITICAL |
-|| OTP-SEC-B-009 | OTP in application logs | Check logs | OTP redacted/masked | CRITICAL |
-|| OTP-SEC-B-010 | OTP in error messages | Wrong OTP | Generic error, no hints | HIGH |
-|| OTP-SEC-B-011 | Rate limit: 3 OTP/hour | Send 4th OTP | 4th rejected (429) | HIGH |
-|| OTP-SEC-B-012 | Rate limit: 10 verify/hour | 11th verify attempt | Rejected, account locked | HIGH |
-|| OTP-SEC-B-013 | IP-based rate limiting | 100 OTP from same IP | Blocked after threshold | HIGH |
-|| OTP-SEC-B-014 | Distributed attack | OTPs from 100 IPs | Each IP limited separately | MEDIUM |
-|| OTP-SEC-B-015 | Mobile format: India | +91 9876543210 | Accepted | HIGH |
-|| OTP-SEC-B-016 | Mobile format: US | +1 2025551234 | Accepted | MEDIUM |
-|| OTP-SEC-B-017 | Mobile format: UK | +44 7911123456 | Accepted | MEDIUM |
-|| OTP-SEC-B-018 | Mobile format: Invalid country | +999 1234567890 | Rejected | MEDIUM |
-|| OTP-SEC-B-019 | Mobile normalization | Various formats → Normalized | Stored consistently | HIGH |
-|| OTP-SEC-B-020 | Duplicate mobile check | Mobile already registered | Link or reject | HIGH |
-|| OTP-SEC-B-021 | SMS gateway failure | Twilio returns error | Retry 3x, then fail gracefully | HIGH |
-|| OTP-SEC-B-022 | SMS delivery delay (2 min) | SMS arrives late | OTP still valid (5 min window) | MEDIUM |
-|| OTP-SEC-B-023 | SMS not delivered | Provider fails | Return error to user | HIGH |
-|| OTP-SEC-B-024 | SMS delivery confirmation | Check delivery status | Log delivery receipt | MEDIUM |
-|| OTP-SEC-B-025 | SMS cost tracking | Send 1000 OTPs | Track cost per SMS | LOW |
-|| OTP-SEC-B-026 | International SMS cost | SMS to US number | Higher cost logged | LOW |
-|| OTP-SEC-B-027 | Concurrent OTP sends | 2 sends for same mobile | Only latest OTP valid | HIGH |
-|| OTP-SEC-B-028 | OTP cleanup job | OTPs older than 1 hour | Deleted automatically | MEDIUM |
-|| OTP-SEC-B-029 | Database index on mobile | Query by mobile | < 50ms with index | HIGH |
-|| OTP-SEC-B-030 | Transaction on OTP verify | Verify + create user | Atomic transaction | HIGH |
-|| OTP-SEC-B-031 | Rollback on failure | User creation fails | OTP not marked as used | HIGH |
-|| OTP-SEC-B-032 | SQL injection in mobile | Malicious mobile input | Sanitized, no execution | CRITICAL |
-|| OTP-SEC-B-033 | NoSQL injection | MongoDB query injection | Sanitized | CRITICAL |
-|| OTP-SEC-B-034 | XSS in mobile storage | Store malicious mobile | Escaped on retrieval | HIGH |
-|| OTP-SEC-B-035 | Mobile number enumeration | Check if mobile exists | Same response (privacy) | HIGH |
-|| OTP-SEC-B-036 | SSRF via webhook | Malicious SMS webhook | Validated URL | MEDIUM |
-|| OTP-SEC-B-037 | Memory leak (many OTPs) | Send 10,000 OTPs | No memory leak | HIGH |
-|| OTP-SEC-B-038 | Database connection pool | 100 concurrent OTP sends | Pool managed | MEDIUM |
-|| OTP-SEC-B-039 | OTP for blocked number | Blacklisted mobile | Rejected | MEDIUM |
-|| OTP-SEC-B-040 | OTP length variation | 4-digit vs 6-digit | 6-digit enforced | MEDIUM |
-|| OTP-SEC-B-041 | Alphanumeric OTP | OTP with letters | Numbers only enforced | MEDIUM |
-|| OTP-SEC-B-042 | SMS template injection | Modify SMS template | Template validated | HIGH |
-|| OTP-SEC-B-043 | Account linking conflict | Link mobile to existing account | Handle gracefully | HIGH |
-|| OTP-SEC-B-044 | First-time user creation | OTP verify → Create account | User created with mobile | HIGH |
-|| OTP-SEC-B-045 | Returning user login | OTP verify → Login | Existing user logged in | HIGH |
-|| OTP-SEC-B-046 | JWT generation after OTP | Verify success | Valid JWT returned | CRITICAL |
-|| OTP-SEC-B-047 | JWT contains mobile | Check JWT payload | Mobile included | HIGH |
-|| OTP-SEC-B-048 | Session creation | After OTP verify | Session in DB | HIGH |
-|| OTP-SEC-B-049 | Multi-tenant isolation | OTP for Business A | Not usable for Business B | CRITICAL |
-|| OTP-SEC-B-050 | Audit log | OTP sent/verified | Logged in audit_logs | MEDIUM |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| OTP-SEC-B-001 | OTP brute force (1000 tries) | Try all 6-digit combos | Block after 3 wrong attempts | CRITICAL |
+| OTP-SEC-B-002 | OTP timing attack | Measure verification time | Constant-time comparison | HIGH |
+| OTP-SEC-B-003 | OTP replay attack | Reuse same OTP twice | Second use rejected | CRITICAL |
+| OTP-SEC-B-004 | OTP from different mobile | OTP for mobile A, verify with B | Rejected | CRITICAL |
+| OTP-SEC-B-005 | Expired OTP (5 min + 1 sec) | Verify after expiry | Rejected | HIGH |
+| OTP-SEC-B-006 | OTP not yet sent | Verify without sending | Rejected | HIGH |
+| OTP-SEC-B-007 | OTP generation randomness | Generate 10,000 OTPs | No predictable pattern | CRITICAL |
+| OTP-SEC-B-008 | OTP hash storage | Check DB | OTP stored as hash | CRITICAL |
+| OTP-SEC-B-009 | OTP in application logs | Check logs | OTP redacted/masked | CRITICAL |
+| OTP-SEC-B-010 | OTP in error messages | Wrong OTP | Generic error, no hints | HIGH |
+| OTP-SEC-B-011 | Rate limit: 3 OTP/hour | Send 4th OTP | 4th rejected (429) | HIGH |
+| OTP-SEC-B-012 | Rate limit: 10 verify/hour | 11th verify attempt | Rejected, account locked | HIGH |
+| OTP-SEC-B-013 | IP-based rate limiting | 100 OTP from same IP | Blocked after threshold | HIGH |
+| OTP-SEC-B-014 | Distributed attack | OTPs from 100 IPs | Each IP limited separately | MEDIUM |
+| OTP-SEC-B-015 | Mobile format: India | +91 9876543210 | Accepted | HIGH |
+| OTP-SEC-B-016 | Mobile format: US | +1 2025551234 | Accepted | MEDIUM |
+| OTP-SEC-B-017 | Mobile format: UK | +44 7911123456 | Accepted | MEDIUM |
+| OTP-SEC-B-018 | Mobile format: Invalid country | +999 1234567890 | Rejected | MEDIUM |
+| OTP-SEC-B-019 | Mobile normalization | Various formats → Normalized | Stored consistently | HIGH |
+| OTP-SEC-B-020 | Duplicate mobile check | Mobile already registered | Link or reject | HIGH |
+| OTP-SEC-B-021 | SMS gateway failure | Twilio returns error | Retry 3x, then fail gracefully | HIGH |
+| OTP-SEC-B-022 | SMS delivery delay (2 min) | SMS arrives late | OTP still valid (5 min window) | MEDIUM |
+| OTP-SEC-B-023 | SMS not delivered | Provider fails | Return error to user | HIGH |
+| OTP-SEC-B-024 | SMS delivery confirmation | Check delivery status | Log delivery receipt | MEDIUM |
+| OTP-SEC-B-025 | SMS cost tracking | Send 1000 OTPs | Track cost per SMS | LOW |
+| OTP-SEC-B-026 | International SMS cost | SMS to US number | Higher cost logged | LOW |
+| OTP-SEC-B-027 | Concurrent OTP sends | 2 sends for same mobile | Only latest OTP valid | HIGH |
+| OTP-SEC-B-028 | OTP cleanup job | OTPs older than 1 hour | Deleted automatically | MEDIUM |
+| OTP-SEC-B-029 | Database index on mobile | Query by mobile | < 50ms with index | HIGH |
+| OTP-SEC-B-030 | Transaction on OTP verify | Verify + create user | Atomic transaction | HIGH |
+| OTP-SEC-B-031 | Rollback on failure | User creation fails | OTP not marked as used | HIGH |
+| OTP-SEC-B-032 | SQL injection in mobile | Malicious mobile input | Sanitized, no execution | CRITICAL |
+| OTP-SEC-B-033 | NoSQL injection | MongoDB query injection | Sanitized | CRITICAL |
+| OTP-SEC-B-034 | XSS in mobile storage | Store malicious mobile | Escaped on retrieval | HIGH |
+| OTP-SEC-B-035 | Mobile number enumeration | Check if mobile exists | Same response (privacy) | HIGH |
+| OTP-SEC-B-036 | SSRF via webhook | Malicious SMS webhook | Validated URL | MEDIUM |
+| OTP-SEC-B-037 | Memory leak (many OTPs) | Send 10,000 OTPs | No memory leak | HIGH |
+| OTP-SEC-B-038 | Database connection pool | 100 concurrent OTP sends | Pool managed | MEDIUM |
+| OTP-SEC-B-039 | OTP for blocked number | Blacklisted mobile | Rejected | MEDIUM |
+| OTP-SEC-B-040 | OTP length variation | 4-digit vs 6-digit | 6-digit enforced | MEDIUM |
+| OTP-SEC-B-041 | Alphanumeric OTP | OTP with letters | Numbers only enforced | MEDIUM |
+| OTP-SEC-B-042 | SMS template injection | Modify SMS template | Template validated | HIGH |
+| OTP-SEC-B-043 | Account linking conflict | Link mobile to existing account | Handle gracefully | HIGH |
+| OTP-SEC-B-044 | First-time user creation | OTP verify → Create account | User created with mobile | HIGH |
+| OTP-SEC-B-045 | Returning user login | OTP verify → Login | Existing user logged in | HIGH |
+| OTP-SEC-B-046 | JWT generation after OTP | Verify success | Valid JWT returned | CRITICAL |
+| OTP-SEC-B-047 | JWT contains mobile | Check JWT payload | Mobile included | HIGH |
+| OTP-SEC-B-048 | Session creation | After OTP verify | Session in DB | HIGH |
+| OTP-SEC-B-049 | Multi-tenant isolation | OTP for Business A | Not usable for Business B | CRITICAL |
+| OTP-SEC-B-050 | Audit log | OTP sent/verified | Logged in audit_logs | MEDIUM |
 
 **Sub-Total:** **50 Security Edge Cases (OTP Backend)**
 
@@ -585,28 +585,28 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Database Tests - Mobile OTP
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| OTP-DB-001 | OTP storage structure | Check otps collection | Fields: mobile, otp_hash, expires_at | HIGH |
-|| OTP-DB-002 | OTP hash algorithm | Check hashing method | bcrypt or Argon2 | CRITICAL |
-|| OTP-DB-003 | OTP expiry timestamp | Check expires_at | 5 minutes from creation | HIGH |
-|| OTP-DB-004 | OTP TTL index | Check MongoDB TTL | Auto-delete after expiry | MEDIUM |
-|| OTP-DB-005 | Mobile number unique index | Insert duplicate mobile (active OTP) | Update, not insert | HIGH |
-|| OTP-DB-006 | OTP attempts tracking | Check failed_attempts field | Increments on wrong OTP | HIGH |
-|| OTP-DB-007 | Account lock after 3 fails | 3 wrong OTPs | locked: true in DB | HIGH |
-|| OTP-DB-008 | Unlock after time period | Wait 30 min | locked: false | MEDIUM |
-|| OTP-DB-009 | OTP history tracking | Check otp_history collection | All OTPs logged | LOW |
-|| OTP-DB-010 | SMS delivery status | Check delivery_status field | pending/sent/failed/delivered | MEDIUM |
-|| OTP-DB-011 | Rate limit tracking | Check rate_limits collection | Per mobile, per IP | HIGH |
-|| OTP-DB-012 | Query performance (1M OTPs) | Find OTP by mobile | < 50ms with index | HIGH |
-|| OTP-DB-013 | Concurrent OTP updates | 2 verifies same time | Optimistic locking | HIGH |
-|| OTP-DB-014 | Transaction isolation | OTP verify + user create | ACID compliance | CRITICAL |
-|| OTP-DB-015 | Backup includes OTPs | Restore from backup | OTPs restored correctly | LOW |
-|| OTP-DB-016 | Data encryption at rest | Check DB encryption | Enabled | HIGH |
-|| OTP-DB-017 | Sensitive data not in logs | Query logs | No OTP values | CRITICAL |
-|| OTP-DB-018 | Cascade delete on user | User deleted | Associated OTPs deleted | MEDIUM |
-|| OTP-DB-019 | Index on expires_at | Check index | Exists for cleanup queries | MEDIUM |
-|| OTP-DB-020 | Storage size (100K OTPs) | Monitor collection size | < 100MB | LOW |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| OTP-DB-001 | OTP storage structure | Check otps collection | Fields: mobile, otp_hash, expires_at | HIGH |
+| OTP-DB-002 | OTP hash algorithm | Check hashing method | bcrypt or Argon2 | CRITICAL |
+| OTP-DB-003 | OTP expiry timestamp | Check expires_at | 5 minutes from creation | HIGH |
+| OTP-DB-004 | OTP TTL index | Check MongoDB TTL | Auto-delete after expiry | MEDIUM |
+| OTP-DB-005 | Mobile number unique index | Insert duplicate mobile (active OTP) | Update, not insert | HIGH |
+| OTP-DB-006 | OTP attempts tracking | Check failed_attempts field | Increments on wrong OTP | HIGH |
+| OTP-DB-007 | Account lock after 3 fails | 3 wrong OTPs | locked: true in DB | HIGH |
+| OTP-DB-008 | Unlock after time period | Wait 30 min | locked: false | MEDIUM |
+| OTP-DB-009 | OTP history tracking | Check otp_history collection | All OTPs logged | LOW |
+| OTP-DB-010 | SMS delivery status | Check delivery_status field | pending/sent/failed/delivered | MEDIUM |
+| OTP-DB-011 | Rate limit tracking | Check rate_limits collection | Per mobile, per IP | HIGH |
+| OTP-DB-012 | Query performance (1M OTPs) | Find OTP by mobile | < 50ms with index | HIGH |
+| OTP-DB-013 | Concurrent OTP updates | 2 verifies same time | Optimistic locking | HIGH |
+| OTP-DB-014 | Transaction isolation | OTP verify + user create | ACID compliance | CRITICAL |
+| OTP-DB-015 | Backup includes OTPs | Restore from backup | OTPs restored correctly | LOW |
+| OTP-DB-016 | Data encryption at rest | Check DB encryption | Enabled | HIGH |
+| OTP-DB-017 | Sensitive data not in logs | Query logs | No OTP values | CRITICAL |
+| OTP-DB-018 | Cascade delete on user | User deleted | Associated OTPs deleted | MEDIUM |
+| OTP-DB-019 | Index on expires_at | Check index | Exists for cleanup queries | MEDIUM |
+| OTP-DB-020 | Storage size (100K OTPs) | Monitor collection size | < 100MB | LOW |
 
 **Sub-Total:** **20 Database Tests (OTP)**
 
@@ -614,28 +614,28 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 📱 SMS Provider Integration Tests
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| OTP-SMS-001 | Twilio integration | Send OTP via Twilio (India) | SMS delivered | HIGH |
-|| OTP-SMS-002 | Twilio US numbers | Send to +1 number | SMS delivered | MEDIUM |
-|| OTP-SMS-003 | MSG91 integration (India) | Send via MSG91 | SMS delivered | HIGH |
-|| OTP-SMS-004 | AWS SNS integration | Send via SNS | SMS delivered | MEDIUM |
-|| OTP-SMS-005 | Failover: Twilio → MSG91 | Twilio fails | Auto-switch to MSG91 | HIGH |
-|| OTP-SMS-006 | SMS template customization | Modify template | Custom message sent | MEDIUM |
-|| OTP-SMS-007 | SMS sender ID | Check sender name | "ClassInTown" or number | MEDIUM |
-|| OTP-SMS-008 | SMS length optimization | Check message length | < 160 chars (1 SMS) | LOW |
-|| OTP-SMS-009 | Unicode in SMS (Hindi) | Send with Hindi text | Unicode SMS sent | LOW |
-|| OTP-SMS-010 | SMS delivery report | Check webhook | Delivery status received | MEDIUM |
-|| OTP-SMS-011 | DND registered number | Send to DND number | Promotional blocked, transactional OK | MEDIUM |
-|| OTP-SMS-012 | Invalid phone number | Send to invalid number | Error returned | HIGH |
-|| OTP-SMS-013 | SMS cost tracking | Track per-SMS cost | Logged correctly | LOW |
-|| OTP-SMS-014 | Bulk SMS sending | Send 1000 OTPs | All delivered, < 5 min | MEDIUM |
-|| OTP-SMS-015 | SMS queue | Send 100 simultaneous | Queued, sent in order | HIGH |
-|| OTP-SMS-016 | SMS retry logic | Initial send fails | Retry 3x with backoff | HIGH |
-|| OTP-SMS-017 | SMS webhook security | Validate webhook signature | Only authentic requests | HIGH |
-|| OTP-SMS-018 | SMS rate limit by provider | Exceed provider limit | Handled gracefully | MEDIUM |
-|| OTP-SMS-019 | International SMS | Send to 10 countries | All delivered | LOW |
-|| OTP-SMS-020 | SMS during provider outage | Provider down | Queue, send when up | MEDIUM |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| OTP-SMS-001 | Twilio integration | Send OTP via Twilio (India) | SMS delivered | HIGH |
+| OTP-SMS-002 | Twilio US numbers | Send to +1 number | SMS delivered | MEDIUM |
+| OTP-SMS-003 | MSG91 integration (India) | Send via MSG91 | SMS delivered | HIGH |
+| OTP-SMS-004 | AWS SNS integration | Send via SNS | SMS delivered | MEDIUM |
+| OTP-SMS-005 | Failover: Twilio → MSG91 | Twilio fails | Auto-switch to MSG91 | HIGH |
+| OTP-SMS-006 | SMS template customization | Modify template | Custom message sent | MEDIUM |
+| OTP-SMS-007 | SMS sender ID | Check sender name | "ClassInTown" or number | MEDIUM |
+| OTP-SMS-008 | SMS length optimization | Check message length | < 160 chars (1 SMS) | LOW |
+| OTP-SMS-009 | Unicode in SMS (Hindi) | Send with Hindi text | Unicode SMS sent | LOW |
+| OTP-SMS-010 | SMS delivery report | Check webhook | Delivery status received | MEDIUM |
+| OTP-SMS-011 | DND registered number | Send to DND number | Promotional blocked, transactional OK | MEDIUM |
+| OTP-SMS-012 | Invalid phone number | Send to invalid number | Error returned | HIGH |
+| OTP-SMS-013 | SMS cost tracking | Track per-SMS cost | Logged correctly | LOW |
+| OTP-SMS-014 | Bulk SMS sending | Send 1000 OTPs | All delivered, < 5 min | MEDIUM |
+| OTP-SMS-015 | SMS queue | Send 100 simultaneous | Queued, sent in order | HIGH |
+| OTP-SMS-016 | SMS retry logic | Initial send fails | Retry 3x with backoff | HIGH |
+| OTP-SMS-017 | SMS webhook security | Validate webhook signature | Only authentic requests | HIGH |
+| OTP-SMS-018 | SMS rate limit by provider | Exceed provider limit | Handled gracefully | MEDIUM |
+| OTP-SMS-019 | International SMS | Send to 10 countries | All delivered | LOW |
+| OTP-SMS-020 | SMS during provider outage | Provider down | Queue, send when up | MEDIUM |
 
 **Sub-Total:** **20 SMS Integration Tests**
 
@@ -643,28 +643,28 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🌐 Mobile OTP - Cross-Platform Tests
 
-|| Test ID | Device/Browser | Send OTP | Verify OTP | SMS Autofill | Priority |
-||---------|----------------|----------|------------|--------------|----------|
-|| OTP-PLAT-001 | Android 14 (Chrome) | ✓ | ✓ | ✓ (SMS OTP API) | HIGH |
-|| OTP-PLAT-002 | Android 13 (Chrome) | ✓ | ✓ | ✓ | HIGH |
-|| OTP-PLAT-003 | Android 10 (Chrome) | ✓ | ✓ | Manual | MEDIUM |
-|| OTP-PLAT-004 | iPhone 15 (Safari) | ✓ | ✓ | ✓ (AutoFill) | HIGH |
-|| OTP-PLAT-005 | iPhone 12 (Safari) | ✓ | ✓ | ✓ | HIGH |
-|| OTP-PLAT-006 | Samsung Galaxy (Samsung Internet) | ✓ | ✓ | ✓ | MEDIUM |
-|| OTP-PLAT-007 | OnePlus (OxygenOS) | ✓ | ✓ | ✓ | MEDIUM |
-|| OTP-PLAT-008 | Xiaomi (MIUI) | ✓ | ✓ | ✓ | MEDIUM |
-|| OTP-PLAT-009 | Desktop Chrome | ✓ | ✓ | Manual entry | MEDIUM |
-|| OTP-PLAT-010 | Desktop Firefox | ✓ | ✓ | Manual entry | MEDIUM |
-|| OTP-PLAT-011 | iPad (Safari) | ✓ | ✓ | ✓ | LOW |
-|| OTP-PLAT-012 | Android tablet | ✓ | ✓ | Manual | LOW |
-|| OTP-PLAT-013 | Mobile with no SMS app | ✓ | Manual verify | N/A | LOW |
-|| OTP-PLAT-014 | Dual SIM phone | ✓ | ✓ | Correct SIM | MEDIUM |
-|| OTP-PLAT-015 | 2G network | ✓ (slow) | ✓ | SMS delay OK | LOW |
-|| OTP-PLAT-016 | 3G network | ✓ | ✓ | ✓ | MEDIUM |
-|| OTP-PLAT-017 | 4G/LTE network | ✓ | ✓ | ✓ | HIGH |
-|| OTP-PLAT-018 | 5G network | ✓ | ✓ | ✓ | MEDIUM |
-|| OTP-PLAT-019 | WiFi only (no cellular) | ✓ | Manual verify | N/A | MEDIUM |
-|| OTP-PLAT-020 | Roaming (international) | ✓ | ✓ | SMS delay | LOW |
+| Test ID | Device/Browser | Send OTP | Verify OTP | SMS Autofill | Priority |
+|---------|----------------|----------|------------|--------------|----------|
+| OTP-PLAT-001 | Android 14 (Chrome) | ✓ | ✓ | ✓ (SMS OTP API) | HIGH |
+| OTP-PLAT-002 | Android 13 (Chrome) | ✓ | ✓ | ✓ | HIGH |
+| OTP-PLAT-003 | Android 10 (Chrome) | ✓ | ✓ | Manual | MEDIUM |
+| OTP-PLAT-004 | iPhone 15 (Safari) | ✓ | ✓ | ✓ (AutoFill) | HIGH |
+| OTP-PLAT-005 | iPhone 12 (Safari) | ✓ | ✓ | ✓ | HIGH |
+| OTP-PLAT-006 | Samsung Galaxy (Samsung Internet) | ✓ | ✓ | ✓ | MEDIUM |
+| OTP-PLAT-007 | OnePlus (OxygenOS) | ✓ | ✓ | ✓ | MEDIUM |
+| OTP-PLAT-008 | Xiaomi (MIUI) | ✓ | ✓ | ✓ | MEDIUM |
+| OTP-PLAT-009 | Desktop Chrome | ✓ | ✓ | Manual entry | MEDIUM |
+| OTP-PLAT-010 | Desktop Firefox | ✓ | ✓ | Manual entry | MEDIUM |
+| OTP-PLAT-011 | iPad (Safari) | ✓ | ✓ | ✓ | LOW |
+| OTP-PLAT-012 | Android tablet | ✓ | ✓ | Manual | LOW |
+| OTP-PLAT-013 | Mobile with no SMS app | ✓ | Manual verify | N/A | LOW |
+| OTP-PLAT-014 | Dual SIM phone | ✓ | ✓ | Correct SIM | MEDIUM |
+| OTP-PLAT-015 | 2G network | ✓ (slow) | ✓ | SMS delay OK | LOW |
+| OTP-PLAT-016 | 3G network | ✓ | ✓ | ✓ | MEDIUM |
+| OTP-PLAT-017 | 4G/LTE network | ✓ | ✓ | ✓ | HIGH |
+| OTP-PLAT-018 | 5G network | ✓ | ✓ | ✓ | MEDIUM |
+| OTP-PLAT-019 | WiFi only (no cellular) | ✓ | Manual verify | N/A | MEDIUM |
+| OTP-PLAT-020 | Roaming (international) | ✓ | ✓ | SMS delay | LOW |
 
 **Sub-Total:** **20 Cross-Platform Tests (OTP)**
 
@@ -717,58 +717,58 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Google Calendar Deep Integration Tests
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| GCAL-001 | First-time calendar scope request | User logs in | Prompt for Calendar access | CRITICAL |
-|| GCAL-002 | User grants calendar access | Click "Allow" | Scope stored in DB | CRITICAL |
-|| GCAL-003 | User denies calendar access | Click "Deny" | Continue without sync | HIGH |
-|| GCAL-004 | Re-request scope later | User clicks "Enable Calendar Sync" | OAuth prompt again | HIGH |
-|| GCAL-005 | Multiple calendar selection | User has 3 calendars | Select which to sync | MEDIUM |
-|| GCAL-006 | Primary calendar default | No selection | Use primary calendar | HIGH |
-|| GCAL-007 | Create event in Google | New class created | Event in Google Calendar | CRITICAL |
-|| GCAL-008 | Update event in Google | Edit class time | Google event updated | CRITICAL |
-|| GCAL-009 | Delete event in Google | Delete class | Google event deleted | CRITICAL |
-|| GCAL-010 | Sync from Google to ClassInTown | Create event in Google | Appears in ClassInTown | HIGH |
-|| GCAL-011 | Conflict detection | Same time slot | Show conflict warning | HIGH |
-|| GCAL-012 | Conflict resolution | Resolve conflict | User chooses which to keep | MEDIUM |
-|| GCAL-013 | Event attendees sync | Add student to class | Student in Google event | HIGH |
-|| GCAL-014 | Event location sync | Class venue | Venue in Google event | HIGH |
-|| GCAL-015 | Event description sync | Class details | Description in Google | MEDIUM |
-|| GCAL-016 | Event reminders | Set reminder in ClassInTown | Google Calendar reminder set | HIGH |
-|| GCAL-017 | Recurring event sync | Weekly class | Recurring event in Google | HIGH |
-|| GCAL-018 | Edit single recurring event | Edit one instance | Only that instance updated | MEDIUM |
-|| GCAL-019 | Edit all recurring events | Edit series | All instances updated | HIGH |
-|| GCAL-020 | Delete single recurring event | Delete one | Only that instance deleted | MEDIUM |
-|| GCAL-021 | Delete all recurring events | Delete series | All instances deleted | HIGH |
-|| GCAL-022 | Timezone handling | Class in IST | Google event in IST | HIGH |
-|| GCAL-023 | Daylight saving time | DST change | Times adjusted correctly | MEDIUM |
-|| GCAL-024 | All-day event | Full day class | All-day in Google | LOW |
-|| GCAL-025 | Multi-day event | 3-day workshop | Spans correctly | LOW |
-|| GCAL-026 | Event color coding | Class type → Color | Correct color in Google | LOW |
-|| GCAL-027 | Event privacy | Private class | Private in Google | MEDIUM |
-|| GCAL-028 | Sync delay | Create class | Synced within 1 minute | HIGH |
-|| GCAL-029 | Batch sync | 10 classes at once | All synced correctly | HIGH |
-|| GCAL-030 | Sync retry on failure | Network error | Retry 3x with backoff | HIGH |
-|| GCAL-031 | Sync queue | 100 events to sync | Queued, processed in order | MEDIUM |
-|| GCAL-032 | Google API rate limit | Exceed quota | Queue, sync later | HIGH |
-|| GCAL-033 | Google API error (500) | Server error | Retry, graceful failure | HIGH |
-|| GCAL-034 | Token expired during sync | Mid-sync token expires | Refresh token, continue | CRITICAL |
-|| GCAL-035 | Token revoked during sync | User revokes access | Stop sync, notify user | HIGH |
-|| GCAL-036 | Incremental sync | Only sync changes | Not full re-sync | MEDIUM |
-|| GCAL-037 | Sync pagination | 1000+ events | Paginate through all | MEDIUM |
-|| GCAL-038 | Sync conflict: same event edited | Both sides edited | Last-write-wins or merge | HIGH |
-|| GCAL-039 | Sync state tracking | Check sync_status | In DB: pending/syncing/synced/failed | MEDIUM |
-|| GCAL-040 | Manual sync trigger | User clicks "Sync Now" | Immediate sync | MEDIUM |
-|| GCAL-041 | Auto-sync interval | Every 15 minutes | Background sync | MEDIUM |
-|| GCAL-042 | Webhook from Google | Google sends notification | Real-time sync | LOW |
-|| GCAL-043 | Sync only future events | Past events | Not synced (performance) | MEDIUM |
-|| GCAL-044 | Sync range: 6 months ahead | Events beyond | Not synced yet | LOW |
-|| GCAL-045 | Re-sync all | Force full sync | All events re-synced | LOW |
-|| GCAL-046 | Sync errors in UI | Failed sync | Show error to user | HIGH |
-|| GCAL-047 | Sync history log | Check sync_logs | All syncs logged | LOW |
-|| GCAL-048 | Multiple instructors | 2 instructors, same class | Both calendars updated | HIGH |
-|| GCAL-049 | Student calendar sync | Student joins class | Event in student's calendar | MEDIUM |
-|| GCAL-050 | Disable calendar sync | User disables | Stop syncing, keep data | MEDIUM |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| GCAL-001 | First-time calendar scope request | User logs in | Prompt for Calendar access | CRITICAL |
+| GCAL-002 | User grants calendar access | Click "Allow" | Scope stored in DB | CRITICAL |
+| GCAL-003 | User denies calendar access | Click "Deny" | Continue without sync | HIGH |
+| GCAL-004 | Re-request scope later | User clicks "Enable Calendar Sync" | OAuth prompt again | HIGH |
+| GCAL-005 | Multiple calendar selection | User has 3 calendars | Select which to sync | MEDIUM |
+| GCAL-006 | Primary calendar default | No selection | Use primary calendar | HIGH |
+| GCAL-007 | Create event in Google | New class created | Event in Google Calendar | CRITICAL |
+| GCAL-008 | Update event in Google | Edit class time | Google event updated | CRITICAL |
+| GCAL-009 | Delete event in Google | Delete class | Google event deleted | CRITICAL |
+| GCAL-010 | Sync from Google to ClassInTown | Create event in Google | Appears in ClassInTown | HIGH |
+| GCAL-011 | Conflict detection | Same time slot | Show conflict warning | HIGH |
+| GCAL-012 | Conflict resolution | Resolve conflict | User chooses which to keep | MEDIUM |
+| GCAL-013 | Event attendees sync | Add student to class | Student in Google event | HIGH |
+| GCAL-014 | Event location sync | Class venue | Venue in Google event | HIGH |
+| GCAL-015 | Event description sync | Class details | Description in Google | MEDIUM |
+| GCAL-016 | Event reminders | Set reminder in ClassInTown | Google Calendar reminder set | HIGH |
+| GCAL-017 | Recurring event sync | Weekly class | Recurring event in Google | HIGH |
+| GCAL-018 | Edit single recurring event | Edit one instance | Only that instance updated | MEDIUM |
+| GCAL-019 | Edit all recurring events | Edit series | All instances updated | HIGH |
+| GCAL-020 | Delete single recurring event | Delete one | Only that instance deleted | MEDIUM |
+| GCAL-021 | Delete all recurring events | Delete series | All instances deleted | HIGH |
+| GCAL-022 | Timezone handling | Class in IST | Google event in IST | HIGH |
+| GCAL-023 | Daylight saving time | DST change | Times adjusted correctly | MEDIUM |
+| GCAL-024 | All-day event | Full day class | All-day in Google | LOW |
+| GCAL-025 | Multi-day event | 3-day workshop | Spans correctly | LOW |
+| GCAL-026 | Event color coding | Class type → Color | Correct color in Google | LOW |
+| GCAL-027 | Event privacy | Private class | Private in Google | MEDIUM |
+| GCAL-028 | Sync delay | Create class | Synced within 1 minute | HIGH |
+| GCAL-029 | Batch sync | 10 classes at once | All synced correctly | HIGH |
+| GCAL-030 | Sync retry on failure | Network error | Retry 3x with backoff | HIGH |
+| GCAL-031 | Sync queue | 100 events to sync | Queued, processed in order | MEDIUM |
+| GCAL-032 | Google API rate limit | Exceed quota | Queue, sync later | HIGH |
+| GCAL-033 | Google API error (500) | Server error | Retry, graceful failure | HIGH |
+| GCAL-034 | Token expired during sync | Mid-sync token expires | Refresh token, continue | CRITICAL |
+| GCAL-035 | Token revoked during sync | User revokes access | Stop sync, notify user | HIGH |
+| GCAL-036 | Incremental sync | Only sync changes | Not full re-sync | MEDIUM |
+| GCAL-037 | Sync pagination | 1000+ events | Paginate through all | MEDIUM |
+| GCAL-038 | Sync conflict: same event edited | Both sides edited | Last-write-wins or merge | HIGH |
+| GCAL-039 | Sync state tracking | Check sync_status | In DB: pending/syncing/synced/failed | MEDIUM |
+| GCAL-040 | Manual sync trigger | User clicks "Sync Now" | Immediate sync | MEDIUM |
+| GCAL-041 | Auto-sync interval | Every 15 minutes | Background sync | MEDIUM |
+| GCAL-042 | Webhook from Google | Google sends notification | Real-time sync | LOW |
+| GCAL-043 | Sync only future events | Past events | Not synced (performance) | MEDIUM |
+| GCAL-044 | Sync range: 6 months ahead | Events beyond | Not synced yet | LOW |
+| GCAL-045 | Re-sync all | Force full sync | All events re-synced | LOW |
+| GCAL-046 | Sync errors in UI | Failed sync | Show error to user | HIGH |
+| GCAL-047 | Sync history log | Check sync_logs | All syncs logged | LOW |
+| GCAL-048 | Multiple instructors | 2 instructors, same class | Both calendars updated | HIGH |
+| GCAL-049 | Student calendar sync | Student joins class | Event in student's calendar | MEDIUM |
+| GCAL-050 | Disable calendar sync | User disables | Stop syncing, keep data | MEDIUM |
 
 **Sub-Total:** **50 Google Calendar Integration Tests**
 
@@ -776,58 +776,58 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔐 Token Security & Lifecycle Tests
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| TOKEN-001 | JWT structure validation | Decode JWT | Header, payload, signature present | CRITICAL |
-|| TOKEN-002 | JWT algorithm | Check alg field | RS256 or HS256 (not 'none') | CRITICAL |
-|| TOKEN-003 | JWT signature validation | Verify signature | Valid signature required | CRITICAL |
-|| TOKEN-004 | JWT expiry claim | Check exp field | Timestamp in future | CRITICAL |
-|| TOKEN-005 | JWT issued at claim | Check iat field | Timestamp in past | HIGH |
-|| TOKEN-006 | JWT not before claim | Check nbf field | Timestamp validation | MEDIUM |
-|| TOKEN-007 | JWT issuer claim | Check iss field | ClassInTown or Google | CRITICAL |
-|| TOKEN-008 | JWT audience claim | Check aud field | Correct audience | CRITICAL |
-|| TOKEN-009 | JWT subject claim | Check sub field | User ID present | HIGH |
-|| TOKEN-010 | JWT custom claims | Check role, permissions | Correct user data | HIGH |
-|| TOKEN-011 | Token in Authorization header | Format: "Bearer {token}" | Parsed correctly | CRITICAL |
-|| TOKEN-012 | Missing Bearer prefix | Just token, no Bearer | Rejected (400) | HIGH |
-|| TOKEN-013 | Malformed Bearer header | "Bearer" with no token | Rejected (400) | HIGH |
-|| TOKEN-014 | Multiple Authorization headers | 2 headers sent | Use first or reject | MEDIUM |
-|| TOKEN-015 | Token in query parameter | ?token=xyz | Rejected (insecure) | HIGH |
-|| TOKEN-016 | Token in POST body | {token: "xyz"} | Rejected (use header) | HIGH |
-|| TOKEN-017 | Token in cookie | Cookie: token=xyz | Accepted if configured | MEDIUM |
-|| TOKEN-018 | HttpOnly cookie | Check cookie flags | HttpOnly, Secure, SameSite | HIGH |
-|| TOKEN-019 | Token refresh endpoint | POST /api/auth/refresh | New token returned | CRITICAL |
-|| TOKEN-020 | Refresh with expired token | Refresh token expired | Rejected, re-login required | CRITICAL |
-|| TOKEN-021 | Refresh with invalid token | Bad refresh token | Rejected (401) | CRITICAL |
-|| TOKEN-022 | Refresh token rotation | Use refresh token | New refresh token issued | HIGH |
-|| TOKEN-023 | Refresh token reuse detection | Use old refresh token | Rejected, invalidate session | CRITICAL |
-|| TOKEN-024 | Token blacklist on logout | User logs out | Token added to blacklist | HIGH |
-|| TOKEN-025 | Blacklisted token check | Use blacklisted token | Rejected (401) | HIGH |
-|| TOKEN-026 | Token family/chain tracking | Multiple refreshes | Chain maintained | MEDIUM |
-|| TOKEN-027 | Logout from all devices | User clicks "Logout All" | All tokens invalidated | HIGH |
-|| TOKEN-028 | Token sliding window | Activity within window | Token validity extended | MEDIUM |
-|| TOKEN-029 | Idle timeout (30 min) | No activity for 30 min | Token expires | MEDIUM |
-|| TOKEN-030 | Absolute timeout (7 days) | 7 days after login | Force re-login | HIGH |
-|| TOKEN-031 | Remember me (30 days) | "Remember me" checked | Longer token validity | LOW |
-|| TOKEN-032 | Token storage: localStorage | Store in localStorage | Retrieved correctly | HIGH |
-|| TOKEN-033 | Token storage: sessionStorage | Use sessionStorage | Cleared on tab close | MEDIUM |
-|| TOKEN-034 | Token storage: cookie | Use cookie | Sent automatically | MEDIUM |
-|| TOKEN-035 | Token storage: IndexedDB | Large tokens | Use IndexedDB | LOW |
-|| TOKEN-036 | Token size limit | Very large token (>4KB) | Handle or reject | LOW |
-|| TOKEN-037 | Token encryption in transit | HTTPS only | TLS 1.2+ required | CRITICAL |
-|| TOKEN-038 | Token encryption at rest | DB storage | Encrypted in database | CRITICAL |
-|| TOKEN-039 | Token in error responses | Error occurs | Token NOT in response | HIGH |
-|| TOKEN-040 | Token in logs | Check all logs | Token redacted | CRITICAL |
-|| TOKEN-041 | Token in monitoring tools | Sentry, DataDog | Token masked | HIGH |
-|| TOKEN-042 | Token scope validation | Token has limited scope | Scope enforced | HIGH |
-|| TOKEN-043 | Token role validation | Student token → Admin API | Rejected (403) | CRITICAL |
-|| TOKEN-044 | Token permission validation | Missing permission | Rejected (403) | HIGH |
-|| TOKEN-045 | Token tenant validation | Business A token → Business B | Rejected | CRITICAL |
-|| TOKEN-046 | Token device fingerprinting | Track device info | Device ID in token | MEDIUM |
-|| TOKEN-047 | Token IP binding | Bind to IP | IP change detected | LOW |
-|| TOKEN-048 | Token User-Agent binding | Bind to User-Agent | UA change detected | LOW |
-|| TOKEN-049 | Token geolocation check | Unusual location | Warning or block | LOW |
-|| TOKEN-050 | Token compromise detection | Suspicious activity | Auto-revoke token | HIGH |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| TOKEN-001 | JWT structure validation | Decode JWT | Header, payload, signature present | CRITICAL |
+| TOKEN-002 | JWT algorithm | Check alg field | RS256 or HS256 (not 'none') | CRITICAL |
+| TOKEN-003 | JWT signature validation | Verify signature | Valid signature required | CRITICAL |
+| TOKEN-004 | JWT expiry claim | Check exp field | Timestamp in future | CRITICAL |
+| TOKEN-005 | JWT issued at claim | Check iat field | Timestamp in past | HIGH |
+| TOKEN-006 | JWT not before claim | Check nbf field | Timestamp validation | MEDIUM |
+| TOKEN-007 | JWT issuer claim | Check iss field | ClassInTown or Google | CRITICAL |
+| TOKEN-008 | JWT audience claim | Check aud field | Correct audience | CRITICAL |
+| TOKEN-009 | JWT subject claim | Check sub field | User ID present | HIGH |
+| TOKEN-010 | JWT custom claims | Check role, permissions | Correct user data | HIGH |
+| TOKEN-011 | Token in Authorization header | Format: "Bearer {token}" | Parsed correctly | CRITICAL |
+| TOKEN-012 | Missing Bearer prefix | Just token, no Bearer | Rejected (400) | HIGH |
+| TOKEN-013 | Malformed Bearer header | "Bearer" with no token | Rejected (400) | HIGH |
+| TOKEN-014 | Multiple Authorization headers | 2 headers sent | Use first or reject | MEDIUM |
+| TOKEN-015 | Token in query parameter | ?token=xyz | Rejected (insecure) | HIGH |
+| TOKEN-016 | Token in POST body | {token: "xyz"} | Rejected (use header) | HIGH |
+| TOKEN-017 | Token in cookie | Cookie: token=xyz | Accepted if configured | MEDIUM |
+| TOKEN-018 | HttpOnly cookie | Check cookie flags | HttpOnly, Secure, SameSite | HIGH |
+| TOKEN-019 | Token refresh endpoint | POST /api/auth/refresh | New token returned | CRITICAL |
+| TOKEN-020 | Refresh with expired token | Refresh token expired | Rejected, re-login required | CRITICAL |
+| TOKEN-021 | Refresh with invalid token | Bad refresh token | Rejected (401) | CRITICAL |
+| TOKEN-022 | Refresh token rotation | Use refresh token | New refresh token issued | HIGH |
+| TOKEN-023 | Refresh token reuse detection | Use old refresh token | Rejected, invalidate session | CRITICAL |
+| TOKEN-024 | Token blacklist on logout | User logs out | Token added to blacklist | HIGH |
+| TOKEN-025 | Blacklisted token check | Use blacklisted token | Rejected (401) | HIGH |
+| TOKEN-026 | Token family/chain tracking | Multiple refreshes | Chain maintained | MEDIUM |
+| TOKEN-027 | Logout from all devices | User clicks "Logout All" | All tokens invalidated | HIGH |
+| TOKEN-028 | Token sliding window | Activity within window | Token validity extended | MEDIUM |
+| TOKEN-029 | Idle timeout (30 min) | No activity for 30 min | Token expires | MEDIUM |
+| TOKEN-030 | Absolute timeout (7 days) | 7 days after login | Force re-login | HIGH |
+| TOKEN-031 | Remember me (30 days) | "Remember me" checked | Longer token validity | LOW |
+| TOKEN-032 | Token storage: localStorage | Store in localStorage | Retrieved correctly | HIGH |
+| TOKEN-033 | Token storage: sessionStorage | Use sessionStorage | Cleared on tab close | MEDIUM |
+| TOKEN-034 | Token storage: cookie | Use cookie | Sent automatically | MEDIUM |
+| TOKEN-035 | Token storage: IndexedDB | Large tokens | Use IndexedDB | LOW |
+| TOKEN-036 | Token size limit | Very large token (>4KB) | Handle or reject | LOW |
+| TOKEN-037 | Token encryption in transit | HTTPS only | TLS 1.2+ required | CRITICAL |
+| TOKEN-038 | Token encryption at rest | DB storage | Encrypted in database | CRITICAL |
+| TOKEN-039 | Token in error responses | Error occurs | Token NOT in response | HIGH |
+| TOKEN-040 | Token in logs | Check all logs | Token redacted | CRITICAL |
+| TOKEN-041 | Token in monitoring tools | Sentry, DataDog | Token masked | HIGH |
+| TOKEN-042 | Token scope validation | Token has limited scope | Scope enforced | HIGH |
+| TOKEN-043 | Token role validation | Student token → Admin API | Rejected (403) | CRITICAL |
+| TOKEN-044 | Token permission validation | Missing permission | Rejected (403) | HIGH |
+| TOKEN-045 | Token tenant validation | Business A token → Business B | Rejected | CRITICAL |
+| TOKEN-046 | Token device fingerprinting | Track device info | Device ID in token | MEDIUM |
+| TOKEN-047 | Token IP binding | Bind to IP | IP change detected | LOW |
+| TOKEN-048 | Token User-Agent binding | Bind to User-Agent | UA change detected | LOW |
+| TOKEN-049 | Token geolocation check | Unusual location | Warning or block | LOW |
+| TOKEN-050 | Token compromise detection | Suspicious activity | Auto-revoke token | HIGH |
 
 **Sub-Total:** **50 Token Security Tests**
 
@@ -855,68 +855,68 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Email/Password - Comprehensive Security Tests
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| EP-SEC-001 | Email format validation | Various email formats | RFC 5322 compliant | HIGH |
-|| EP-SEC-002 | Email with + symbol | test+tag@example.com | Accepted | MEDIUM |
-|| EP-SEC-003 | Email with dots | test.name@example.com | Accepted | MEDIUM |
-|| EP-SEC-004 | Email case sensitivity | Test@Example.COM | Normalized to lowercase | HIGH |
-|| EP-SEC-005 | Email whitespace trimming | " test@example.com " | Trimmed automatically | HIGH |
-|| EP-SEC-006 | Password minimum length | Less than 8 chars | Rejected | CRITICAL |
-|| EP-SEC-007 | Password maximum length | More than 128 chars | Truncated or rejected | MEDIUM |
-|| EP-SEC-008 | Password complexity | Require uppercase, lowercase, number, symbol | Enforced | HIGH |
-|| EP-SEC-009 | Password common passwords | "password123" | Rejected (dictionary check) | HIGH |
-|| EP-SEC-010 | Password same as email | Password equals email | Rejected | MEDIUM |
-|| EP-SEC-011 | Password hashing algorithm | Check DB | bcrypt or Argon2 | CRITICAL |
-|| EP-SEC-012 | Password salt | Check hash | Unique salt per password | CRITICAL |
-|| EP-SEC-013 | Password hash cost factor | bcrypt rounds | 10-12 rounds | HIGH |
-|| EP-SEC-014 | Brute force protection | 5 wrong attempts | Account locked 30 min | CRITICAL |
-|| EP-SEC-015 | Credential stuffing | 100 login attempts | IP blocked | HIGH |
-|| EP-SEC-016 | Rate limiting per IP | 10 logins/minute | 11th rejected | HIGH |
-|| EP-SEC-017 | Rate limiting per email | 5 attempts/hour | 6th rejected | HIGH |
-|| EP-SEC-018 | CAPTCHA after failures | 3 wrong attempts | CAPTCHA required | HIGH |
-|| EP-SEC-019 | Timing attack prevention | Wrong email vs wrong password | Same response time | HIGH |
-|| EP-SEC-020 | User enumeration | Check if email exists | Same response | HIGH |
-|| EP-SEC-021 | Password reset token | Generate reset token | Cryptographically random | CRITICAL |
-|| EP-SEC-022 | Reset token expiry | Token expires | 1 hour expiry | HIGH |
-|| EP-SEC-023 | Reset token single use | Use token twice | Second use rejected | CRITICAL |
-|| EP-SEC-024 | Reset link format | Check link | HTTPS, no token in URL (use POST) | HIGH |
-|| EP-SEC-025 | Reset token in database | Check storage | Hashed, not plain text | CRITICAL |
-|| EP-SEC-026 | Reset email delivery | Send reset email | Delivered within 1 min | HIGH |
-|| EP-SEC-027 | Reset email template | Check content | Professional, no phishing indicators | MEDIUM |
-|| EP-SEC-028 | Multiple reset requests | Request 5 times | Only latest valid | HIGH |
-|| EP-SEC-029 | Reset with wrong token | Invalid token | Rejected | HIGH |
-|| EP-SEC-030 | Password reset rate limiting | 10 requests/hour | 11th rejected | MEDIUM |
-|| EP-SEC-031 | Password history | New password same as old | Rejected (last 5 passwords) | MEDIUM |
-|| EP-SEC-032 | Password strength meter | Show strength | Weak/Medium/Strong | LOW |
-|| EP-SEC-033 | Show/hide password toggle | Click eye icon | Password visibility toggles | LOW |
-|| EP-SEC-034 | Password paste disabled | Try paste | Allowed (UX best practice) | LOW |
-|| EP-SEC-035 | Account lockout notification | Account locked | Email sent | MEDIUM |
-|| EP-SEC-036 | Account unlock | Wait 30 min | Auto-unlocked | MEDIUM |
-|| EP-SEC-037 | Admin unlock account | Admin action | Immediately unlocked | MEDIUM |
-|| EP-SEC-038 | Failed login logging | Wrong password | Logged with IP, timestamp | HIGH |
-|| EP-SEC-039 | Successful login logging | Login success | Logged in audit_logs | MEDIUM |
-|| EP-SEC-040 | SQL injection in email | ' OR '1'='1 | Sanitized, no SQL exec | CRITICAL |
-|| EP-SEC-041 | SQL injection in password | Malicious input | Sanitized | CRITICAL |
-|| EP-SEC-042 | XSS in email field | <script> tag | Sanitized | CRITICAL |
-|| EP-SEC-043 | LDAP injection | Email with LDAP chars | Sanitized | MEDIUM |
-|| EP-SEC-044 | Email verification required | Unverified email login | Rejected or prompt to verify | MEDIUM |
-|| EP-SEC-045 | Email verification link | Click verify link | Email marked verified | MEDIUM |
-|| EP-SEC-046 | Email verification expiry | 24-hour expiry | Expired link rejected | MEDIUM |
-|| EP-SEC-047 | Resend verification email | User requests | New email sent | MEDIUM |
-|| EP-SEC-048 | Change email | User updates email | Re-verification required | HIGH |
-|| EP-SEC-049 | Change password | User updates password | Old password required | HIGH |
-|| EP-SEC-050 | Current password validation | Wrong current password | Change rejected | HIGH |
-|| EP-SEC-051 | Password confirmation | Passwords don't match | Error shown | HIGH |
-|| EP-SEC-052 | Session invalidation on password change | Password changed | All sessions terminated | HIGH |
-|| EP-SEC-053 | Login with old password | After password change | Rejected | HIGH |
-|| EP-SEC-054 | 2FA enrollment (optional) | User enables 2FA | TOTP setup | LOW |
-|| EP-SEC-055 | 2FA login | 2FA enabled | OTP required after password | LOW |
-|| EP-SEC-056 | 2FA backup codes | Generate codes | 10 backup codes created | LOW |
-|| EP-SEC-057 | Login with backup code | Use backup code | Login successful, code invalidated | LOW |
-|| EP-SEC-058 | 2FA recovery | Lost device | Recovery via email | LOW |
-|| EP-SEC-059 | Remember device (30 days) | "Trust this device" | 2FA skipped for 30 days | LOW |
-|| EP-SEC-060 | Account deletion | User deletes account | Data removed, email released | MEDIUM |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| EP-SEC-001 | Email format validation | Various email formats | RFC 5322 compliant | HIGH |
+| EP-SEC-002 | Email with + symbol | test+tag@example.com | Accepted | MEDIUM |
+| EP-SEC-003 | Email with dots | test.name@example.com | Accepted | MEDIUM |
+| EP-SEC-004 | Email case sensitivity | Test@Example.COM | Normalized to lowercase | HIGH |
+| EP-SEC-005 | Email whitespace trimming | " test@example.com " | Trimmed automatically | HIGH |
+| EP-SEC-006 | Password minimum length | Less than 8 chars | Rejected | CRITICAL |
+| EP-SEC-007 | Password maximum length | More than 128 chars | Truncated or rejected | MEDIUM |
+| EP-SEC-008 | Password complexity | Require uppercase, lowercase, number, symbol | Enforced | HIGH |
+| EP-SEC-009 | Password common passwords | "password123" | Rejected (dictionary check) | HIGH |
+| EP-SEC-010 | Password same as email | Password equals email | Rejected | MEDIUM |
+| EP-SEC-011 | Password hashing algorithm | Check DB | bcrypt or Argon2 | CRITICAL |
+| EP-SEC-012 | Password salt | Check hash | Unique salt per password | CRITICAL |
+| EP-SEC-013 | Password hash cost factor | bcrypt rounds | 10-12 rounds | HIGH |
+| EP-SEC-014 | Brute force protection | 5 wrong attempts | Account locked 30 min | CRITICAL |
+| EP-SEC-015 | Credential stuffing | 100 login attempts | IP blocked | HIGH |
+| EP-SEC-016 | Rate limiting per IP | 10 logins/minute | 11th rejected | HIGH |
+| EP-SEC-017 | Rate limiting per email | 5 attempts/hour | 6th rejected | HIGH |
+| EP-SEC-018 | CAPTCHA after failures | 3 wrong attempts | CAPTCHA required | HIGH |
+| EP-SEC-019 | Timing attack prevention | Wrong email vs wrong password | Same response time | HIGH |
+| EP-SEC-020 | User enumeration | Check if email exists | Same response | HIGH |
+| EP-SEC-021 | Password reset token | Generate reset token | Cryptographically random | CRITICAL |
+| EP-SEC-022 | Reset token expiry | Token expires | 1 hour expiry | HIGH |
+| EP-SEC-023 | Reset token single use | Use token twice | Second use rejected | CRITICAL |
+| EP-SEC-024 | Reset link format | Check link | HTTPS, no token in URL (use POST) | HIGH |
+| EP-SEC-025 | Reset token in database | Check storage | Hashed, not plain text | CRITICAL |
+| EP-SEC-026 | Reset email delivery | Send reset email | Delivered within 1 min | HIGH |
+| EP-SEC-027 | Reset email template | Check content | Professional, no phishing indicators | MEDIUM |
+| EP-SEC-028 | Multiple reset requests | Request 5 times | Only latest valid | HIGH |
+| EP-SEC-029 | Reset with wrong token | Invalid token | Rejected | HIGH |
+| EP-SEC-030 | Password reset rate limiting | 10 requests/hour | 11th rejected | MEDIUM |
+| EP-SEC-031 | Password history | New password same as old | Rejected (last 5 passwords) | MEDIUM |
+| EP-SEC-032 | Password strength meter | Show strength | Weak/Medium/Strong | LOW |
+| EP-SEC-033 | Show/hide password toggle | Click eye icon | Password visibility toggles | LOW |
+| EP-SEC-034 | Password paste disabled | Try paste | Allowed (UX best practice) | LOW |
+| EP-SEC-035 | Account lockout notification | Account locked | Email sent | MEDIUM |
+| EP-SEC-036 | Account unlock | Wait 30 min | Auto-unlocked | MEDIUM |
+| EP-SEC-037 | Admin unlock account | Admin action | Immediately unlocked | MEDIUM |
+| EP-SEC-038 | Failed login logging | Wrong password | Logged with IP, timestamp | HIGH |
+| EP-SEC-039 | Successful login logging | Login success | Logged in audit_logs | MEDIUM |
+| EP-SEC-040 | SQL injection in email | ' OR '1'='1 | Sanitized, no SQL exec | CRITICAL |
+| EP-SEC-041 | SQL injection in password | Malicious input | Sanitized | CRITICAL |
+| EP-SEC-042 | XSS in email field | <script> tag | Sanitized | CRITICAL |
+| EP-SEC-043 | LDAP injection | Email with LDAP chars | Sanitized | MEDIUM |
+| EP-SEC-044 | Email verification required | Unverified email login | Rejected or prompt to verify | MEDIUM |
+| EP-SEC-045 | Email verification link | Click verify link | Email marked verified | MEDIUM |
+| EP-SEC-046 | Email verification expiry | 24-hour expiry | Expired link rejected | MEDIUM |
+| EP-SEC-047 | Resend verification email | User requests | New email sent | MEDIUM |
+| EP-SEC-048 | Change email | User updates email | Re-verification required | HIGH |
+| EP-SEC-049 | Change password | User updates password | Old password required | HIGH |
+| EP-SEC-050 | Current password validation | Wrong current password | Change rejected | HIGH |
+| EP-SEC-051 | Password confirmation | Passwords don't match | Error shown | HIGH |
+| EP-SEC-052 | Session invalidation on password change | Password changed | All sessions terminated | HIGH |
+| EP-SEC-053 | Login with old password | After password change | Rejected | HIGH |
+| EP-SEC-054 | 2FA enrollment (optional) | User enables 2FA | TOTP setup | LOW |
+| EP-SEC-055 | 2FA login | 2FA enabled | OTP required after password | LOW |
+| EP-SEC-056 | 2FA backup codes | Generate codes | 10 backup codes created | LOW |
+| EP-SEC-057 | Login with backup code | Use backup code | Login successful, code invalidated | LOW |
+| EP-SEC-058 | 2FA recovery | Lost device | Recovery via email | LOW |
+| EP-SEC-059 | Remember device (30 days) | "Trust this device" | 2FA skipped for 30 days | LOW |
+| EP-SEC-060 | Account deletion | User deletes account | Data removed, email released | MEDIUM |
 
 **Sub-Total:** **60 Email/Password Security Tests**
 
@@ -960,78 +960,78 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### 🔒 Session Management - Comprehensive Edge Cases
 
-|| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
-||---------|---------------|------------|-----------------|----------|
-|| SESS-001 | Session creation on login | User logs in | Session in DB with metadata | CRITICAL |
-|| SESS-002 | Session ID generation | Create session | Cryptographically random ID | CRITICAL |
-|| SESS-003 | Session ID length | Check session ID | 128+ bits entropy | HIGH |
-|| SESS-004 | Session ID collision | Create 1M sessions | No collisions | HIGH |
-|| SESS-005 | Session storage location | Check DB | sessions collection exists | HIGH |
-|| SESS-006 | Session data structure | Query session | user_id, token, created_at, expires_at, device_info | HIGH |
-|| SESS-007 | Session expiry time | Check expires_at | 24 hours from creation | HIGH |
-|| SESS-008 | Session auto-renewal | Activity detected | Expiry extended | MEDIUM |
-|| SESS-009 | Session absolute timeout | 7 days after creation | Force logout | HIGH |
-|| SESS-010 | Session idle timeout | 30 min no activity | Logout | MEDIUM |
-|| SESS-011 | Session validation on each request | API call | Session checked | CRITICAL |
-|| SESS-012 | Invalid session ID | Use random session ID | Rejected (401) | HIGH |
-|| SESS-013 | Expired session | Use expired session | Rejected, redirect to login | HIGH |
-|| SESS-014 | Session hijacking attempt | Different IP/User-Agent | Warn or block | HIGH |
-|| SESS-015 | Session fixation prevention | Pre-login session ID | New ID after login | CRITICAL |
-|| SESS-016 | Session replay attack | Reuse logged-out session | Rejected | CRITICAL |
-|| SESS-017 | Concurrent sessions same user | Login from 3 devices | All sessions active | HIGH |
-|| SESS-018 | Max sessions per user | 6th concurrent login | Oldest session terminated | MEDIUM |
-|| SESS-019 | Session device tracking | Check device_info | OS, browser, IP logged | MEDIUM |
-|| SESS-020 | Session location tracking | Check geolocation | Country/city logged | LOW |
-|| SESS-021 | New device notification | Login from new device | Email notification sent | MEDIUM |
-|| SESS-022 | Suspicious activity detection | Login from new country | Additional verification | MEDIUM |
-|| SESS-023 | Session list in UI | User views active sessions | All sessions shown | MEDIUM |
-|| SESS-024 | Logout from specific device | User clicks "Logout Device X" | Only that session terminated | HIGH |
-|| SESS-025 | Logout from all devices | Click "Logout All" | All sessions terminated | HIGH |
-|| SESS-026 | Logout from current device | Click "Logout" | Current session terminated | CRITICAL |
-|| SESS-027 | Session after password change | User changes password | All sessions invalidated | HIGH |
-|| SESS-028 | Session after account deletion | Account deleted | All sessions terminated | HIGH |
-|| SESS-029 | Session cleanup job | Cron job runs | Expired sessions deleted | MEDIUM |
-|| SESS-030 | Session cleanup frequency | Check cron | Runs every 1 hour | LOW |
-|| SESS-031 | Session in Redis cache | Check cache | Session cached for fast lookup | MEDIUM |
-|| SESS-032 | Cache invalidation on logout | User logs out | Cache cleared | HIGH |
-|| SESS-033 | Cache miss fallback | Redis down | Fallback to DB | HIGH |
-|| SESS-034 | Session sync: Redis ↔ DB | Session created | Synced to both | MEDIUM |
-|| SESS-035 | Session token in cookie | Check HTTP cookie | HttpOnly, Secure, SameSite | HIGH |
-|| SESS-036 | Session token in localStorage | Alternative storage | Retrieved correctly | MEDIUM |
-|| SESS-037 | Session token rotation | After 1 hour | New token issued | MEDIUM |
-|| SESS-038 | Old token grace period | Use old token (within 5 min) | Still valid | LOW |
-|| SESS-039 | Session CSRF protection | CSRF token in session | Validated on state-changing requests | CRITICAL |
-|| SESS-040 | Session across subdomains | login.classintown.com → app.classintown.com | Session shared | MEDIUM |
-|| SESS-041 | Session on mobile app | Native app login | Session works | HIGH |
-|| SESS-042 | Session on WebView | Embedded browser | Session works | MEDIUM |
-|| SESS-043 | Session persistence | Browser close/reopen | Session restored | HIGH |
-|| SESS-044 | Session in incognito mode | Private browsing | Session cleared on close | MEDIUM |
-|| SESS-045 | Session warning (5 min left) | 5 min before expiry | Show warning popup | MEDIUM |
-|| SESS-046 | Session extension on warning | User clicks "Stay logged in" | Session extended | MEDIUM |
-|| SESS-047 | Session auto-logout | No response to warning | Logged out | MEDIUM |
-|| SESS-048 | Session heartbeat | Every 5 minutes | Ping to keep alive | LOW |
-|| SESS-049 | Session in multiple tabs | 3 tabs open | Sync session state | MEDIUM |
-|| SESS-050 | Logout in one tab | Close tab A | Other tabs detect logout | HIGH |
-|| SESS-051 | Token refresh in one tab | Tab A refreshes | Other tabs get new token | MEDIUM |
-|| SESS-052 | Session race condition | 2 requests simultaneous | Both succeed | MEDIUM |
-|| SESS-053 | Session database index | Query by user_id | < 50ms with index | HIGH |
-|| SESS-054 | Session database index | Query by token | < 50ms with index | HIGH |
-|| SESS-055 | Session query performance (1M sessions) | Find session | < 100ms | HIGH |
-|| SESS-056 | Session transaction safety | Concurrent updates | No data corruption | HIGH |
-|| SESS-057 | Session backup | Backup sessions | Restored correctly | LOW |
-|| SESS-058 | Session encryption at rest | Check DB | Encrypted | HIGH |
-|| SESS-059 | Session token in logs | Check logs | Token redacted | CRITICAL |
-|| SESS-060 | Session data in error messages | Error occurs | No session data leaked | HIGH |
-|| SESS-061 | Session audit trail | All session events | Logged in audit_logs | MEDIUM |
-|| SESS-062 | Session IP whitelist | Restrict to certain IPs | Enforced | LOW |
-|| SESS-063 | Session IP blacklist | Block malicious IPs | Blocked | MEDIUM |
-|| SESS-064 | Session rate limiting | 100 requests/minute | Enforced per session | HIGH |
-|| SESS-065 | Session remember me | "Remember me" checked | 30-day expiry | MEDIUM |
-|| SESS-066 | Session remember me (unchecked) | Not checked | 24-hour expiry | MEDIUM |
-|| SESS-067 | Session 2FA requirement | Admin account | 2FA enforced | MEDIUM |
-|| SESS-068 | Session step-up authentication | Sensitive action | Re-authenticate | LOW |
-|| SESS-069 | Session device fingerprinting | Track device | Consistent fingerprint | LOW |
-|| SESS-070 | Session anomaly detection | Unusual pattern | Flag for review | LOW |
+| Test ID | Test Scenario | Test Steps | Expected Result | Priority |
+|---------|---------------|------------|-----------------|----------|
+| SESS-001 | Session creation on login | User logs in | Session in DB with metadata | CRITICAL |
+| SESS-002 | Session ID generation | Create session | Cryptographically random ID | CRITICAL |
+| SESS-003 | Session ID length | Check session ID | 128+ bits entropy | HIGH |
+| SESS-004 | Session ID collision | Create 1M sessions | No collisions | HIGH |
+| SESS-005 | Session storage location | Check DB | sessions collection exists | HIGH |
+| SESS-006 | Session data structure | Query session | user_id, token, created_at, expires_at, device_info | HIGH |
+| SESS-007 | Session expiry time | Check expires_at | 24 hours from creation | HIGH |
+| SESS-008 | Session auto-renewal | Activity detected | Expiry extended | MEDIUM |
+| SESS-009 | Session absolute timeout | 7 days after creation | Force logout | HIGH |
+| SESS-010 | Session idle timeout | 30 min no activity | Logout | MEDIUM |
+| SESS-011 | Session validation on each request | API call | Session checked | CRITICAL |
+| SESS-012 | Invalid session ID | Use random session ID | Rejected (401) | HIGH |
+| SESS-013 | Expired session | Use expired session | Rejected, redirect to login | HIGH |
+| SESS-014 | Session hijacking attempt | Different IP/User-Agent | Warn or block | HIGH |
+| SESS-015 | Session fixation prevention | Pre-login session ID | New ID after login | CRITICAL |
+| SESS-016 | Session replay attack | Reuse logged-out session | Rejected | CRITICAL |
+| SESS-017 | Concurrent sessions same user | Login from 3 devices | All sessions active | HIGH |
+| SESS-018 | Max sessions per user | 6th concurrent login | Oldest session terminated | MEDIUM |
+| SESS-019 | Session device tracking | Check device_info | OS, browser, IP logged | MEDIUM |
+| SESS-020 | Session location tracking | Check geolocation | Country/city logged | LOW |
+| SESS-021 | New device notification | Login from new device | Email notification sent | MEDIUM |
+| SESS-022 | Suspicious activity detection | Login from new country | Additional verification | MEDIUM |
+| SESS-023 | Session list in UI | User views active sessions | All sessions shown | MEDIUM |
+| SESS-024 | Logout from specific device | User clicks "Logout Device X" | Only that session terminated | HIGH |
+| SESS-025 | Logout from all devices | Click "Logout All" | All sessions terminated | HIGH |
+| SESS-026 | Logout from current device | Click "Logout" | Current session terminated | CRITICAL |
+| SESS-027 | Session after password change | User changes password | All sessions invalidated | HIGH |
+| SESS-028 | Session after account deletion | Account deleted | All sessions terminated | HIGH |
+| SESS-029 | Session cleanup job | Cron job runs | Expired sessions deleted | MEDIUM |
+| SESS-030 | Session cleanup frequency | Check cron | Runs every 1 hour | LOW |
+| SESS-031 | Session in Redis cache | Check cache | Session cached for fast lookup | MEDIUM |
+| SESS-032 | Cache invalidation on logout | User logs out | Cache cleared | HIGH |
+| SESS-033 | Cache miss fallback | Redis down | Fallback to DB | HIGH |
+| SESS-034 | Session sync: Redis ↔ DB | Session created | Synced to both | MEDIUM |
+| SESS-035 | Session token in cookie | Check HTTP cookie | HttpOnly, Secure, SameSite | HIGH |
+| SESS-036 | Session token in localStorage | Alternative storage | Retrieved correctly | MEDIUM |
+| SESS-037 | Session token rotation | After 1 hour | New token issued | MEDIUM |
+| SESS-038 | Old token grace period | Use old token (within 5 min) | Still valid | LOW |
+| SESS-039 | Session CSRF protection | CSRF token in session | Validated on state-changing requests | CRITICAL |
+| SESS-040 | Session across subdomains | login.classintown.com → app.classintown.com | Session shared | MEDIUM |
+| SESS-041 | Session on mobile app | Native app login | Session works | HIGH |
+| SESS-042 | Session on WebView | Embedded browser | Session works | MEDIUM |
+| SESS-043 | Session persistence | Browser close/reopen | Session restored | HIGH |
+| SESS-044 | Session in incognito mode | Private browsing | Session cleared on close | MEDIUM |
+| SESS-045 | Session warning (5 min left) | 5 min before expiry | Show warning popup | MEDIUM |
+| SESS-046 | Session extension on warning | User clicks "Stay logged in" | Session extended | MEDIUM |
+| SESS-047 | Session auto-logout | No response to warning | Logged out | MEDIUM |
+| SESS-048 | Session heartbeat | Every 5 minutes | Ping to keep alive | LOW |
+| SESS-049 | Session in multiple tabs | 3 tabs open | Sync session state | MEDIUM |
+| SESS-050 | Logout in one tab | Close tab A | Other tabs detect logout | HIGH |
+| SESS-051 | Token refresh in one tab | Tab A refreshes | Other tabs get new token | MEDIUM |
+| SESS-052 | Session race condition | 2 requests simultaneous | Both succeed | MEDIUM |
+| SESS-053 | Session database index | Query by user_id | < 50ms with index | HIGH |
+| SESS-054 | Session database index | Query by token | < 50ms with index | HIGH |
+| SESS-055 | Session query performance (1M sessions) | Find session | < 100ms | HIGH |
+| SESS-056 | Session transaction safety | Concurrent updates | No data corruption | HIGH |
+| SESS-057 | Session backup | Backup sessions | Restored correctly | LOW |
+| SESS-058 | Session encryption at rest | Check DB | Encrypted | HIGH |
+| SESS-059 | Session token in logs | Check logs | Token redacted | CRITICAL |
+| SESS-060 | Session data in error messages | Error occurs | No session data leaked | HIGH |
+| SESS-061 | Session audit trail | All session events | Logged in audit_logs | MEDIUM |
+| SESS-062 | Session IP whitelist | Restrict to certain IPs | Enforced | LOW |
+| SESS-063 | Session IP blacklist | Block malicious IPs | Blocked | MEDIUM |
+| SESS-064 | Session rate limiting | 100 requests/minute | Enforced per session | HIGH |
+| SESS-065 | Session remember me | "Remember me" checked | 30-day expiry | MEDIUM |
+| SESS-066 | Session remember me (unchecked) | Not checked | 24-hour expiry | MEDIUM |
+| SESS-067 | Session 2FA requirement | Admin account | 2FA enforced | MEDIUM |
+| SESS-068 | Session step-up authentication | Sensitive action | Re-authenticate | LOW |
+| SESS-069 | Session device fingerprinting | Track device | Consistent fingerprint | LOW |
+| SESS-070 | Session anomaly detection | Unusual pattern | Flag for review | LOW |
 
 **Sub-Total:** **70 Comprehensive Session Management Tests**
 
@@ -1047,68 +1047,68 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### Authentication Attack Scenarios
 
-|| Test ID | Attack Type | Test Scenario | Expected Result | Priority |
-||---------|-------------|---------------|-----------------|----------|
-|| ATK-001 | Brute Force | Try 10,000 password combinations | Blocked after 5 attempts | CRITICAL |
-|| ATK-002 | Dictionary Attack | Use common password list (10K) | All rejected, rate limited | CRITICAL |
-|| ATK-003 | Credential Stuffing | Replay leaked credentials | Detect and block | CRITICAL |
-|| ATK-004 | Password Spraying | Same password, many accounts | Detect pattern, block | HIGH |
-|| ATK-005 | Rainbow Table Attack | Pre-computed hash attack | Salted hashes prevent | CRITICAL |
-|| ATK-006 | Session Hijacking | Steal session cookie | Detect IP/UA change | CRITICAL |
-|| ATK-007 | Session Fixation | Force user to use attacker's session | New session on login | CRITICAL |
-|| ATK-008 | Session Replay | Replay captured session | Detect and reject | CRITICAL |
-|| ATK-009 | Token Theft | Steal JWT from storage | Token encrypted/httpOnly | CRITICAL |
-|| ATK-010 | Token Forgery | Create fake JWT | Signature validation fails | CRITICAL |
-|| ATK-011 | Token Tampering | Modify JWT payload | Signature mismatch | CRITICAL |
-|| ATK-012 | Algorithm Confusion | Change JWT alg to "none" | Rejected | CRITICAL |
-|| ATK-013 | CSRF Attack | Force state-changing request | CSRF token validation | CRITICAL |
-|| ATK-014 | XSS Attack | Inject script to steal token | Sanitization prevents | CRITICAL |
-|| ATK-015 | Clickjacking | Embed login in invisible iframe | X-Frame-Options blocks | HIGH |
-|| ATK-016 | Phishing | Fake login page | User education + 2FA helps | MEDIUM |
-|| ATK-017 | Man-in-the-Middle | Intercept traffic | HTTPS + HSTS enforced | CRITICAL |
-|| ATK-018 | DNS Spoofing | Redirect to fake site | DNSSEC, certificate pinning | MEDIUM |
-|| ATK-019 | SQL Injection | Inject SQL in login form | Prepared statements prevent | CRITICAL |
-|| ATK-020 | NoSQL Injection | MongoDB query injection | Input sanitization prevents | CRITICAL |
-|| ATK-021 | LDAP Injection | Inject LDAP query | Input validation prevents | MEDIUM |
-|| ATK-022 | XML Injection | XML entity attack | XML parser secured | LOW |
-|| ATK-023 | XXE Attack | External entity injection | DTD processing disabled | MEDIUM |
-|| ATK-024 | SSRF Attack | Server-side request forgery | URL validation | MEDIUM |
-|| ATK-025 | Open Redirect | Redirect to malicious site | Whitelist validation | MEDIUM |
-|| ATK-026 | Path Traversal | Access unauthorized files | Path normalization | HIGH |
-|| ATK-027 | File Upload Attack | Upload malicious file | File type validation | HIGH |
-|| ATK-028 | Command Injection | Execute system commands | Input sanitization | CRITICAL |
-|| ATK-029 | Code Injection | Inject executable code | No eval(), sanitized | CRITICAL |
-|| ATK-030 | Timing Attack | Measure response time | Constant-time comparison | HIGH |
-|| ATK-031 | Side-Channel Attack | Extract info via timing | Prevent info leakage | MEDIUM |
-|| ATK-032 | Replay Attack | Replay old authentication | Nonce/timestamp validation | HIGH |
-|| ATK-033 | Downgrade Attack | Force weak encryption | TLS 1.2+ enforced | HIGH |
-|| ATK-034 | Cookie Poisoning | Tamper with cookies | Signed cookies validated | HIGH |
-|| ATK-035 | HTTP Response Splitting | Inject headers | Header validation | MEDIUM |
-|| ATK-036 | Header Injection | CRLF injection | Input sanitization | MEDIUM |
-|| ATK-037 | Host Header Injection | Manipulate Host header | Validated against whitelist | MEDIUM |
-|| ATK-038 | Cache Poisoning | Poison CDN cache | Cache keys validated | LOW |
-|| ATK-039 | DoS - Application Layer | Flood login requests | Rate limiting active | HIGH |
-|| ATK-040 | DoS - Slowloris | Slow connection attack | Connection timeout | MEDIUM |
-|| ATK-041 | DDoS Simulation | 10,000 concurrent requests | Cloudflare/WAF blocks | HIGH |
-|| ATK-042 | Regex DoS (ReDoS) | Evil regex input | Regex timeout/optimization | MEDIUM |
-|| ATK-043 | Billion Laughs Attack | XML bomb | XML parser limits | LOW |
-|| ATK-044 | ZIP Bomb | Compressed malicious file | File size limits | LOW |
-|| ATK-045 | Privilege Escalation | Student → Admin | Role validation blocks | CRITICAL |
-|| ATK-046 | Horizontal Privilege Escalation | Access another user's data | Tenant isolation | CRITICAL |
-|| ATK-047 | Vertical Privilege Escalation | User → Root | Permission checks | CRITICAL |
-|| ATK-048 | IDOR (Insecure Direct Object Ref) | Access by changing ID | Authorization check | CRITICAL |
-|| ATK-049 | Mass Assignment | Set admin=true in request | Whitelist fields only | HIGH |
-|| ATK-050 | Parameter Pollution | Duplicate parameters | Last value or reject | MEDIUM |
-|| ATK-051 | HTTP Verb Tampering | POST → GET | Method validated | MEDIUM |
-|| ATK-052 | CORS Misconfiguration | Access from evil.com | CORS policy enforced | HIGH |
-|| ATK-053 | Subdomain Takeover | Hijack unused subdomain | DNS records monitored | LOW |
-|| ATK-054 | API Key Exposure | API key in client code | No sensitive keys in frontend | CRITICAL |
-|| ATK-055 | Secret Leakage | Secrets in git/logs | Secrets never committed | CRITICAL |
-|| ATK-056 | Metadata Exposure | .git, .env files accessible | Web server configured | HIGH |
-|| ATK-057 | Information Disclosure | Error messages leak info | Generic error messages | HIGH |
-|| ATK-058 | Username Enumeration | Check if user exists | Same response always | HIGH |
-|| ATK-059 | Account Takeover | Combine multiple vulns | All mitigations active | CRITICAL |
-|| ATK-060 | Social Engineering | Trick user into revealing creds | User awareness training | LOW |
+| Test ID | Attack Type | Test Scenario | Expected Result | Priority |
+|---------|-------------|---------------|-----------------|----------|
+| ATK-001 | Brute Force | Try 10,000 password combinations | Blocked after 5 attempts | CRITICAL |
+| ATK-002 | Dictionary Attack | Use common password list (10K) | All rejected, rate limited | CRITICAL |
+| ATK-003 | Credential Stuffing | Replay leaked credentials | Detect and block | CRITICAL |
+| ATK-004 | Password Spraying | Same password, many accounts | Detect pattern, block | HIGH |
+| ATK-005 | Rainbow Table Attack | Pre-computed hash attack | Salted hashes prevent | CRITICAL |
+| ATK-006 | Session Hijacking | Steal session cookie | Detect IP/UA change | CRITICAL |
+| ATK-007 | Session Fixation | Force user to use attacker's session | New session on login | CRITICAL |
+| ATK-008 | Session Replay | Replay captured session | Detect and reject | CRITICAL |
+| ATK-009 | Token Theft | Steal JWT from storage | Token encrypted/httpOnly | CRITICAL |
+| ATK-010 | Token Forgery | Create fake JWT | Signature validation fails | CRITICAL |
+| ATK-011 | Token Tampering | Modify JWT payload | Signature mismatch | CRITICAL |
+| ATK-012 | Algorithm Confusion | Change JWT alg to "none" | Rejected | CRITICAL |
+| ATK-013 | CSRF Attack | Force state-changing request | CSRF token validation | CRITICAL |
+| ATK-014 | XSS Attack | Inject script to steal token | Sanitization prevents | CRITICAL |
+| ATK-015 | Clickjacking | Embed login in invisible iframe | X-Frame-Options blocks | HIGH |
+| ATK-016 | Phishing | Fake login page | User education + 2FA helps | MEDIUM |
+| ATK-017 | Man-in-the-Middle | Intercept traffic | HTTPS + HSTS enforced | CRITICAL |
+| ATK-018 | DNS Spoofing | Redirect to fake site | DNSSEC, certificate pinning | MEDIUM |
+| ATK-019 | SQL Injection | Inject SQL in login form | Prepared statements prevent | CRITICAL |
+| ATK-020 | NoSQL Injection | MongoDB query injection | Input sanitization prevents | CRITICAL |
+| ATK-021 | LDAP Injection | Inject LDAP query | Input validation prevents | MEDIUM |
+| ATK-022 | XML Injection | XML entity attack | XML parser secured | LOW |
+| ATK-023 | XXE Attack | External entity injection | DTD processing disabled | MEDIUM |
+| ATK-024 | SSRF Attack | Server-side request forgery | URL validation | MEDIUM |
+| ATK-025 | Open Redirect | Redirect to malicious site | Whitelist validation | MEDIUM |
+| ATK-026 | Path Traversal | Access unauthorized files | Path normalization | HIGH |
+| ATK-027 | File Upload Attack | Upload malicious file | File type validation | HIGH |
+| ATK-028 | Command Injection | Execute system commands | Input sanitization | CRITICAL |
+| ATK-029 | Code Injection | Inject executable code | No eval(), sanitized | CRITICAL |
+| ATK-030 | Timing Attack | Measure response time | Constant-time comparison | HIGH |
+| ATK-031 | Side-Channel Attack | Extract info via timing | Prevent info leakage | MEDIUM |
+| ATK-032 | Replay Attack | Replay old authentication | Nonce/timestamp validation | HIGH |
+| ATK-033 | Downgrade Attack | Force weak encryption | TLS 1.2+ enforced | HIGH |
+| ATK-034 | Cookie Poisoning | Tamper with cookies | Signed cookies validated | HIGH |
+| ATK-035 | HTTP Response Splitting | Inject headers | Header validation | MEDIUM |
+| ATK-036 | Header Injection | CRLF injection | Input sanitization | MEDIUM |
+| ATK-037 | Host Header Injection | Manipulate Host header | Validated against whitelist | MEDIUM |
+| ATK-038 | Cache Poisoning | Poison CDN cache | Cache keys validated | LOW |
+| ATK-039 | DoS - Application Layer | Flood login requests | Rate limiting active | HIGH |
+| ATK-040 | DoS - Slowloris | Slow connection attack | Connection timeout | MEDIUM |
+| ATK-041 | DDoS Simulation | 10,000 concurrent requests | Cloudflare/WAF blocks | HIGH |
+| ATK-042 | Regex DoS (ReDoS) | Evil regex input | Regex timeout/optimization | MEDIUM |
+| ATK-043 | Billion Laughs Attack | XML bomb | XML parser limits | LOW |
+| ATK-044 | ZIP Bomb | Compressed malicious file | File size limits | LOW |
+| ATK-045 | Privilege Escalation | Student → Admin | Role validation blocks | CRITICAL |
+| ATK-046 | Horizontal Privilege Escalation | Access another user's data | Tenant isolation | CRITICAL |
+| ATK-047 | Vertical Privilege Escalation | User → Root | Permission checks | CRITICAL |
+| ATK-048 | IDOR (Insecure Direct Object Ref) | Access by changing ID | Authorization check | CRITICAL |
+| ATK-049 | Mass Assignment | Set admin=true in request | Whitelist fields only | HIGH |
+| ATK-050 | Parameter Pollution | Duplicate parameters | Last value or reject | MEDIUM |
+| ATK-051 | HTTP Verb Tampering | POST → GET | Method validated | MEDIUM |
+| ATK-052 | CORS Misconfiguration | Access from evil.com | CORS policy enforced | HIGH |
+| ATK-053 | Subdomain Takeover | Hijack unused subdomain | DNS records monitored | LOW |
+| ATK-054 | API Key Exposure | API key in client code | No sensitive keys in frontend | CRITICAL |
+| ATK-055 | Secret Leakage | Secrets in git/logs | Secrets never committed | CRITICAL |
+| ATK-056 | Metadata Exposure | .git, .env files accessible | Web server configured | HIGH |
+| ATK-057 | Information Disclosure | Error messages leak info | Generic error messages | HIGH |
+| ATK-058 | Username Enumeration | Check if user exists | Same response always | HIGH |
+| ATK-059 | Account Takeover | Combine multiple vulns | All mitigations active | CRITICAL |
+| ATK-060 | Social Engineering | Trick user into revealing creds | User awareness training | LOW |
 
 **Sub-Total:** **60 Attack Scenario Tests**
 
@@ -1116,23 +1116,23 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### Penetration Testing Checklists
 
-|| Test ID | Category | Test Area | Tests | Priority |
-||---------|----------|-----------|-------|----------|
-|| PEN-001 | OWASP Top 10 (2021) | All 10 vulnerabilities | 50 | CRITICAL |
-|| PEN-002 | Authentication | All auth flows | 40 | CRITICAL |
-|| PEN-003 | Authorization | Role & permission checks | 30 | CRITICAL |
-|| PEN-004 | Session Management | All session operations | 25 | HIGH |
-|| PEN-005 | Input Validation | All input fields | 40 | HIGH |
-|| PEN-006 | Output Encoding | All dynamic content | 30 | HIGH |
-|| PEN-007 | Cryptography | Encryption, hashing, tokens | 25 | HIGH |
-|| PEN-008 | Error Handling | All error scenarios | 20 | MEDIUM |
-|| PEN-009 | Logging & Monitoring | Audit trails, alerts | 20 | MEDIUM |
-|| PEN-010 | API Security | All API endpoints | 35 | HIGH |
-|| PEN-011 | Database Security | Queries, access control | 25 | HIGH |
-|| PEN-012 | File Operations | Upload, download, storage | 20 | MEDIUM |
-|| PEN-013 | Third-party Integration | Google, payment gateways | 25 | HIGH |
-|| PEN-014 | Mobile Security | WebView, mobile-specific | 15 | MEDIUM |
-|| PEN-015 | Cloud Security | AWS/GCP configurations | 20 | MEDIUM |
+| Test ID | Category | Test Area | Tests | Priority |
+|---------|----------|-----------|-------|----------|
+| PEN-001 | OWASP Top 10 (2021) | All 10 vulnerabilities | 50 | CRITICAL |
+| PEN-002 | Authentication | All auth flows | 40 | CRITICAL |
+| PEN-003 | Authorization | Role & permission checks | 30 | CRITICAL |
+| PEN-004 | Session Management | All session operations | 25 | HIGH |
+| PEN-005 | Input Validation | All input fields | 40 | HIGH |
+| PEN-006 | Output Encoding | All dynamic content | 30 | HIGH |
+| PEN-007 | Cryptography | Encryption, hashing, tokens | 25 | HIGH |
+| PEN-008 | Error Handling | All error scenarios | 20 | MEDIUM |
+| PEN-009 | Logging & Monitoring | Audit trails, alerts | 20 | MEDIUM |
+| PEN-010 | API Security | All API endpoints | 35 | HIGH |
+| PEN-011 | Database Security | Queries, access control | 25 | HIGH |
+| PEN-012 | File Operations | Upload, download, storage | 20 | MEDIUM |
+| PEN-013 | Third-party Integration | Google, payment gateways | 25 | HIGH |
+| PEN-014 | Mobile Security | WebView, mobile-specific | 15 | MEDIUM |
+| PEN-015 | Cloud Security | AWS/GCP configurations | 20 | MEDIUM |
 
 **Sub-Total:** **420 Penetration Testing Tests**
 
@@ -1140,18 +1140,18 @@ By testing every possible edge case, attack vector, and compliance requirement, 
 
 #### Compliance & Security Standards
 
-|| Test ID | Standard | Requirements | Tests | Priority |
-||---------|----------|--------------|-------|----------|
-|| COMP-001 | OWASP ASVS Level 2 | Authentication Verification | 50 | HIGH |
-|| COMP-002 | GDPR | Data protection & privacy | 30 | HIGH |
-|| COMP-003 | ISO 27001 | Information security | 40 | MEDIUM |
-|| COMP-004 | SOC 2 Type II | Security controls | 35 | MEDIUM |
-|| COMP-005 | PCI DSS (payments) | Payment security | 25 | HIGH |
-|| COMP-006 | NIST Cybersecurity Framework | Core functions | 30 | MEDIUM |
-|| COMP-007 | CWE Top 25 | Most dangerous weaknesses | 40 | HIGH |
-|| COMP-008 | SANS Top 25 | Software errors | 35 | HIGH |
-|| COMP-009 | India IT Act 2000 | Local compliance | 20 | MEDIUM |
-|| COMP-010 | CERT Secure Coding | Secure development | 25 | MEDIUM |
+| Test ID | Standard | Requirements | Tests | Priority |
+|---------|----------|--------------|-------|----------|
+| COMP-001 | OWASP ASVS Level 2 | Authentication Verification | 50 | HIGH |
+| COMP-002 | GDPR | Data protection & privacy | 30 | HIGH |
+| COMP-003 | ISO 27001 | Information security | 40 | MEDIUM |
+| COMP-004 | SOC 2 Type II | Security controls | 35 | MEDIUM |
+| COMP-005 | PCI DSS (payments) | Payment security | 25 | HIGH |
+| COMP-006 | NIST Cybersecurity Framework | Core functions | 30 | MEDIUM |
+| COMP-007 | CWE Top 25 | Most dangerous weaknesses | 40 | HIGH |
+| COMP-008 | SANS Top 25 | Software errors | 35 | HIGH |
+| COMP-009 | India IT Act 2000 | Local compliance | 20 | MEDIUM |
+| COMP-010 | CERT Secure Coding | Secure development | 25 | MEDIUM |
 
 **Sub-Total:** **330 Compliance Tests**
 
