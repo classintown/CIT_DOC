@@ -101,16 +101,19 @@ Emails sent this way:
 - Password change confirmation
 - Payment plan created/updated emails
 
-**Mode 2 — User-based email (`ENABLE_USER_BASED_EMAIL_SENDING=true`):**
-Emails appear to come FROM the instructor's own Gmail address. Requires the instructor's personal OAuth tokens with Gmail access.
+**Mode 2 — User-based email (`ENABLE_USER_BASED_EMAIL_SENDING=true`) — REQUIRED:**
+Emails appear to come FROM the instructor's own Gmail address. Students see `Rahul Sharma <rahul@gmail.com>` as the sender, not a generic platform address. This is a core trust feature we are keeping.
 
-Emails sent this way:
-- All of the above but from `instructor@gmail.com` instead of system
+Emails sent this way (from instructor's address):
+- Class enrollment confirmation → to student
+- Payment receipt → to student
+- Session reminders → to students
+- Class update/cancellation → to students
+- Task assignments → to students
 
-**The real question:** Is Mode 2 (user-based sending) actually needed, or can all emails come from the system account?
-
-If Mode 2 is disabled → **NO Gmail scope is needed at sign-in time at all.**
-If Mode 2 is needed → Use `gmail.send` (REST API, Sensitive) not `mail.google.com` (SMTP, Restricted). But this requires replacing Nodemailer with Gmail REST API calls.
+**Conclusion:** `gmail.send` scope (REST API, Sensitive) **must** be requested.
+`mail.google.com` (SMTP, **Restricted**) must **never** be used.
+This requires replacing the current Nodemailer SMTP approach with Gmail REST API calls.
 
 ---
 
@@ -162,9 +165,10 @@ Sign In
 System Email (classintownuat@gmail.com)
   └── NO USER SCOPE NEEDED ← System token pre-configured in DB
 
-User-Based Email (instructor's own Gmail)
-  └── gmail.send           [Sensitive]     ← Only if Mode 2 enabled
-      (currently broken — code checks for mail.google.com not gmail.send)
+User-Based Email (instructor's own Gmail) — REQUIRED FEATURE
+  └── gmail.send           [Sensitive]     ← MUST be requested
+      CURRENTLY BROKEN: code checks for mail.google.com instead of gmail.send
+      FIX NEEDED: replace Nodemailer SMTP with Gmail REST API
 
 Class Scheduling (events only)
   └── calendar.events      [Sensitive]     ← Insert/Update/Delete/Get/List events
@@ -183,10 +187,10 @@ Google Meet Auto-Generation
 
 | If Google says: "Remove this scope" | What breaks |
 |---|---|
-| Remove `gmail.send` / `mail.google.com` | User-based email sending disabled (system email still works) |
-| Replace `calendar` with `calendar.events` | Secondary CalendarManager breaks entirely — no separate "ClassInTown" calendar |
-| Replace `calendar` with `calendar.events` | Google Meet auto-generation breaks (if no custom class_link provided) |
-| Remove all Gmail scopes | Only system emails work; instructor's name doesn't appear as sender |
+| Remove `gmail.send` | ❌ All instructor-sent emails fall back to system address — students don't recognize sender, trust drops |
+| Replace `calendar` with `calendar.events` | ❌ `SecondaryCalendarManager` breaks — no dedicated "ClassInTown" calendar for instructors |
+| Replace `calendar` with `calendar.events` | ❌ Google Meet auto-link generation breaks when no custom `class_link` is provided |
+| Use `calendar.events` + always require `class_link` | ⚠️ Possible workaround — but forces instructors to always provide an external meeting link |
 
 ---
 
@@ -202,47 +206,142 @@ Google is rejecting the app for **three compounding reasons**:
 
 ---
 
-## 8. RECOMMENDED SOLUTION — THREE OPTIONS
+## 8. DECISION: USER-BASED EMAIL SENDING IS REQUIRED
 
-### Option 1 (Minimal Code Change): Fix the mismatch, argue calendar need
-- Fix: Make backend and frontend agree on `gmail.send` (not `mail.google.com`)
-- Fix: Switch Nodemailer to Gmail REST API for user-based sending (or disable user-based sending)
-- Justify: Explain to Google that secondary calendar creation (`calendars.insert`) is needed to give instructors a dedicated "ClassInTown" calendar separate from their personal events
-- **Result**: `gmail.send` (Sensitive) + `calendar` (Sensitive) → both need verification but NOT restricted review
+**We want instructors' emails to come FROM their own Gmail address** — students must see the instructor's name/email as the sender, not a generic ClassInTown address. This is a core trust feature.
 
-### Option 2 (Recommended): Incremental authorization
-- Sign-in: Only request `profile` + `email`
-- After sign-in, when instructor sets up their class for the first time: Request `calendar.events` separately with in-app prompt explaining why
-- For user-based email: Request `gmail.send` separately only if instructor opts in
-- **Result**: Sign-in works immediately without scope friction; extra scopes requested contextually
-- **Google loves this pattern** and it's explicitly recommended in their OAuth guidelines
-
-### Option 3 (Easiest): Remove user-based email + secondary calendars
-- Remove `ENABLE_USER_BASED_EMAIL_SENDING` feature entirely → all emails from system account → no Gmail scope needed from users
-- Disable `SecondaryCalendarManager` (just add events to primary calendar) → use `calendar.events` instead of `calendar`
-- **Result**: Only `calendar.events` (Sensitive) needed → much easier Google approval
-- **Trade-off**: All emails come from `classintownuat@gmail.com`, no separate ClassInTown calendar
+This decision locks in the following:
+- `https://www.googleapis.com/auth/gmail.send` **must** be requested
+- `https://mail.google.com/` **must NOT** be used (it is a Restricted scope — Google will never approve without a costly security audit)
+- The current Nodemailer SMTP approach must be **replaced** with the Gmail REST API
 
 ---
 
-## 9. WHAT TO TELL GOOGLE IN YOUR RESUBMISSION
+## 9. THE ONLY CORRECT PATH FORWARD
 
-For `https://www.googleapis.com/auth/calendar`:
-> "We use this scope to create a dedicated 'ClassInTown' calendar in the instructor's Google account (calendars.insert), manage its lifecycle (calendars.delete), and create class schedule events with Google Meet links (events.insert with conferenceDataVersion). This allows instructors and their students to see class sessions in a separate calendar, preventing clutter in their primary calendar."
+### Step 1 — Replace Nodemailer SMTP with Gmail REST API
 
-For `https://www.googleapis.com/auth/gmail.send`:
-> "We use this scope to send transactional emails from the instructor's own Gmail address, including class enrollment confirmations, payment receipts, and session reminders. Students see the email coming from their instructor directly, building trust. Without this scope, all emails come from our system address and students may not recognize the sender."
+**Why:** Nodemailer SMTP requires `https://mail.google.com/` (Restricted). The Gmail REST API's send endpoint uses `gmail.send` (Sensitive). Same result — email goes out from the instructor's address — but a completely different technical path.
 
-**Critical: Remove any reference to `https://mail.google.com/` from ALL files before resubmission.** Replace it with `gmail.send` in the frontend scope service and fix the Nodemailer SMTP implementation to use the Gmail REST API instead.
+**How it works with Gmail REST API:**
+```
+POST https://gmail.googleapis.com/gmail/v1/users/me/messages/send
+Authorization: Bearer {instructor_access_token}
+Body: { raw: "<base64-encoded RFC 2822 email>" }
+```
+The `me` in the URL means "the authenticated user" — i.e., the instructor. The email is sent from their Gmail account. Access token is the instructor's OAuth token obtained at sign-in with `gmail.send` scope.
+
+**Emails affected (all must move from Nodemailer to REST API for user-based sending):**
+- Class enrollment confirmation → to student (sent from instructor)
+- Enrollment notification → to instructor (sent from system — no change needed)
+- Payment receipt → to student (sent from instructor)
+- Session reminders → to students (sent from instructor)
+- Class update notifications → to students (sent from instructor)
+- Task assignments → to students (sent from instructor)
+
+**Emails that stay on system account (no instructor token needed):**
+- OTP verification → always from system
+- Password reset → always from system
+- Admin notifications → always from system
+
+### Step 2 — Fix the scope check in `createTransporter`
+
+Currently the check is wrong for `gmail.send`:
+```javascript
+// CURRENT (BROKEN for gmail.send):
+const hasGmailScope = userTokenScope.includes('https://mail.google.com/') ||
+                      userTokenScope.includes('mail.google.com');
+
+// FIXED:
+const hasGmailScope = userTokenScope.includes('gmail.send') ||
+                      userTokenScope.includes('mail.google.com'); // keep for backward compat
+```
+
+### Step 3 — Fix the frontend scope service
+
+```typescript
+// CURRENT (WRONG — Restricted scope):
+{
+  id: 'gmail',
+  name: 'https://mail.google.com/',   // ← This triggers Restricted review
+  ...
+}
+
+// FIXED (Sensitive scope):
+{
+  id: 'gmail',
+  name: 'https://www.googleapis.com/auth/gmail.send',  // ← Sensitive only
+  ...
+}
+```
+
+### Step 4 — Unify backend REQUIRED_SCOPES validation
+
+```javascript
+// CURRENT (accepts either — confusing):
+scope.includes('mail.google.com') || scope.includes('gmail.send')
+
+// FIXED (only accept gmail.send going forward):
+scope.includes('gmail.send')
+```
+
+### Step 5 — Justify the full `calendar` scope to Google
+
+Since user-based email is kept, the final scope set requested at sign-in is:
+```
+userinfo.profile    [Non-sensitive] — authentication
+userinfo.email      [Non-sensitive] — authentication
+gmail.send          [Sensitive]     — send from instructor's own address
+calendar            [Sensitive]     — secondary calendars + events + Meet links
+```
+
+Use incremental auth: request `gmail.send` and `calendar` only when the instructor first configures their class/profile, not at initial sign-in. This is the pattern Google recommends and approves fastest.
 
 ---
 
-## 10. FILES THAT NEED TO BE CHANGED
+## 10. WHAT TO TELL GOOGLE IN YOUR RESUBMISSION
 
-| File | Issue | Change Needed |
+### For `https://www.googleapis.com/auth/gmail.send`:
+> "ClassInTown is an instructor-student platform where instructors teach classes to enrolled students. When an instructor enrolls a student, confirms payment, sends class reminders, or assigns tasks, the email must come FROM the instructor's Gmail address — not a generic platform address — so students trust and recognize the sender. We use the Gmail API send endpoint (`POST /gmail/v1/users/me/messages/send`) with the instructor's OAuth token to achieve this. We do NOT read, modify, or delete any emails. We only send. The `gmail.send` scope is the minimum scope that allows sending via the Gmail REST API."
+
+### For `https://www.googleapis.com/auth/calendar`:
+> "ClassInTown creates a dedicated 'ClassInTown' calendar in the instructor's Google account (separate from their personal calendar) using `calendars.insert`. This keeps teaching sessions visually separated from personal events. We also create, update, and delete calendar events for each class session (`events.insert/update/delete`) and generate Google Meet links for online classes (`conferenceDataVersion: 1`). The full `calendar` scope is required because `calendar.events` alone does not allow creating or deleting calendars — only managing events within an existing calendar."
+
+---
+
+## 11. FILES THAT NEED TO BE CHANGED
+
+| File | Issue | Required Change |
 |---|---|---|
-| `backend/configs/google/OAuth2.config.js` | Requests `gmail.send` but checks for `mail.google.com` | Fix `createTransporter` check to use `gmail.send` |
-| `frontend/src/app/services/google-oauth-scope.service.ts` | Lists `https://mail.google.com/` as Gmail scope | Change to `gmail.send` |
-| `backend/configs/google/OAuth2.config.js` | `REQUIRED_SCOPES` checks `mail.google.com` | Update to check `gmail.send` |
-| `backend/shared/emailService.js` + `OAuth2.config.js` | Uses Nodemailer SMTP (requires `mail.google.com`) | Switch to Gmail REST API or disable user-based email |
-| `backend/services/calendar/secondaryCalendarManager.js` | Creates actual Google Calendars (forces full `calendar` scope) | Either justify or remove secondary calendar feature |
+| `frontend/src/app/services/google-oauth-scope.service.ts` | Lists `https://mail.google.com/` (Restricted) | Replace with `https://www.googleapis.com/auth/gmail.send` |
+| `backend/configs/google/OAuth2.config.js` — `createTransporter()` | Scope check looks for `mail.google.com` only | Add `gmail.send` to the scope check (fix the bug) |
+| `backend/configs/google/OAuth2.config.js` — `validateRequiredScopes()` | Checks `mail.google.com` in `missingFeatures` message | Update message and check to reference `gmail.send` |
+| `backend/shared/emailService.js` | User-based emails go via Nodemailer SMTP | Replace with Gmail REST API calls for instructor-sent emails |
+| `backend/configs/google/OAuth2.config.js` — `createTransporter()` | Builds a Nodemailer SMTP transporter for user tokens | Build a Gmail REST API sender instead when user tokens are available |
+| `backend/services/calendar/secondaryCalendarManager.js` | Creates real Google Calendars | No code change — but must be justified to Google in resubmission |
+
+---
+
+## 12. SCOPE DEPENDENCY MAP (FINAL — WITH USER-BASED EMAIL)
+
+```
+Sign-In (initial)
+  ├── userinfo.profile     [Non-sensitive] ← Always, no review needed
+  └── userinfo.email       [Non-sensitive] ← Always, no review needed
+
+After sign-in → "Connect Google" step (incremental auth):
+  ├── gmail.send           [Sensitive] ← Send emails FROM instructor's own Gmail
+  │     Used by: Gmail REST API → POST /gmail/v1/users/me/messages/send
+  │     Emails: enrollment confirms, payment receipts, reminders, task assignments
+  │     NOT used for: system emails (OTP, password reset) — those use system account
+  │
+  └── calendar             [Sensitive] ← Full calendar management
+        Used by:
+          calendar.events.insert/update/delete/patch/get/list → class session events
+          calendar.calendars.insert/delete/get             → secondary ClassInTown calendar
+          calendar.calendarList.list/insert                → calendar subscription management
+          conferenceDataVersion: 1                         → Google Meet link generation
+
+System Emails (no user token needed):
+  └── OTP, password reset, admin notifications → classintownuat@gmail.com system account
+```
