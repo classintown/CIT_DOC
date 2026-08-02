@@ -22,3 +22,32 @@ flowchart TD
 
     ROSTER_FREE --> DONE(["Enrolled"])
     ROSTER_PAID --> DONE
+
+
+```
+
+
+
+
+```mermaid
+
+flowchart LR
+  subgraph FULL["Full ladder — Path 3 walks all steps"]
+    A[1 requested] --> B[2 approved]
+    B --> C[3 plan created]
+    C --> D[4 plan sent]
+    D --> E[5 student paid PCS]
+    E --> F[6 platform confirm optional]
+    F --> G[7 instructor confirm PCI]
+    G --> H[8 active]
+  end
+
+  subgraph SKIP["Paths 1 and 2 skip 1–2"]
+    X[Enter at step 3] --> C
+  end
+
+  subgraph FREE["Free class shortcut"]
+    Y[Enter] --> H
+  end
+```
+
