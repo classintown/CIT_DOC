@@ -54,3 +54,39 @@ flowchart LR
 
 
 <img width="2060" height="1088" alt="image" src="https://github.com/user-attachments/assets/4081f35b-696a-47d2-857e-7ce99ee06330" />
+
+
+
+
+```mermaid
+
+flowchart TD
+  subgraph PATH12["Path 1 + Path 2 — Instructor direct SAME engine"]
+    I0[Instructor picks student] --> I1{Class free?}
+    I1 -->|Yes| I2[Step → active]
+    I2 --> I3[On roster immediately]
+    I1 -->|No| I4[Step → payment_plan_created]
+    I4 --> I5[Optional: send plan now]
+    I5 --> I6[Student pays]
+    I6 --> I7[PCS → PCI]
+    I7 --> I8[On roster]
+  end
+
+  subgraph PATH3["Path 3 — Student self-enroll via share link"]
+    S0[Opens course page / form] --> S1[Step 1: requested]
+    S1 -->|Class full| S1b[Step 1b: waitlisted]
+    S1b --> S2
+    S1 --> S2[Step 2: instructor approves]
+    S2 --> S3[Step 3: plan created]
+    S3 --> S4[Step 4: plan sent]
+    S4 --> S5[Step 5: student pays]
+    S5 --> S6[Step 6–7: confirms]
+    S6 --> S7[On roster at PCI/active]
+  end
+
+  I4 -.->|CONVERGE| CONV[Same paid steps 3→8]
+  S3 -.->|CONVERGE| CONV
+  I2 -.->|DIVERGE forever if free| DONE_F[Done free]
+  CONV --> DONE_P[Done paid]
+
+```
