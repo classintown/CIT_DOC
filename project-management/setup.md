@@ -66,14 +66,28 @@
 ### Step 5 — Verify automation (same day)
 
 1. In Apps Script, select `sendDailyStandupEmail` → **Run**.
-2. Confirm all six inboxes receive `[CIT Standup] Please submit your daily update`.
-3. Submit one test form response as yourself.
-4. Confirm a new row appears on **Daily Updates**.
-5. Submit a second test with **Blocker = Yes** → that row’s Blocker cell should turn **red**.
+2. Confirm all six inboxes receive `[CIT Standup] Daily update form (due by 9:45 PM IST)`.
+3. Confirm the body says deadline **9:45 PM IST** and sync **10:00–10:15 PM IST**.
+4. Submit one test form response as yourself.
+5. Confirm a new row appears on **Daily Updates**.
+6. Submit a second test with **Blocker = Yes** → that row’s Blocker cell should turn **red**.
 
 ### Step 6 — Meeting habit (no extra tooling)
 
 Use the sheet tab **Meeting Agenda** every day at 10:00 PM. Rules are printed on that tab. Keep it to blockers only.
+
+### Step 7 — If email text is still wrong (do this, don’t re-run setup)
+
+The Form URL and Sheet URL **do not change**. Only the Apps Script source must match this guide.
+
+1. Open your existing **CIT Daily Ops Automation** project on [script.google.com](https://script.google.com).
+2. Replace the entire `sendDailyStandupEmail` function with the version in [Part C](#part-c--complete-google-apps-script) (subject due **9:45 PM**, sync **10:00–10:15 PM**).
+3. Click **Save**.
+4. Run `sendDailyStandupEmail` once and confirm the new email text.
+5. Optionally update the live Form description / confirmation message to the same times (Form Edit URL from `logCITConfig`).
+6. On the sheet **Meeting Agenda** tab, set the title to `10:00–10:15 PM IST`.
+
+**Never** run `setupCITCompleteWorkspace` again just to change email wording — that creates a new Sheet + Form and new URLs.
 
 ---
 
@@ -534,6 +548,7 @@ Name / email / role reference for the Apps Script and onboarding.
 | Symptom | Fix |
 | --- | --- |
 | Emails at wrong time | Project Settings → timezone = Asia/Kolkata; run `reinstallEmailTriggers` (should be ~7:00 AM IST) |
+| Email still shows old deadline/sync times | Update `sendDailyStandupEmail` in `Code.gs` from this guide → Save → Run once. Do **not** re-run `setupCITCompleteWorkspace` |
 | No red highlighting | Confirm header contains `Blocker Flag`; re-run setup or manually Format → Conditional formatting → Text is exactly `Yes` → red fill |
 | Form responses on wrong tab | Responses always land on the destination spreadsheet; rename tab to `Daily Updates` if needed |
 | Permission errors on MailApp | Re-run and accept Gmail/Mail scope; account must be allowed to send mail |
@@ -547,7 +562,8 @@ Name / email / role reference for the Apps Script and onboarding.
 - [ ] Apps Script project created; timezone IST
 - [ ] `setupCITCompleteWorkspace` ran successfully
 - [ ] Sheet + Form shared with all 6 emails
-- [ ] Test email via `sendDailyStandupEmail`
+- [ ] Test email via `sendDailyStandupEmail` shows **9:45 PM** due / **10:00–10:15 PM** sync
 - [ ] Test Yes-blocker row shows red on Daily Updates
 - [ ] Form link pinned in team chat
 - [ ] Team agrees: 10:00 PM = blockers only, 15 minutes
+- [ ] If copy was outdated: `Code.gs` email function updated + Save (URLs unchanged)
