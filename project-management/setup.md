@@ -6,8 +6,8 @@
 | Time | Action |
 | --- | --- |
 | 7:00 AM | Automated email with form link (fill anytime during the day) |
-| 11:00 PM | Form submission deadline |
-| 11:15–11:30 PM | 15-min sync: red blockers + cross-team dependencies only |
+| 9:45 PM | Form submission deadline (so rows are ready for standup) |
+| 10:00–10:15 PM | 15-min sync: red blockers + cross-team dependencies only |
 
 ---
 
@@ -61,7 +61,7 @@
 1. Open the **Master Sheet URL** from the log.
 2. Click **Share** → add all six team emails with **Editor** (or Viewer for Ankit if preferred; Editors for Shashank/Swapnil/Vijay).
 3. Open the **Form URL** → **Send** / copy link → pin in Google Chat (e.g. `#cit-standup`).
-4. Optional: bookmark the sheet tab **Daily Updates** for the 11:15 PM sync.
+4. Optional: bookmark the sheet tab **Daily Updates** for the 10:00 PM sync.
 
 ### Step 5 — Verify automation (same day)
 
@@ -73,13 +73,13 @@
 
 ### Step 6 — Meeting habit (no extra tooling)
 
-Use the sheet tab **Meeting Agenda** every day at 11:15 PM. Rules are printed on that tab. Keep it to blockers only.
+Use the sheet tab **Meeting Agenda** every day at 10:00 PM. Rules are printed on that tab. Keep it to blockers only.
 
 ---
 
 ## Part B — Daily 15-minute sync
 
-**When:** 11:15–11:30 PM IST · **Facilitator:** Shashank or Swapnil · **Screen:** Daily Updates → filter Blocker = Yes
+**When:** 10:00–10:15 PM IST · **Facilitator:** Shashank or Swapnil · **Screen:** Daily Updates → filter Blocker = Yes
 
 | Focus | Rule |
 | --- | --- |
@@ -152,7 +152,7 @@ function setupCITCompleteWorkspace() {
   // --- Form ---
   var form = FormApp.create(CIT_CONFIG.FORM_TITLE);
   form.setDescription(
-    'Quick daily check-in. Submit anytime before 11:00 PM IST. ' +
+    'Quick daily check-in. Submit anytime before 9:45 PM IST. ' +
     'Use Blocker=Yes only when someone else must unblock you.'
   );
   form.setCollectEmail(true);
@@ -160,7 +160,7 @@ function setupCITCompleteWorkspace() {
   form.setAllowResponseEdits(true);
   form.setProgressBar(false);
   form.setConfirmationMessage(
-    'Thanks — logged. Red blockers are reviewed in the 11:15 PM sync.'
+    'Thanks — logged. Red blockers are reviewed in the 10:00 PM sync.'
   );
 
   form.addListItem()
@@ -250,14 +250,14 @@ function sendDailyStandupEmail() {
     return;
   }
 
-  var subject = '[CIT Standup] Daily update form (due by 11:00 PM IST)';
+  var subject = '[CIT Standup] Daily update form (due by 9:45 PM IST)';
   var body =
     'Hi team,\n\n' +
-    'Morning nudge — submit today’s standup anytime before 11:00 PM IST.\n' +
+    'Morning nudge — submit today’s standup anytime before 9:45 PM IST.\n' +
     'Flag Blocker=Yes only if you are blocked on another person.\n\n' +
     'Form: ' + formUrl + '\n' +
     (sheetUrl ? 'Tracker: ' + sheetUrl + '\n' : '') +
-    '\nSync 11:15–11:30 PM IST = red blockers + dependencies only.\n\n' +
+    '\nSync 10:00–10:15 PM IST = red blockers + dependencies only.\n\n' +
     '— ClassInTown Ops';
 
   MailApp.sendEmail({
@@ -349,7 +349,7 @@ function _buildTeamSheet(sheet, team) {
 
 function _buildMeetingAgendaSheet(sheet) {
   var lines = [
-    ['CIT Daily Sync — 15 minutes (11:15–11:30 PM IST)'],
+    ['CIT Daily Sync — 15 minutes (10:00–10:15 PM IST)'],
     [''],
     ['RULES'],
     ['1. Open Daily Updates. Discuss ONLY rows where Blocker Flag = Yes (red).'],
@@ -509,7 +509,7 @@ Parent features → owner → sub-tasks → status → target date → depends o
 Seeded with CIT’s current verticals (Payments, AI, Mobile, Web Core, Sales, QA). Update live during sprints.
 
 ### 2. Daily Updates
-Live form responses. **Blocker Flag = Yes** cells are bright red; **No** is green. Use the header filter in the 11:15 PM sync.
+Live form responses. **Blocker Flag = Yes** cells are bright red; **No** is green. Use the header filter in the 10:00 PM sync.
 
 ### 3. Meeting Agenda
 Printed rules so the sync stays on blockers and dependencies.
@@ -550,4 +550,4 @@ Name / email / role reference for the Apps Script and onboarding.
 - [ ] Test email via `sendDailyStandupEmail`
 - [ ] Test Yes-blocker row shows red on Daily Updates
 - [ ] Form link pinned in team chat
-- [ ] Team agrees: 11:15 PM = blockers only, 15 minutes
+- [ ] Team agrees: 10:00 PM = blockers only, 15 minutes
