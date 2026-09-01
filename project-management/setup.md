@@ -2,12 +2,12 @@
 
 **Goal:** Keep the 6-person ClassInTown team aligned with a 60-second daily form, one master sheet, and a 15-minute blocker-only sync — no extra admin overhead.
 
-**Cadence (IST):**
+**Cadence (IST, Mon–Fri):**
 | Time | Action |
 | --- | --- |
-| 4:30 PM Mon–Fri | Automated email with form link |
-| 5:00 PM | Form submission deadline |
-| 5:15–5:30 PM | 15-min sync: red blockers + cross-team dependencies only |
+| 7:00 AM | Automated email with form link (fill anytime during the day) |
+| 11:00 PM | Form submission deadline |
+| 11:15–11:30 PM | 15-min sync: red blockers + cross-team dependencies only |
 
 ---
 
@@ -37,13 +37,13 @@
 5. Paste **all** of the script from [Part C](#part-c--complete-google-apps-script) below.
 6. Click **Save** (disk icon).
 
-### Step 2 — Set script timezone to IST (required for 4:30 PM)
+### Step 2 — Set script timezone to IST (required for 7:00 AM)
 
 1. In the Apps Script editor: **Project Settings** (gear icon).
 2. Under **Time zone**, select **(GMT+05:30) India Standard Time**.
 3. Save.
 
-> Triggers use the script’s timezone. If this stays on US time, reminders will fire at the wrong hour.
+> Triggers use the script’s timezone. If this stays on US time, the morning reminder will fire at the wrong hour.
 
 ### Step 3 — Run the installer once
 
@@ -61,7 +61,7 @@
 1. Open the **Master Sheet URL** from the log.
 2. Click **Share** → add all six team emails with **Editor** (or Viewer for Ankit if preferred; Editors for Shashank/Swapnil/Vijay).
 3. Open the **Form URL** → **Send** / copy link → pin in Google Chat (e.g. `#cit-standup`).
-4. Optional: bookmark the sheet tab **Daily Updates** for the 5:15 PM sync.
+4. Optional: bookmark the sheet tab **Daily Updates** for the 11:15 PM sync.
 
 ### Step 5 — Verify automation (same day)
 
@@ -73,26 +73,22 @@
 
 ### Step 6 — Meeting habit (no extra tooling)
 
-Use the sheet tab **Meeting Agenda** every day at 5:15 PM. Rules are printed on that tab. Do not turn the sync into status theater.
+Use the sheet tab **Meeting Agenda** every day at 11:15 PM. Rules are printed on that tab. Keep it to blockers only.
 
 ---
 
-## Part B — Daily 15-minute sync agenda (strict)
+## Part B — Daily 15-minute sync
 
-**Facilitator:** Shashank (PO) or Swapnil (Tech Lead).  
-**Timer:** 15 minutes hard stop.  
-**Screen share:** Master Sheet → **Daily Updates** filtered/sorted by Blocker = Yes.
+**When:** 11:15–11:30 PM IST · **Facilitator:** Shashank or Swapnil · **Screen:** Daily Updates → filter Blocker = Yes
 
-| Minute | Focus | Rule |
-| --- | --- | --- |
-| 0–1 | Scan red rows only | Ignore green / “No” rows |
-| 1–10 | Resolve or assign each blocker | Name owner + next action + ETA (same day / tomorrow) |
-| 10–14 | Cross-team dependencies | e.g. Kunal ↔ Swapnil APIs; Vijay ↔ Shashank specs; Aniruddha ↔ Shashank scope |
-| 14–15 | Confirm tomorrow’s critical path | One sentence each if needed — no full status dumps |
+| Focus | Rule |
+| --- | --- |
+| Red rows only | Skip anyone with Blocker = No |
+| Unblock | Owner + next action + ETA |
+| Dependencies | Mobile↔Backend, QA↔Specs, Sales↔Scope |
+| Stop at 15 min | Design/revenue topics → weekly sync |
 
-**Out of scope for this meeting:** demos, long design debates, backlog grooming, revenue deep-dives (those belong in weekly product/business sync).
-
-**Escalation:** If a blocker needs Ankit sign-off (scope/revenue), Shashank notes it on **Product Roadmap** and Slack/emails Ankit outside the standup.
+**Escalation:** Ankit sign-offs go on Product Roadmap + a short note outside this call.
 
 ---
 
@@ -105,7 +101,7 @@ Copy everything below into `Code.gs`.
  * CIT Daily Ops — one-click workspace installer
  * Creates: Master Sheet (Roadmap + Daily Updates + Meeting Agenda + Team)
  *          Daily Standup Form (linked)
- *          Mon–Fri 4:30 PM IST email reminders
+ *          Mon–Fri 7:00 AM IST email reminders
  *
  * BEFORE FIRST RUN: Project Settings → Time zone = (GMT+05:30) India Standard Time
  */
@@ -156,15 +152,15 @@ function setupCITCompleteWorkspace() {
   // --- Form ---
   var form = FormApp.create(CIT_CONFIG.FORM_TITLE);
   form.setDescription(
-    '60-second daily check-in. Submit by 5:00 PM IST. ' +
-    'Use Blocker=Yes only when someone else must unblock you before you can proceed.'
+    'Quick daily check-in. Submit anytime before 11:00 PM IST. ' +
+    'Use Blocker=Yes only when someone else must unblock you.'
   );
   form.setCollectEmail(true);
   form.setLimitOneResponsePerUser(false);
   form.setAllowResponseEdits(true);
   form.setProgressBar(false);
   form.setConfirmationMessage(
-    'Thanks — your update is logged. Red blockers will be reviewed in the 5:15 PM sync.'
+    'Thanks — logged. Red blockers are reviewed in the 11:15 PM sync.'
   );
 
   form.addListItem()
@@ -236,7 +232,7 @@ function setupCITCompleteWorkspace() {
   Logger.log('Master Sheet URL: ' + ss.getUrl());
   Logger.log('Daily Form URL:   ' + form.getPublishedUrl());
   Logger.log('Form Edit URL:    ' + form.getEditUrl());
-  Logger.log('Triggers (Mon–Fri ~4:30 PM IST): ' + ScriptApp.getProjectTriggers().length);
+  Logger.log('Triggers (Mon–Fri ~7:00 AM IST): ' + ScriptApp.getProjectTriggers().length);
   Logger.log('Next: Share Sheet + Form with the team, then Run sendDailyStandupEmail once to test.');
 }
 
@@ -254,14 +250,14 @@ function sendDailyStandupEmail() {
     return;
   }
 
-  var subject = '[CIT Standup] Please submit your daily update (by 5:00 PM IST)';
+  var subject = '[CIT Standup] Daily update form (due by 11:00 PM IST)';
   var body =
     'Hi team,\n\n' +
-    'Take ~60 seconds to submit today’s standup before 5:00 PM IST.\n' +
+    'Morning nudge — submit today’s standup anytime before 11:00 PM IST.\n' +
     'Flag Blocker=Yes only if you are blocked on another person.\n\n' +
     'Form: ' + formUrl + '\n' +
     (sheetUrl ? 'Tracker: ' + sheetUrl + '\n' : '') +
-    '\nSync at 5:15 PM IST = red blockers + cross-team dependencies only.\n\n' +
+    '\nSync 11:15–11:30 PM IST = red blockers + dependencies only.\n\n' +
     '— ClassInTown Ops';
 
   MailApp.sendEmail({
@@ -352,7 +348,7 @@ function _buildTeamSheet(sheet, team) {
 
 function _buildMeetingAgendaSheet(sheet) {
   var lines = [
-    ['CIT Daily Sync — 15 minutes (5:15–5:30 PM IST)'],
+    ['CIT Daily Sync — 15 minutes (11:15–11:30 PM IST)'],
     [''],
     ['RULES'],
     ['1. Open Daily Updates. Discuss ONLY rows where Blocker Flag = Yes (red).'],
@@ -484,8 +480,8 @@ function _installWeekdayEmailTriggers() {
     ScriptApp.newTrigger('sendDailyStandupEmail')
       .timeBased()
       .onWeekDay(day)
-      .atHour(16)      // 4 PM hour bucket
-      .nearMinute(30)  // ~4:30 PM in script timezone
+      .atHour(7)       // 7 AM IST
+      .nearMinute(0)
       .inTimezone('Asia/Kolkata')
       .create();
   });
@@ -512,7 +508,7 @@ Parent features → owner → sub-tasks → status → target date → depends o
 Seeded with CIT’s current verticals (Payments, AI, Mobile, Web Core, Sales, QA). Update live during sprints.
 
 ### 2. Daily Updates
-Live form responses. **Blocker Flag = Yes** cells are bright red; **No** is green. Use the header filter in the 5:15 sync.
+Live form responses. **Blocker Flag = Yes** cells are bright red; **No** is green. Use the header filter in the 11:15 PM sync.
 
 ### 3. Meeting Agenda
 Printed rules so the sync stays on blockers and dependencies.
@@ -536,7 +532,7 @@ Name / email / role reference for the Apps Script and onboarding.
 
 | Symptom | Fix |
 | --- | --- |
-| Emails at wrong time | Project Settings → timezone = Asia/Kolkata; run `reinstallEmailTriggers` |
+| Emails at wrong time | Project Settings → timezone = Asia/Kolkata; run `reinstallEmailTriggers` (should be ~7:00 AM IST) |
 | No red highlighting | Confirm header contains `Blocker Flag`; re-run setup or manually Format → Conditional formatting → Text is exactly `Yes` → red fill |
 | Form responses on wrong tab | Responses always land on the destination spreadsheet; rename tab to `Daily Updates` if needed |
 | Permission errors on MailApp | Re-run and accept Gmail/Mail scope; account must be allowed to send mail |
@@ -553,4 +549,4 @@ Name / email / role reference for the Apps Script and onboarding.
 - [ ] Test email via `sendDailyStandupEmail`
 - [ ] Test Yes-blocker row shows red on Daily Updates
 - [ ] Form link pinned in team chat
-- [ ] Team agrees: 5:15 PM = blockers only, 15 minutes
+- [ ] Team agrees: 11:15 PM = blockers only, 15 minutes
