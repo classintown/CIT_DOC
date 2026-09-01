@@ -313,7 +313,8 @@ function _buildRoadmapSheet(sheet) {
     ['Sales Requests', 'Aniruddha Mane', 'Client feature intake & commercial dates', 'Ongoing', '', 'Shashank D', ''],
     ['QA/Infra', 'Vijay G', 'Regression + release sign-off', 'Pending', '2026-09-15', 'Shashank D / Swapnil M', '']
   ];
-  sheet.getRange(2, 1, seed.length + 1, headers.length).setValues(seed);
+  // getRange(row, column, numRows, numColumns) — not endRow/endCol
+  sheet.getRange(2, 1, seed.length, headers.length).setValues(seed);
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers.length);
 
@@ -341,7 +342,7 @@ function _buildTeamSheet(sheet, team) {
   sheet.getRange(1, 1, 1, 3).setValues([['Name', 'Email', 'Role']]);
   sheet.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#34a853').setFontColor('#ffffff');
   var rows = team.map(function (m) { return [m.name, m.email, m.role]; });
-  sheet.getRange(2, 1, rows.length + 1, 3).setValues(rows);
+  sheet.getRange(2, 1, rows.length, 3).setValues(rows);
   sheet.autoResizeColumns(1, 3);
   sheet.setFrozenRows(1);
 }
